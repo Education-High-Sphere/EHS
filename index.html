@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="img/logo2.png" type="image/x-icon">
+    <title>EHSYNC</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background-color: #fdfdfdf3;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        header{
+            background-color: #1B2232;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+
+        }
+        header img{
+            max-width: 150px;
+        }
+        .menu{
+            list-style: none;
+            margin-top: 20px;
+        }
+        .menu li{
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .menu li:hover{
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .menu a{
+            color: #fff;
+            font-weight: 550;
+            text-decoration: none;
+        }
+        .search-bar {
+            width: 100%;  /* Adapta ao contêiner pai */
+            max-width: 150px;  /* Limita o tamanho máximo */  
+            border-radius: 8px;  /* Bordas mais suaves */
+            height: 15px;  /* Altura aumentada para conforto */
+            border: 1px solid #ccc;  /* Borda sutil */
+            font-size: 13px;
+            text-align: right;  /* Fonte maior para melhor leitura */
+            outline: none;  /* Remove o contorno padrão */
+            transition: all 0.3s ease-in-out;
+        }
+
+/* Efeito ao focar na barra de pesquisa */
+        .search-bar:focus {
+            border-color: #007bff;  /* Destaca ao clicar */
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);  /* Efeito de foco suave */
+        }
+        li i{
+            margin-right: 5px;
+            color : #fff;
+        }
+
+        .hero{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 70vh;
+            background-image: linear-gradient(#1B2232, #000000);
+        }
+        .image-container{
+            display: flex;
+            justify-content: end;
+            width: 100%;
+            height: 400px;
+            margin-top: 30px;
+        }
+        
+        .image img{
+            border-radius: 10px;
+            max-width: 250px;
+            margin: 0 10px;
+        }
+        #image1{
+            transform: translateY(80%);
+            margin-left: 0;
+        }
+        #image2{
+            transform: translateY(40%);
+            margin: 0 10px;
+        }
+        #image3{
+
+            margin-right: 0;
+        }
+        .text-box{
+            display: flex;
+            justify-content: start;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .welcome{
+            text-align: center;
+        }
+        .text-box{
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            
+        }
+        .text-box h2{
+            text-align: center;
+            font-size: 60px;
+            color: #fff;
+        }
+        .text-box h4{
+            text-align: center;
+            font-size: 30px;
+            color: #ffffff56;
+        }
+        .blue{
+            color: #6693fc;
+        }
+        .about{
+            margin: 30px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 10px;
+        }
+        .title{
+            width: 50%;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+        .title h2{
+            font-size: 40px;
+            font-weight: 1000;
+            color: #4a78a6;
+            font-family: 'Arial';
+        }
+        .desc{
+            text-align: left;
+            width: 50%;
+        }
+        .desc p{
+            font-size: 18px;
+            font-family: 'Poppins';
+        }
+        .login{
+            margin: 40px;
+            background-color: #4a78a6;
+            border-radius: 20px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.527);
+            display: flex;
+            justify-content: space-evenly;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+        }
+        .title h1{
+            margin-bottom: 20px;
+            font-size: 45px;
+            font-weight: 1000;
+            color: #1B2232;
+            font-family: 'Arial';
+        }
+        .subtitle {
+            margin-top: 20px;
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+        .stats p {
+            font-size: 18px;
+            margin: 15px 0;
+            color: #222;
+        }
+
+        .stats span {
+            font-size: 14px;
+            color: #fcfcfc88;
+        }
+
+        .cta {
+            display: inline-block;
+            background: #1B2232;
+            color: #fff;
+            padding: 15px 25px;
+            font-size: 18px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cta a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .cta:hover {
+            background: #0056b3;
+        }
+        .desc h1{
+            font-size: 20px;
+            color: #fff;
+        }
+        .button{
+            margin: 20px;
+            text-align: center;
+            width: 50%;
+        }
+        .button button{
+            background-color: #1B2232;
+            border: none;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .button button a{
+            text-decoration: none;
+            font-size: 30px;
+            color: #fff;
+        }
+        .button button:hover{
+            background-color: #090c13;
+        }
+        .carousel {
+            width: 100%;
+            max-width: 600px;
+            height: 60vh;
+            margin: auto;
+            overflow: hidden;
+            border-radius: 10px;
+        }  
+
+        .carousel-container {
+            display: flex;
+            width: 100%;
+            animation: slide 15s infinite;
+        }
+
+        .slide {
+            width: 100%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .slide img {
+            width: 600px;
+            height: auto;
+            
+        }
+
+        .caption {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            text-align: left;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+/* Animação do carrossel */
+        @keyframes slide {
+            0% { transform: translateX(0%); }
+            33% { transform: translateX(-100%); }
+            66% { transform: translateX(-200%); }
+            100% { transform: translateX(0%); }
+        }
+
+        
+
+    </style>
+</head>
+<body>
+    <header>
+        <img src="img/logo.png" alt="logo">
+        <ul class="menu">
+            <li><i class="fas fa-search"></i><input type="text" class="search-bar"></input></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="sobre.html">Cursos</a></li>
+            <li><a href="contato.html">Contato</a></li>
+        </ul>
+    </header>
+    
+    <div class="hero">
+        <div class="text-box">
+            <h2 class="welcome">Bem vindo ao <span class="blue">EHSYNC</span></h2>
+            <h4>"O futuro da sua empresa começa com o conhecimento certo."</h4>
+        </div>
+    <div class="image-container">
+        <span class="image"><img id = "image1" src="img/training.jpg" alt="Designed by Freepik"></span>
+        <span class="image"><img id = "image2" src="img/training2.jpg" alt="Designed by Freepik"></span>
+        <span class="image"><img id = "image3" src="img/training3.jpg" alt="Designed by Freepik"></span>
+    </div>
+
+    </div>
+    
+    <div class="about">
+        <span class="title">
+            <h2>Sobre nós</h2>
+        </span>
+        <span class="desc">
+            <p>O EHSYNC é uma plataforma de educação corporativa desenvolvida para ajudar empresas a capacitar suas equipes de forma eficiente e personalizada. Com um ambiente dinâmico e intuitivo, permite que organizações ofereçam treinamentos sob medida, alinhados às suas necessidades e desafios específicos.
+                <br><br>
+
+                Seja para aprimorar habilidades técnicas, desenvolver soft skills ou impulsionar a produtividade, o EHSYNC transforma conhecimento em resultados. Nossa abordagem flexível possibilita que cada empresa crie trilhas de aprendizado personalizadas, garantindo que seus colaboradores adquiram as competências certas para crescer junto com o negócio.
+                <br><br>
+                
+                Além disso, combinamos tecnologia e inovação para proporcionar uma experiência de ensino interativa, acessível e eficaz. Invista no desenvolvimento da sua equipe com o EHSYNC e leve a educação corporativa da sua empresa para o próximo nível.</p>
+        </span>
+
+    </div>
+
+    <div class="carousel">
+        <div class="carousel-container">
+            <div class="slide">
+                <img class="slide-image" src="img/curso1.jpg" alt="Instrutores qualificados">
+                <div class="caption">Instrutores altamente qualificados e experientes.</div>
+            </div>
+            <div class="slide">
+                <img src="img/curso2.jpg" alt="Método interativo">
+                <div class="caption">Aprendizado interativo e envolvente.</div>
+            </div>
+            <div class="slide">
+                <img src="img/curso3.jpg" alt="Certificação reconhecida">
+                <div class="caption">Certificação reconhecida no mercado.</div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="login">
+        <h1 class="title">🚀 Faça Parte do EHSYNC</h1>
+        
+        <h2 class="subtitle">Transforme sua equipe com treinamentos sob medida e impulsione o sucesso da sua empresa!</h2>
+        
+        <div class="stats">
+            <p>✅ <strong>94% dos funcionários</strong> ficariam mais tempo em uma empresa que investe em seu desenvolvimento. </p>
+            <p>✅ <strong>Empresas que investem</strong> em treinamento e desenvolvimento têm <strong>218% mais receita por colaborador.</strong> </p>
+            <p>✅ <strong>76% dos colaboradores</strong> dizem que aprender novas habilidades os torna mais engajados no trabalho. </p>
+        </div>
+    
+        <button class="cta"><a href="register.html">🔑 Inscreva-se Agora</a></button>
+    </div>
+    
+
+
+    
+</body>
+</html>
