@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EHSYNC - Educação Online</title>
+  <style>
+    body {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+  background: #f4f4f4;
+}
+
+.top-bar {
+  background: #0c0c1f;
+  color: white;
+  display: flex;
+
+}
+
+.top-bar a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  display: inline-block;
+}
+
+.top-bar a:hover {
+  background: #1B2232;
+}
+
+.top-bar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.top-bar .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.top-bar .menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.top-bar .menu li {
+  margin: 0 10px;
+}
+
+.hero {
+  background: linear-gradient(to right, #2e3033 0%, #17171a 25%, #181825 50%, #181825 100%);
+  color: white;
+  height: 70vh;
+  padding: 40px 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-container{
+    display: flex;
+    width: 70%;
+    height: 70vh;
+    background-color: #2828494f;
+    box-shadow: 0 0 10px rgba(50, 53, 82, 0.5);
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-wrap: nowrap;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+.container h1{
+  font-size: 34px;
+}
+.hero ul{
+    list-style: none;
+    text-align: left;
+    color: #e4e4e4;
+    font-size: 12px;
+    font-weight: 200;
+}
+.hero-img{
+  width: 500px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.hero-img img{
+    width: 600px;
+    height: auto;
+    object-fit: cover;
+    transform: translateY(60px);
+}
+
+.container .buttons button{
+    margin: 10px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #fff;
+    background: #1B2232;
+}
+
+.categories{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.category-buttons {
+  text-align: center;
+  margin: 20px;
+  border-bottom: 2px solid gray;
+  width: 70%
+}
+
+.category-buttons button {
+  margin: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #fff;
+  background: #1B2232;
+}
+
+.cards-area {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  margin: 10px;
+  width: 250px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+/* Começa com todos os cards visíveis */
+.card {
+  display: none;
+}
+
+  </style>
+</head>
+<body>
+
+  <header class="top-bar">
+    <div class="container">
+      <div class="logo">EHSYNC</div>
+      <div class="contact-info">
+        <span>📞 +55 (81) 99632-3689</span>
+        <span>📧 educationhighsphere@gmail.com</span>
+      </div>
+    </div>
+  </header>
+
+
+    <section class="hero">
+      <div class="hero-container">
+      <div class="container">
+        <h1>Educação Online</h1>
+        <p>Sua sala de aula <strong style="color: #8291b4">disponível em qualquer lugar</strong></p>
+        <ul>
+          <li>✅ Cursos Profissionalizantes</li>
+          <li>✅ Material didático</li>
+          <li>✅ Interação com outros alunos</li>
+        </ul>
+        <div class="buttons">
+          <button style="background-color:#1B2232">Comece agora</button>
+          <button style="background-color: #3f4f75 ;">Conheça nossos cursos</button>
+        </div>
+      </div>
+      <div class="hero-img">
+          <img src="img/estudante.png" alt="Estudante" width="500px" height="auto" object-fit="contain">
+      </div>
+    </div>
+    </section>
+
+  <section class="categories">
+    <p>Se o mundo é online, sua carreira também pode ser. Vem com a EHS!</p>
+    <div class="category-buttons">
+      <a onclick="filterCategory('tecnologia')">Tecnologia e Inovação</a>
+      <a onclick="filterCategory('marketing')">Marketing Digital</a>
+      <a onclick="filterCategory('empreendedorismo')">Empreendedorismo</b>
+      <a onclick="filterCategory('softskills')">Soft Skills</a>
+    </div>
+
+    <div class="cards-area">
+      <!-- Tecnologia -->
+      <div class="card tecnologia">
+        <h3>Desenvolvimento Web</h3>
+        <p>HTML, CSS, JavaScript, etc.</p>
+      </div>
+      <div class="card tecnologia">
+        <h3>Inteligência Artificial</h3>
+        <p>Automação, algoritmos, machine learning.</p>
+      </div>
+
+      <!-- Marketing -->
+      <div class="card marketing">
+        <h3>Marketing de Conteúdo</h3>
+        <p>Criação de textos, SEO e engajamento.</p>
+      </div>
+      <div class="card marketing">
+        <h3>Tráfego Pago</h3>
+        <p>Facebook Ads, Google Ads, etc.</p>
+      </div>
+
+      <!-- Empreendedorismo -->
+      <div class="card empreendedorismo">
+        <h3>Criação de Negócios</h3>
+        <p>Do zero ao seu próprio negócio digital.</p>
+      </div>
+      <div class="card empreendedorismo">
+        <h3>Gestão Financeira</h3>
+        <p>Controle de finanças para empreendedores.</p>
+      </div>
+
+      <!-- Soft Skills -->
+      <div class="card softskills">
+        <h3>Comunicação Eficaz</h3>
+        <p>Como falar bem em público e no trabalho.</p>
+      </div>
+      <div class="card softskills">
+        <h3>Liderança</h3>
+        <p>Como liderar equipes e tomar decisões.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+
+  </script>
+</body>
+</html>
