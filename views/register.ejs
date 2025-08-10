@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+    href='../css/boxicons.min.css'
+    rel='stylesheet'>    
+    <link rel="icon" href="../src/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../styles/register.css">
+    <title>EHS Cadastro</title>
+</head>
+<body>
+    <div class="logo-img">
+        <img src="../src/group.png" alt="logo">
+    </div>
+    <div class="vertical-line"></div>
+    
+    <main class = "container-register">
+
+        <label class="label"><h1>Cadastro</h1></label>
+       
+        
+        <form class="form-container" action="../.config/cadastro.php" method="POST">
+    
+            <div class="input-box">
+                <input name="name" placeholder="Nome" type="text" required>
+            </div>
+        
+            <div class="input-box">
+                <input name="email" placeholder="Endereço de e-mail" type="email" required>
+            </div>
+        
+            <div class="input-box">
+                <input name="birth" placeholder="Data de nascimento" type="date" id="birthdate" required>
+            </div>
+
+            <div class="input-box">
+                <input name="genero" placeholder="Genero" type="text" required>
+            </div>
+
+            <div class="input-box">
+                <input name="job" placeholder="Cargo" type="text" required>
+            </div>
+        
+            <div class="input-box">
+                <input name="telefone" placeholder="Telefone" type="tel" required>
+            </div>
+        
+            <div class="input-box">
+                <input id = "senha" name="senha" placeholder="Senha" type="password" required>
+                <a href="#" onclick="togglePassword()"><i class="bx bx-hide" id="togglePassword"></i></a>
+            </div>
+        
+            <div class="input-box">
+                <input name="confirmar_senha" id="confirmar_senha" placeholder="Confirme sua senha" type="password" required>
+                <a href="#" onclick="toggleConfirmPassword()"><i class="bx bx-hide" id="toggleConfirmPassword"></i></a>
+            </div>
+        
+            <p class="switch-form">Já possui uma conta? <a href="#" onclick="showLogin()">Login</a></p>
+        
+            <div class="termos-aceite">
+                <label class="custom-checkbox">
+                    <input name="termos_aceitos" type="checkbox" value="sim" required>
+                    <span class="checkmark"></span>
+                    Li e aceito os <a href="#">Termos de uso do EHS, Aviso de privacidade, Termos LGPD.</a>
+                </label>
+            </div>
+        
+            <button type="submit">Cadastre-se</button>
+        
+        </form>
+        
+    </main>
+
+    <main class="container-login" style="display: none;">
+
+        <label class="label"><h1>Login</h1></label>
+    
+        <form class="form-container" action="../.config/testelogin.php" method="POST">
+    
+            <div class="input-box">
+                <input name="email" placeholder="E-mail" type="email" required>
+            </div>
+        
+            <div class="input-box">
+                <input id = "senha" name="pswd" placeholder="Senha" type="password" required>
+                <a href="#" onclick="togglePassword()"><i class="bx bx-hide" id="togglePassword"></i></a>
+            </div>
+        
+            <div class="remember-forgot">
+                <label class="custom-checkbox">
+                    <input name="lembrar" type="checkbox" value="sim">
+                    <span class="checkmark"></span>
+                    Lembrar de mim
+                </label>
+                <a href="#" style="color: #4A78A6; text-decoration: none;">Esqueceu a senha?</a>
+            </div>
+        
+            <p class="switch-form">Não possui uma conta?
+                <a href="#" onclick="showRegister()">Cadastre-se</a>
+            </p>
+        
+            <button type="submit">Entrar</button>
+        
+        </form>
+        
+    </main>
+    
+
+
+
+    <script>
+
+        function showLogin() {
+            document.querySelector('.container-register').style.display = 'none';
+            document.querySelector('.container-login').style.display = 'block';
+
+        }
+
+        function showRegister() {
+            document.querySelector('.container-login').style.display = 'none';
+            document.querySelector('.container-register').style.display = 'block';
+        }
+
+        function verifyPassword() {
+            var senha = document.getElementById('senha').value;
+            var confirmar_senha = document.getElementById('confirmar_senha').value;
+
+            if (senha !== confirmar_senha) {
+                alert('As senhas não coincidem, por favor, tente novamente.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function togglePassword() {
+            var passwordInput = document.getElementById('senha');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                document.getElementById('togglePassword').style.color = '#4A78A6';
+
+            } else {
+                document.getElementById('senha').type = 'password';
+                document.getElementById('togglePassword').style.color = 'gray';
+            }
+        }
+
+        function toggleConfirmPassword() {
+            var passwordInput = document.getElementById('confirmar_senha');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                document.getElementById('toggleConfirmPassword').style.color = '#4A78A6';
+            } else {
+                passwordInput.type = 'password';
+                document.getElementById('toggleConfirmPassword').style.color = 'gray';
+            }
+        }
+
+
+    </script>
+</body>
+</html>
+

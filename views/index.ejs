@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="../styles/style.css" />
+
+    <title>EHSYNC - Educação Online</title>
+  </head>
+  <body>
+    <header class="top-header">
+      <div class="top-info">
+        <div>
+          <span class="phone"><i class="fas fa-phone"></i> +55 (81) 9962-3659</span>
+          <span class="email"><i class="fas fa-envelope"></i>EHS@gmail.com</span>
+        </div>
+        <div class="social">
+          <h4>Redes Sociais:</h4>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <div class="login">
+          <i class="fas fa-user"></i>
+          <a href="/register" class="login">Login/Cadastre-se</a>
+        </div>
+      </div>
+
+      <div class="main-header">
+        <div class="logo-container">
+          <div class="logo">
+            <img src="../src/logo.png" alt="Logo" />
+            <div>
+              <strong>EHS</strong>
+              <small>Educando Mentes do Futuro</small>
+            </div>
+          </div>
+        </div>
+
+        <nav class="nav-links">
+          <a href="#">Home</a>
+          <a href="#">Cursos</a>
+          <a href="#">Seja um Professor</a>
+          <a href="#">Comunidade</a>
+        </nav>
+
+        <div class="search-bar">
+          <input type="text" placeholder="Procure por um curso..." />
+          <button><i class="fas fa-search"></i></button>
+        </div>
+
+        <div class="icons">
+          <i class="fas fa-bell"></i>
+          <i class="fas fa-heart"></i>
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-container">
+        <div class="container">
+          <h1>Educação Online</h1>
+          <p>
+            Sua sala de aula
+            <strong style="color: #4a78a6">disponível em qualquer lugar</strong>
+          </p>
+          <ul>
+            <li>✅ Cursos Profissionalizantes</li>
+            <br />
+            <li>✅ Material didático</li>
+            <br />
+            <li>✅ Interação com outros alunos</li>
+          </ul>
+          <br />
+          <div class="buttons">
+            <button style="background-color: #1b2232">Comece agora</button>
+            <button style="background-color: #51769c">
+              Conheça nossos cursos
+            </button>
+          </div>
+        </div>
+        <div class="hero-img">
+          <img
+            src="../src/estudante.png"
+            alt="Estudante"
+            width="500px"
+            height="auto"
+            object-fit="contain"
+          />
+        </div>
+      </div>
+      <h3>Se o mundo é online, sua carreira também pode ser. Vem com a EHS!</h3>
+    </section>
+
+    <section class="categories">
+      <div class="category-buttons">
+        <a onclick="filterCategory('tecnologia')">Tecnologia e Inovação</a>
+        <a onclick="filterCategory('marketing')">Marketing Digital</a>
+        <a onclick="filterCategory('empreendedorismo')">Empreendedorismo</a>
+        <a onclick="filterCategory('softskills')">Soft Skills</a>
+      </div>
+
+      <div class="cards-area">
+        <h1 style="color: #4a78a6">Tecnologia</h1>
+
+        <div class="cards">
+          <div class="card tecnologia">
+            <div
+              class="img"
+              style="background-image: url('../src/card-img1.jpg')"
+            ></div>
+            <h3>Desenvolvimento Web</h3>
+            <p>
+              Aprenda a criar sites e sistemas completos, desde o design até a
+              programação, dominando linguagens como HTML, CSS, JavaScript,
+              React.
+            </p>
+          </div>
+          <div class="card tecnologia">
+            <div
+              class="img"
+              style="background-image: url('../src/card-img2.jpg')"
+            ></div>
+            <h3>Inteligência Artificial</h3>
+            <p>Automação, algoritmos, machine learning.</p>
+          </div>
+          <div class="card tecnologia">
+            <div
+              class="img"
+              style="background-image: url('../src/card-img3.jpg')"
+            ></div>
+            <h3>CyberSecurity</h3>
+            <p>Cibersegurança, criptografia, segurança da informação.</p>
+          </div>
+          <div class="card tecnologia">
+            <div
+              class="img"
+              style="background-image: url('../src/card-img4.jpg')"
+            ></div>
+            <h3>Cloud Computing</h3>
+            <p>Nuvem, AWS, Azure, Google Cloud.</p>
+          </div>
+
+          <!-- Marketing -->
+          <div class="card marketing">
+            <div
+              class="img"
+              style="background-image: url('../src/card-img5.jpg')"
+            ></div>
+            <h3>Marketing de Conteúdo</h3>
+            <p>Criação de textos, SEO e engajamento.</p>
+          </div>
+          <div class="card marketing">
+            <div
+              class="img"
+              style="background-image: url('../src/card-img6.jpg')"
+            ></div>
+            <h3>Tráfego Pago</h3>
+            <p>Facebook Ads, Google Ads, etc.</p>
+          </div>
+
+          <!-- Empreendedorismo -->
+          <div class="card empreendedorismo">
+            <div
+              class="img"
+              style="background-image: url('../src/card-img7.jpg')"
+            ></div>
+            <h3>Criação de Negócios</h3>
+            <p>Do zero ao seu próprio negócio digital.</p>
+          </div>
+          <div class="card empreendedorismo">
+            <div
+              class="img"
+              style="background-image: url('../src/card-img8.jpg')"
+            ></div>
+            <h3>Gestão Financeira</h3>
+            <p>Controle de finanças para empreendedores.</p>
+          </div>
+
+          <!-- Soft Skills -->
+          <div class="card softskills">
+            <h3>Comunicação Eficaz</h3>
+            <p>Como falar bem em público e no trabalho.</p>
+          </div>
+          <div class="card softskills">
+            <h3>Liderança</h3>
+            <p>Como liderar equipes e tomar decisões.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="main">
+        <h1>Explore nossas comunidades</h1>
+        <div class="comunidades">
+          <div class="big-container">
+            <span class="docker">
+              <div
+                class="docker-header"
+                style="background-image: url('../src/training3.jpg')"
+              ></div>
+              <div class="docker-body">
+                <h3>Clube de desafios práticos</h3>
+                <p>
+                  Espaços interativos onde os alunos enfrentam desafios reais e
+                  dinâmicos em suas áreas de estudo. A cada semana ou mês, novas
+                  missões são lançadas para estimular a prática, desenvolver
+                  habilidades e compartilhar soluções criativas com a
+                  comunidade.
+                </p>
+                <button class="action-button">Ver comunidade</button>
+              </div>
+            </span>
+          </div>
+          <div class="small-container">
+            <span class="docker">
+              <div
+                class="docker-header"
+                style="background-image: url('../src/curso3.jpg')"
+              ></div>
+              <div class="docker-body">
+                <h3>Clube de Carreira</h3>
+                <p>
+                  Ambientes dedicados ao crescimento profissional, onde alunos
+                  recebem apoio de mentores, trocam experiências de mercado e
+                  participam de sessões exclusivas de orientação de carreira,
+                  networking e desenvolvimento pessoal.
+                </p>
+                <button class="action-button">Ver comunidade</button>
+              </div>
+            </span>
+            <span class="docker">
+              <div class="docker-body">
+                <h3>Squad Learning</h3>
+                <p>
+                  Comunidades formadas por grupos pequenos ou duplas de estudo,
+                  conectando alunos com interesses em comum para trocar
+                  conhecimentos, manter a motivação e alcançar metas juntos de
+                  forma mais leve e colaborativa.
+                </p>
+                <button class="action-button">Ver comunidade</button>
+              </div>
+              <div
+                class="docker-header"
+                style="background-image: url('../src/training.jpg')"
+              ></div>
+            </span>
+          </div>
+      </div>
+    </section>
+    <script>
+      function filterCategory(category) {
+        const cards = document.querySelectorAll(".card");
+        const title = document.querySelector(".cards-area h1");
+
+        switch (category) {
+          case "tecnologia":
+            title.innerHTML = "Tecnologia";
+            break;
+          case "marketing":
+            title.innerHTML = "Marketing Digital";
+            break;
+          case "empreendedorismo":
+            title.innerHTML = "Empreendedorismo";
+            break;
+          case "softskills":
+            title.innerHTML = "Soft Skills";
+            break;
+        }
+        cards.forEach((card) => {
+          if (card.classList.contains(category)) {
+            card.style.display = "block";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      }
+
+      filterCategory("tecnologia");
+    </script>
+  </body>
+</html>
+
