@@ -11,19 +11,19 @@ export async function findUserByEmail(email) {
 }
 
 export async function createUser(userData) {
-  const { name, email, passwordHash } = userData;
+  const { name, email, passwordHash, job, birth_date } = userData;
   const [result] = await pool.query(
-    'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
-    [name, email, passwordHash]
+    'INSERT INTO users (name, email, password, job, birth_date) VALUES (?, ?, ?, ?, ?)',
+    [name, email, passwordHash, job, birth_date]
   );
-  return result.insertId; // retorna o id do usuário criado
+  return result.insertId;
 }
 
 export async function updateUser(id, userData) {
-  const { name, email, passwordHash } = userData;
+  const { name, email, passwordHash, job, birth_date } = userData;
   await pool.query(
-    'UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?',
-    [name, email, passwordHash, id]
+    'UPDATE users SET name = ?, email = ?, password = ?, job = ?, birth_date = ? WHERE id = ?',
+    [name, email, passwordHash, job, birth_date, id]
   );
   return true;
 }
@@ -34,7 +34,7 @@ export async function deleteUser(id) {
 }
 
 export async function findAllUsers() {
-  const [rows] = await pool.query('SELECT * FROM user');
+  const [rows] = await pool.query('SELECT * FROM users');
   return rows;
 }
 export default {

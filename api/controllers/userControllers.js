@@ -5,7 +5,12 @@ export default {
   async register(req, res) {
     try {
       const user = await userService.register(req.body);
-      res.status(201).json(user);
+
+      // Cria token JWT
+      const token = jwt.sign({ id: user.insertId, name: req.body.name, email: req.body.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+      // Redireciona para /userScene passando token como query (ou via cookie)
+      res.redirect(`/userScene?token=${token}`);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
@@ -14,7 +19,9 @@ export default {
   async login(req, res) {
     try {
       const token = await userService.login(req.body);
-      res.json({ token });
+
+      // Redireciona para /userScene com token
+      res.redirect(`/userScene?token=${token}`);
     } catch (error) {
       res.status(401).json({ error: error.message });
     }

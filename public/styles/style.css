@@ -1,79 +1,52 @@
 @import url('href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"');
 
-body {
-  font-family: "Playfair Display", sans-serif;
+*{
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Playfair Display", sans-serif;
   background: #f4f4f4;
 }
 
-
+a{
+  text-decoration: none;
+  color: inherit;
+}
 
 .top-header {
-  background: #0f1e38;
   color: white;
-  padding: 5px 20px;
-  font-size: 14px;
+  font-size: 12px;
   display: flex;
-  max-height: 13vh;
-  flex-direction: column;
+  width: 100vw;
   justify-content: space-between;
   align-items: center;
-  overflow: hidden;
-}
-
-.top-info{
-    display:flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-.phone{
-    margin-right: 20px;
-    font-size: 12px;
-}
-.social{
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-}
-
-.social h4{
-    margin:auto 10px auto 0;
-    font-size: 10px;
-
-}
-
-.social i{
-    margin-right: 10px;
-    cursor: pointer;
-    color : #fff;
+  position: sticky;
+  top:0;
+  z-index: 1000;
 }
 
 .login{
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    color: #fff;
+    font-size: large;
+    font-weight: 600;
+    color: #3a5a86;
     text-decoration: none;
-    background-color: #4a78a6;
-    width: 190px;
-    transform: translateX(20px);
-    border-radius: 10px;
-    height: 20px;
-    padding: 0 10px;
-    margin-right: 10px;
     transition: all 0.3s ease-in-out;
+    margin-right: 20px;
 }
-.login:hover {
+.login a:hover {
   background-color: #3a5a86;
-  color: #fff;
+  color: white;
   text-decoration: none;
+  border-radius: 5px;
 }
 
 .main-header {
   background-color: #fff;
+  height: fit-content;
   width: 100vw;
+  height: 70px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -90,6 +63,7 @@ body {
   align-items: center;
   background-color: #4a78a6;
   border-radius: 0px 10px 0px 0px ;
+  padding:1px;
 }
 .logo div{
     display: flex;
@@ -119,8 +93,7 @@ body {
   border: 1px solid #ccc;
 }
 .search-bar input:focus {
-  box-shadow: 0 0 5px  #4a78a6;
-  outline: none;
+  outline: 1px solid #0f1e38;
 }
 
 .search-bar button {
@@ -159,13 +132,9 @@ body {
 }
 
 .hero {
-  background: linear-gradient(
-    to right,
-    #2e3033 0%,
-    #17171a 25%,
-    #181825 50%,
-    #0c0c14 100%
-  );
+  background-image:url('../src/backgrounds/182428240217.jpg');
+  background-size: cover;
+  background-position: center;
   color: white;
   height: 95vh;
   text-align: center;
@@ -179,11 +148,11 @@ body {
   display: flex;
   width: 70%;
   height: 60vh;
-  background-color: #0061bb44;
+  background-color: #001c36b9;
   border: 2px solid #0c121891;
   border-radius: 10px;
   justify-content: center;
-  align-items: start;
+  align-items:start;
   overflow: hidden;
 }
 
@@ -191,10 +160,13 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  gap: 35px;
   text-wrap: nowrap;
   text-align: left;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
 }
 .container h1 {
   font-size: 34px;
@@ -330,6 +302,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  margin: 20px;
 }
 .big-container {
   display: flex;
@@ -400,4 +373,44 @@ body {
   font-size: 16px;
   color: #f8f8f8;
   background-color: #1b2232;
+}
+
+footer{
+  background-color: #0f1e38;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: 20px;
+}
+.top-info{
+    display:flex;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: flex-start;
+}
+
+.phone{
+    margin-right: 20px;
+    font-size: 12px;
+}
+.email{
+    font-size: 12px;
+    color: #fff;
+}
+.social{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.social h4{
+    margin:auto 10px auto 0;
+    font-size: 10px;
+
+}
+
+.social i{
+    margin-right: 10px;
+    cursor: pointer;
+    color : #fff;
 }

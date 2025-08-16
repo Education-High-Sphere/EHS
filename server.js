@@ -1,50 +1,55 @@
-import express from 'express';
-import userRoutes from './api/routes/userRoutes.js';
+import express from "express";
+import jwt from "jsonwebtoken";
+import userRoutes from "./api/routes/user/userRoutes.js";
 
 const app = express();
 
-// configurando views
-app.set('view engine', 'ejs');
-app.set('views', './views');
+// Configurando views
+app.set("view engine", "ejs");
+app.set("views", "./views");
 
-//configurando o diretório público
-app.use(express.static('public'));
+// Configurando diretório público
+app.use(express.static("public"));
 
-if (!app) {
-  throw new Error('Express app not created');
-}
-
+// Middleware para JSON
 app.use(express.json());
 
-if (!userRoutes) {
-  throw new Error('User routes not found');
-}
+// Middleware para formularios
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/users', userRoutes);
-app.get('/', (req, res) => {
-  if (!res) {
-    throw new Error('Response object not found');
-  }
-  res.render('index', { title: 'EHSYNC' });
-});
-app.get('/userScene', (req, res) => {
-  if (!res) {
-    throw new Error('Response object not found');
-  }
-  res.render('userScene', { title: 'User Scene' });
-});
-app.get('/register', (req, res) => {
-  if (!res) {
-    throw new Error('Response object not found');
-  }
-  res.render('register', { title: 'Register' });
+// Rotas da API
+app.use("/users", userRoutes);
+
+// Rotas para views
+app.get("/", (req, res) => {
+  res.render("index", { title: "EHSYNC" });
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.log('Unhandled Rejection at:', reason.stack || reason);
+app.get("/userScene", (req, res) => {
+  const token = req.query.token;
+  if (!token) {
+    return res.redirect("/register");
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.render("userScene", { title: "User Scene", user: decoded });
+  } catch (err) {
+    return res.redirect("/register");
+  }
+  
 });
 
+app.get("/register", (req, res) => {
+  res.render("register", { title: "Register" });
+});
+
+// Tratamento de erros não tratados
+process.on("unhandledRejection", (reason, promise) => {
+  console.log("Unhandled Rejection at:", reason.stack || reason);
+});
+
+// Inicializando servidor
 app.listen(3000, () => {
-  console.log('API rodando na porta 3000');
+  console.log("API rodando na porta 3000");
 });
-
