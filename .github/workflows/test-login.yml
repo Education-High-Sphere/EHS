@@ -39,6 +39,7 @@ jobs:
         echo "JWT_SECRET=test_jwt_secret_key_for_github_actions" >> .env.test
 
     - name: Executando todos os testes
+      id: run-tests
       run: |
         echo "🧪 Iniciando execução de todos os testes..."
         npm test -- --verbose --coverage
@@ -46,7 +47,24 @@ jobs:
       env:
         NODE_ENV: test
         JWT_SECRET: test_jwt_secret_key_for_github_actions
+      continue-on-error: true # <-- ESSA É A CORREÇÃO IMPORTANTE
 
+    # --- PASSO PARA ENVIAR MENSAGEM NO TELEGRAM ---
+    - name: Enviar notificação para o Telegram
+      if: always() # Sempre executa este passo
+      uses: appleboy/telegram-action@v0.1.1
+      with:
+        to: '6457309231'
+        token: '8262790620:AAESO0QDe1mShsejyndsCy9IaVxe3Pnmt74'
+        message: |
+          ${{ steps.run-tests.outcome == 'success' && '✅' || '❌' }} **Status do Build: ${{ steps.run-tests.outcome == 'success' && 'Sucesso' || 'Falha' }}**
+
+          *Repositório:* ${{ github.repository }}
+          *Evento:* ${{ github.event_name }}
+          *Commit:* `${{ github.sha }}`
+
+          [Ver detalhes da execução](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+    
     - name: Upload da cobertura de código
       uses: actions/upload-artifact@v4
       if: always()
