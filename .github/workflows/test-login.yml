@@ -70,7 +70,7 @@ jobs:
         body: |
           Olá!
           
-          O job "${{ github.job }}" no repositório ${{ github.repository }} finalizou.
+          O job do "${{ github.job }}" no repositório ${{ github.repository }} finalizou.
 
           Status: ${{ job.status }}
           Commit: ${{ github.sha }}
