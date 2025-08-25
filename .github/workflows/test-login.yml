@@ -54,7 +54,7 @@ jobs:
       if: always() # Sempre executa este passo
       uses: appleboy/telegram-action@v0.1.1
       with:
-        to: '6457309231'
+        to: '8262790620'
         token: '8262790620:AAESO0QDe1mShsejyndsCy9IaVxe3Pnmt74'
         message: |
           ${{ steps.run-tests.outcome == 'success' && '✅' || '❌' }} **Status do Build: ${{ steps.run-tests.outcome == 'success' && 'Sucesso' || 'Falha' }}**
