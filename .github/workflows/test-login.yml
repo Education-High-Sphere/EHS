@@ -47,23 +47,36 @@ jobs:
       env:
         NODE_ENV: test
         JWT_SECRET: test_jwt_secret_key_for_github_actions
-      continue-on-error: true # <-- ESSA É A CORREÇÃO IMPORTANTE
+      continue-on-error: true
 
-    # --- PASSO PARA ENVIAR MENSAGEM NO TELEGRAM ---
-    - name: Enviar notificação para o Telegram
+    # --- PASSO PARA ENVIAR E-MAIL PELO GMAIL ---
+    - name: Enviar notificação por e-mail
       if: always() # Sempre executa este passo
-      uses: appleboy/telegram-action@v0.1.1
+      uses: dawidd6/action-send-mail@v6
       with:
-        to: '562937744'
-        token: '8262790620:AAESO0QDe1mShsejyndsCy9IaVxe3Pnmt74'
-        message: |
-          ${{ steps.run-tests.outcome == 'success' && '✅' || '❌' }} **Status do Build: ${{ steps.run-tests.outcome == 'success' && 'Sucesso' || 'Falha' }}**
+        # Configurações do servidor do Gmail
+        server_address: smtp.gmail.com
+        server_port: 465
+        secure: true
 
-          *Repositório:* ${{ github.repository }}
-          *Evento:* ${{ github.event_name }}
-          *Commit:* `${{ github.sha }}`
+        # ⚠️ CUIDADO: Suas credenciais diretamente no código
+        username: 'marco.silva@faculdadenovaroma.com.br' # <-- COLOQUE SEU E-MAIL GMAIL COMPLETO
+        password: 'I9u5m9k#' # <-- COLOQUE SUA SENHA DE APP DE 16 LETRAS
 
-          [Ver detalhes da execução](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+        # Conteúdo do E-mail
+        subject: 'Build no Repositório ${{ github.repository }} - Status: ${{ job.status }}'
+        to: 'eimarcoo@outlook.com' # <-- COLOQUE O E-MAIL QUE VAI RECEBER A NOTIFICAÇÃO
+        from: 'Notificações GitHub <marco.silva@faculdadenovaroma.com.br>' # <-- PODE DEIXAR SEU E-MAIL AQUI DE NOVO
+        body: |
+          Olá!
+          
+          O job "${{ github.job }}" no repositório ${{ github.repository }} finalizou.
+
+          Status: ${{ job.status }}
+          Commit: ${{ github.sha }}
+          
+          Veja os detalhes completos da execução no link abaixo:
+          ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     
     - name: Upload da cobertura de código
       uses: actions/upload-artifact@v4
