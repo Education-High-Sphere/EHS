@@ -1,6 +1,5 @@
 const dotenv = require('dotenv');
 
-// Carrega variáveis de ambiente de teste
 dotenv.config({ path: '.env.test' });
 
 describe('Configuração Básica', () => {
