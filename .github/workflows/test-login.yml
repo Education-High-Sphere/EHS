@@ -1,0 +1,139 @@
+name: Teste da Funcionalidade de Login
+
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+
+jobs:
+  test-login:
+    runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: testpassword
+          MYSQL_DATABASE: ehsync_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Instalando dependências
+      run: npm ci
+
+    - name: Verificando instalação do Jest
+      run: |
+        echo "Verificando instalação do Jest..."
+        npx jest --version
+        echo "Jest instalado com sucesso!"
+
+    - name: Instalando cliente MySQL
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y mysql-client
+
+    - name: Aguardando o MySQL ficar pronto
+      run: |
+        for i in {1..30}; do
+          if mysqladmin ping -h 127.0.0.1 -P 3306 -u root -ptestpassword --silent; then
+            echo "MySQL online!"
+            break
+          fi
+          echo "Aguardando o MySQL... (attempt $i/30)"
+          sleep 2
+        done
+
+    - name: Setup teste de banco de dados
+      run: |
+        mysql -h 127.0.0.1 -P 3306 -u root -ptestpassword -e "
+        CREATE DATABASE IF NOT EXISTS ehsync_test;
+        USE ehsync_test;
+        CREATE TABLE IF NOT EXISTS users (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );"
+
+    - name: Criando arquivo de ambiente
+      run: |
+        echo "DB_HOST=127.0.0.1" > .env.test
+        echo "DB_PORT=3306" >> .env.test
+        echo "DB_USER=root" >> .env.test
+        echo "DB_PASSWORD=testpassword" >> .env.test
+        echo "DB_NAME=ehsync_test" >> .env.test
+        echo "JWT_SECRET=test_jwt_secret_key_for_github_actions" >> .env.test
+
+    - name: Iniciando testes unitários
+      run: |
+        echo "Executando testes unitários..."
+        npm test -- --verbose --coverage
+        echo "Testes unitários concluídos!"
+      env:
+        NODE_ENV: test
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_USER: root
+        DB_PASSWORD: testpassword
+        DB_NAME: ehsync_test
+        JWT_SECRET: test_jwt_secret_key_for_github_actions
+
+    - name: Test login API endpoints
+      run: |
+        # Inicia o servidor
+        npm start &
+        SERVER_PID=$!
+        
+        # Aguarda o servidor iniciar
+        sleep 5
+        
+        # Testa se o servidor está respondendo
+        curl -f http://localhost:3000/ || exit 1
+        
+        # Testa endpoint de registro (deve retornar 400 sem dados)
+        HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:3000/users/register)
+        if [ "$HTTP_CODE" != "400" ]; then
+          echo "❌ Teste de registro falhou. Esperado: 400, Recebido: $HTTP_CODE"
+          kill $SERVER_PID
+          exit 1
+        fi
+        echo "✅ Teste de registro sem dados passou"
+        
+        # Testa endpoint de login (deve retornar 401 sem dados)
+        HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:3000/users/login)
+        if [ "$HTTP_CODE" != "401" ]; then
+          echo "❌ Teste de login falhou. Esperado: 401, Recebido: $HTTP_CODE"
+          kill $SERVER_PID
+          exit 1
+        fi
+        echo "✅ Teste de login sem dados passou"
+        
+        echo "✅ Todos os testes de API passaram!"
+        
+        # Para o servidor
+        kill $SERVER_PID
+      env:
+        NODE_ENV: test
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_USER: root
+        DB_PASSWORD: testpassword
+        DB_NAME: ehsync_test
+        JWT_SECRET: test_jwt_secret_key_for_github_actions

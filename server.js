@@ -1,6 +1,10 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 import userRoutes from "./api/routes/user/userRoutes.js";
+
+// Carrega as variáveis de ambiente do arquivo .env
+dotenv.config();
 
 const app = express();
 

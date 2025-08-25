@@ -1,4 +1,5 @@
 import userService from '../services/userService.js';
+import jwt from 'jsonwebtoken';
 
 
 export default {

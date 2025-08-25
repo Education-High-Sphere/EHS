@@ -1,0 +1,18 @@
+{
+  "testEnvironment": "node",
+  "transform": {
+    "^.+\\.js$": "babel-jest"
+  },
+  "testMatch": [
+    "**/tests/**/*.test.js",
+    "**/?(*.)+(spec|test).js"
+  ],
+  "collectCoverage": true,
+  "coverageDirectory": "coverage",
+  "coverageReporters": ["text", "lcov", "html"],
+  "collectCoverageFrom": [
+    "api/**/*.js",
+    "!api/**/*.test.js",
+    "!**/node_modules/**"
+  ]
+}
