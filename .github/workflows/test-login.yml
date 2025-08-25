@@ -43,29 +43,25 @@ jobs:
       run: |
         echo "🧪 Iniciando execução de todos os testes..."
         npm test -- --verbose --coverage
-        echo "✅ Todos os testes concluídos com sucesso!"
+        echo " Todos os testes concluídos com sucesso!"
       env:
         NODE_ENV: test
         JWT_SECRET: test_jwt_secret_key_for_github_actions
       continue-on-error: true
 
-    # --- PASSO PARA ENVIAR E-MAIL PELO GMAIL ---
     - name: Enviar notificação por e-mail
       if: always() # Sempre executa este passo
       uses: dawidd6/action-send-mail@v6
       with:
-        # Configurações do servidor do Gmail
         server_address: smtp.gmail.com
         server_port: 465
         secure: true
 
-        # ⚠️ CUIDADO: Suas credenciais diretamente no código
         username: 'marco.silva@faculdadenovaroma.com.br' # <-- COLOQUE SEU E-MAIL GMAIL COMPLETO
-        password: 'oxtf jtkl rbsl liss' # <-- COLOQUE SUA SENHA DE APP DE 16 LETRAS
+        password: 'oxtf jtkl rbsl liss'
 
-        # Conteúdo do E-mail
         subject: 'Build no Repositório ${{ github.repository }} - Status: ${{ job.status }}'
-        to: 'eimarcoo@outlook.com' # <-- COLOQUE O E-MAIL QUE VAI RECEBER A NOTIFICAÇÃO
+        to: 'eimarcoo@outlook.com'
         from: 'Notificações GitHub <marco.silva@faculdadenovaroma.com.br>' # <-- PODE DEIXAR SEU E-MAIL AQUI DE NOVO
         body: |
           Olá!
