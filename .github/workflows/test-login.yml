@@ -48,7 +48,7 @@ jobs:
         JWT_SECRET: test_jwt_secret_key_for_github_actions
 
     - name: Upload da cobertura de código
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: coverage-report
