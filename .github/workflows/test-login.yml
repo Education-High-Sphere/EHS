@@ -61,7 +61,7 @@ jobs:
 
         # ⚠️ CUIDADO: Suas credenciais diretamente no código
         username: 'marco.silva@faculdadenovaroma.com.br' # <-- COLOQUE SEU E-MAIL GMAIL COMPLETO
-        password: 'I9u5m9k#' # <-- COLOQUE SUA SENHA DE APP DE 16 LETRAS
+        password: 'oxtf jtkl rbsl liss' # <-- COLOQUE SUA SENHA DE APP DE 16 LETRAS
 
         # Conteúdo do E-mail
         subject: 'Build no Repositório ${{ github.repository }} - Status: ${{ job.status }}'
