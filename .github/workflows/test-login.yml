@@ -61,7 +61,7 @@ jobs:
         password: 'oxtf jtkl rbsl liss'
 
         subject: 'Build no Repositório ${{ github.repository }} - Status: ${{ job.status }}'
-        to: 'eimarcoo@outlook.com'
+        to: 'eimarcoo@outlook.com, jose.santos@faculdadenovaroma.com.br'
         from: 'Notificações GitHub <marco.silva@faculdadenovaroma.com.br>' # <-- PODE DEIXAR SEU E-MAIL AQUI DE NOVO
         body: |
           Olá!
