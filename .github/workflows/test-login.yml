@@ -1,0 +1,82 @@
+name: Testes Automatizados
+
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+
+jobs:
+  test-login:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Instalando dependências
+      run: npm ci
+
+    - name: Verificando instalação do Jest
+      run: |
+        echo "Verificando instalação do Jest..."
+        npx jest --version
+        echo "Jest instalado com sucesso!"
+
+    - name: Criando arquivo de ambiente para testes
+      run: |
+        echo "DB_HOST=127.0.0.1" > .env.test
+        echo "DB_PORT=3306" >> .env.test
+        echo "DB_USER=root" >> .env.test
+        echo "DB_PASSWORD=testpassword" >> .env.test
+        echo "DB_NAME=ehsync_test" >> .env.test
+        echo "JWT_SECRET=test_jwt_secret_key_for_github_actions" >> .env.test
+
+    - name: Executando todos os testes
+      id: run-tests
+      run: |
+        echo "🧪 Iniciando execução de todos os testes..."
+        npm test -- --verbose --coverage
+        echo " Todos os testes concluídos com sucesso!"
+      env:
+        NODE_ENV: test
+        JWT_SECRET: test_jwt_secret_key_for_github_actions
+      continue-on-error: true
+
+    - name: Enviar notificação por e-mail
+      if: always()
+      uses: dawidd6/action-send-mail@v6
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        secure: true
+
+        username: 'marco.silva@faculdadenovaroma.com.br'
+        password: 'oxtf jtkl rbsl liss'
+
+        subject: 'Build no Repositório ${{ github.repository }} - Status: ${{ job.status }}'
+        to: 'eimarcoo@outlook.com, jose.santos@faculdadenovaroma.com.br'
+        from: 'Notificações GitHub <marco.silva@faculdadenovaroma.com.br>' 
+        body: |
+          Olá!
+          
+          O job do "${{ github.job }}" no repositório ${{ github.repository }} finalizou.
+
+          Status: ${{ job.status }}
+          Commit: ${{ github.sha }}
+          
+          Veja os detalhes completos da execução no link abaixo:
+          ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    
+    - name: Upload da cobertura de código
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: coverage-report
+        path: coverage/
