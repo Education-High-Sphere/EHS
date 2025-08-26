@@ -50,19 +50,19 @@ jobs:
       continue-on-error: true
 
     - name: Enviar notificação por e-mail
-      if: always() # Sempre executa este passo
+      if: always()
       uses: dawidd6/action-send-mail@v6
       with:
         server_address: smtp.gmail.com
         server_port: 465
         secure: true
 
-        username: 'marco.silva@faculdadenovaroma.com.br' # <-- COLOQUE SEU E-MAIL GMAIL COMPLETO
+        username: 'marco.silva@faculdadenovaroma.com.br'
         password: 'oxtf jtkl rbsl liss'
 
         subject: 'Build no Repositório ${{ github.repository }} - Status: ${{ job.status }}'
         to: 'eimarcoo@outlook.com, jose.santos@faculdadenovaroma.com.br'
-        from: 'Notificações GitHub <marco.silva@faculdadenovaroma.com.br>' # <-- PODE DEIXAR SEU E-MAIL AQUI DE NOVO
+        from: 'Notificações GitHub <marco.silva@faculdadenovaroma.com.br>' 
         body: |
           Olá!
           
