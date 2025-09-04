@@ -21,6 +21,8 @@ const pool = mysql.createPool({
 
 if (!pool) {
   throw new Error('Não foi possível criar o pool de conexões com o banco de dados');
+}else{
+  console.log('Pool de conexões criado com sucesso');
 }
 
 export default pool;
