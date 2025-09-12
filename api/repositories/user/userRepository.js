@@ -1,4 +1,4 @@
-import pool from '../../.config/db.js';  // importa o pool do db.js
+import pool from '../../../.config/db.js';  // importa o pool do db.js
 
 export async function findUserById(id) {
   const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
@@ -11,10 +11,10 @@ export async function findUserByEmail(email) {
 }
 
 export async function createUser(userData) {
-  const { name, email, passwordHash, job, birth_date } = userData;
+  const { name, email, passwordHash, job, birth_date,phone } = userData;
   const [result] = await pool.query(
-    'INSERT INTO users (name, email, password, job, birth_date) VALUES (?, ?, ?, ?, ?)',
-    [name, email, passwordHash, job, birth_date]
+    'INSERT INTO users (name, email, password, job, birth_date,phone) VALUES (?, ?, ?, ?, ?,?)',
+    [name, email, passwordHash, job, birth_date,phone]
   );
   return result.insertId;
 }

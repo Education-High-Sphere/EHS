@@ -1,4 +1,4 @@
-import userRepository from '../repositories/userRepository.js';
+import userRepository, { updateUser } from '../../repositories/user/userRepository.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -23,11 +23,7 @@ export default {
   if (!match) throw new Error('Senha inválida');
 
   // Cria token incluindo name, email e id
-  return jwt.sign(
-    { id: user.id, name: user.name, email: user.email },
-    process.env.JWT_SECRET,
-    { expiresIn: '1h' }
-  );
+  return user;
 },
 
   async getProfile(id) {
@@ -37,6 +33,22 @@ export default {
   },
   async findAll() {
     return await userRepository.findAll();
+  },
+
+  async updateUser(id, data) {
+    const existing = await userRepository.findById(id);
+    if (!existing) throw new Error('Usuário não encontrado');
+
+    if (data.email && data.email !== existing.email) {
+      const emailTaken = await userRepository.findByEmail(data.email);
+      if (emailTaken) throw new Error('Email já registrado');
+    }
+    const passwordHash = data.password ? await bcrypt.hash(data.password, 10) : existing.password;
+
+    await userRepository.update(id, { ...data, passwordHash });
+
+    const updatedUser = await userRepository.findById(id);
+    return updatedUser;
   }
 
 };

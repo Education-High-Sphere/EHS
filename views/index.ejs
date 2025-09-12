@@ -17,42 +17,7 @@
     <title>EHSYNC - Educação Online</title>
   </head>
   <body>
-    <header class="top-header">
-      <div class="main-header">
-        <div class="logo-container">
-          <div class="logo">
-            <img src="../src/logo.png" alt="Logo" />
-            <div>
-              <strong>EHS</strong>
-              <small>Educando Mentes do Futuro</small>
-            </div>
-          </div>
-        </div>
-
-        <nav class="nav-links">
-          <a href="#">Home</a>
-          <a href="#">Cursos</a>
-          <a href="#">Seja um Professor</a>
-          <a href="#">Comunidade</a>
-        </nav>
-
-        <div class="search-bar">
-          <input type="text" placeholder="Procure por um curso..." />
-          <button><i class="fas fa-search"></i></button>
-        </div>
-
-        <div class="icons">
-          <i class="fas fa-bell"></i>
-          <i class="fas fa-heart"></i>
-          <i class="fas fa-shopping-cart"></i>
-        </div>
-        <div class="login">
-          <a href="/register" class="login">Login/Cadastre-se</a>
-      </div>
-      </div>
-
-      
-    </header>
+    <%- include('common/header'); %>
 
     <section class="hero">
       <div class="hero-container">
@@ -63,11 +28,11 @@
             <strong style="color: #4a78a6">disponível em qualquer lugar</strong>
           </p>
           <ul>
-            <li>✅ Cursos Profissionalizantes</li>
+            <li> Cursos Profissionalizantes</li>
             <br />
-            <li>✅ Material didático</li>
+            <li> Material didático</li>
             <br />
-            <li>✅ Interação com outros alunos</li>
+            <li> Interação com outros alunos</li>
           </ul>
           <br />
           <div class="buttons">
@@ -102,43 +67,21 @@
         <h1 style="color: #4a78a6">Tecnologia</h1>
 
         <div class="cards">
-          <div class="card tecnologia">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img1.jpg')"
-            ></div>
-            <h3>Desenvolvimento Web</h3>
-            <p>
-              Aprenda a criar sites e sistemas completos, desde o design até a
-              programação, dominando linguagens como HTML, CSS, JavaScript,
-              React.
-            </p>
-          </div>
-          <div class="card tecnologia">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img2.jpg')"
-            ></div>
-            <h3>Inteligência Artificial</h3>
-            <p>Automação, algoritmos, machine learning.</p>
-          </div>
-          <div class="card tecnologia">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img3.jpg')"
-            ></div>
-            <h3>CyberSecurity</h3>
-            <p>Cibersegurança, criptografia, segurança da informação.</p>
-          </div>
-          <div class="card tecnologia">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img4.jpg')"
-            ></div>
-            <h3>Cloud Computing</h3>
-            <p>Nuvem, AWS, Azure, Google Cloud.</p>
-          </div>
 
+          <!-- Tecnologia -->
+           <div class="card tecnologia">
+            <% if (courses && courses.length > 0) { %>
+    <% courses.forEach(course => { %>
+      <div class="card <%= categoria.toLowerCase() %>">
+        <div class="img" style="background-image: url('<%= course.imagem %>')"></div>
+        <h3><%= course.nome %></h3>
+        <p><%= course.descricao %></p>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <p>Nenhum curso de <%= categoria %> encontrado.</p>
+  <% } %>
+  </div>
           <!-- Marketing -->
           <div class="card marketing">
             <div
@@ -246,50 +189,51 @@
           </div>
       </div>
     </section>
-    <footer>
-      <div class="top-info">
-        <div>
-          <span class="phone"><i class="fas fa-phone"></i> +55 (81) 9962-3659</span>
-          <a href="mailto:educationhighsphere@gmail.com"><span class="email"> <i class="fas fa-envelope"></i>educationhighsphere@gmail.com</span></a>
-        </div>
-        <div class="social">
-          <h4>Redes Sociais:</h4>
-          <a href="#"><i class="fab fa-youtube"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-facebook-f"></i></a>
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
-        </div>
-      </div>
-    </footer>
+    <%- include('common/footer'); %>
     <script>
-      function filterCategory(category) {
-        const cards = document.querySelectorAll(".card");
-        const title = document.querySelector(".cards-area h1");
-
-        switch (category) {
-          case "tecnologia":
-            title.innerHTML = "Tecnologia";
-            break;
-          case "marketing":
-            title.innerHTML = "Marketing Digital";
-            break;
-          case "empreendedorismo":
-            title.innerHTML = "Empreendedorismo";
-            break;
-          case "softskills":
-            title.innerHTML = "Soft Skills";
-            break;
-        }
-        cards.forEach((card) => {
-          if (card.classList.contains(category)) {
-            card.style.display = "block";
-          } else {
-            card.style.display = "none";
-          }
+  /**
+   * Fun o que filtra os cursos por categoria
+   * @param {string} category - Categoria a ser filtrada
+   * @returns {Promise<void>}
+   */
+      async function filterCategory(category) {
+        const categories = ["Tecnologia", "Marketing", "Empreendedorismo", "Softskills"];
+        document.querySelector('.cards-area h1').innerText = category.charAt(0).toUpperCase() + category.slice(1);
+        categories.forEach(cat => {
+          document.querySelectorAll(`.card.${cat.toLowerCase()}`).forEach(card => {
+            card.style.display = cat.toLowerCase() === category ? 'block' : 'none';
+          });
         });
-      }
+        try{
+          const res = await fetch(`/cursos/category/${category}`);
+          const data = await res.json();
+          console.log(data);
+          if (data.length === 0) {
+            document.querySelector('.cards-area .cards').innerHTML = '<h4 style="color: red; font-size: 20px; font-weight: 500; text-align: center;">Nenhum curso encontrado nessa categoria!</h4>';
+          } else {
+            const cardsArea = document.querySelector('.cards-area .cards');
+            cardsArea.innerHTML = '';
+            data.forEach(course => {
+              const card = document.createElement('div');
+              card.className = `card ${category}`;
+              card.innerHTML = `
+                <div class="img" style="background-image: url('${course.imagem}')"></div>
+                <h3>${course.nome}</h3>
+                <p>${course.descricao}</p>
+              `;
+              cardsArea.appendChild(card);
+            });
+          }
+        } catch (error) {
+          console.error(error);
 
-      filterCategory("tecnologia");
+        }
+        
+      };
+
+      filterCategory("Tecnologia");
+
+
     </script>
   </body>
 </html>
