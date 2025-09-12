@@ -1,61 +1,185 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../styles/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../styles/userScene.css" />
     <title>EHSYNC</title>
-</head>
-<body>
-    <nav class="sidebar-nav">
-        <ul>
-            <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="/userScene/<%= user.id %>"><i class="fas fa-user"></i> Perfil</a></li>
-            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
-        </ul>
+  </head>
+  <body>
+    <%-include ('common/header')-%>
+    <h1 class="title">Seja bem-vindo <%= user.name %></h1>
+    <button class="logout-button" id="logout">Logout</button>
 
-    </nav>
-    <h1>Hello, <%= user.name %></h1>
-
-    <div class="container">
-        
-        <div class="card left-card">
-            <h3>Meus Cursos</h3>
-            
-            <div class="course">
-                <p>Gestão Ágil com Scrum e Kanban</p>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 30%;"></div>
-                </div>
-            </div>
-
-            <div class="course">
-                <p>Design Thinking para Resolução de Problemas na TI</p>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 90%;"></div>
-                </div>
-            </div>
-
-            <div class="course">
-                <p>Inteligência Artificial para Líderes e Gestores</p>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 10%;"></div>
-                </div>
-            </div>
+    <div class="body-content">
+      <div class="user-info">
+        <span class="user-picture">
+          <img
+            src="<%= user.avatar ? user.avatar : '../src/user.png' %>"
+            alt="User"
+          />
+        </span>
+        <div class="user-title">
+          <span class="user-name"><%= user.name %></span>
+          <span class="user-email"><%= user.job %></span>
         </div>
-
-    
-        <div class="card right-card">
-        
-            <span class="medal">&#127941;</span>
-            <h3>Meus certificados</h3>
-            <div class="certificates">
-                <p>Ética e Responsabilidade no Uso de IA</p>
-                <p>Análise de Dados com IA</p>
-            </div>
+        <div class="user-actions">
+          <button class="action-button" onclick="window.location.href='/edit'">
+            Editar perfil <i class="fas fa-edit"></i>
+          </button>
         </div>
+        <div class="user-data">
+          <p>
+            <strong><i class="fas fa-user"></i> Email:</strong> <%= user.email
+            %>
+          </p>
+          <p>
+            <strong><i class="fas fa-phone"></i> Telefone:</strong> <%=
+            user.phone %>
+          </p>
+          <p>
+            <strong><i class="fas fa-calendar"></i> Membro desde:</strong> <%=
+            new Date(user.createdAt).toLocaleDateString('pt-BR') %>
+          </p>
+        </div>
+        <div class="user-trophies">
+          <span class="user-trophy">
+            <i class="fa fa-trophy" style="color: blue;"></i>
+            <p>34 cursos concluidos</p>
+          </span>
+
+          <span class="user-trophy">
+            <i class="fa fa-trophy" style="color: blueviolet;"></i>
+            <p>12 avaliações positivas</p>
+          </span>
+        </div>
+        
+      </div>
+
+      <div class="user-courses">
+        <h2><i class="fas fa-book"></i> Seus cursos</h2>
+        <div class="courses-list">
+          <div class="course-card">
+            <div class="course-info">
+              <h3>Desenvolvimento Web</h3>
+              <small>Professor: João Silva</small>
+
+              <div class="rating">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star-half-alt"></i>
+                <span>4.5</span>
+              </div>
+
+              <div class="progress-container">
+                <div class="progress-bar" style="width: 60%"></div>
+              </div>
+              <div class="progress-info">
+                <p>12 de 20 aulas concluídas</p>
+                <button class="continue-btn">Continue</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="course-card">
+            <div class="course-info">
+              <h3>Introdução a Banco de dados</h3>
+              <small>Professor: Maria de Souza</small>
+
+              <div class="rating">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star-half-alt"></i>
+                <span>3.5</span>
+              </div>
+              <div class="progress-container">
+                <div class="progress-bar" style="width: 90%"></div>
+              </div>
+              <div class="progress-info">
+                <p>16 de 18 aulas concluídas</p>
+                <button class="continue-btn">Continue</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="course-card">
+            <div class="course-info">
+              <h3>Cybersecurity</h3>
+              <small>Professor: Ademário Silva</small>
+
+              <div class="rating">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <span>5</span>
+              </div>
+
+              <div class="progress-container">
+                <div class="progress-bar" style="width: 40%"></div>
+              </div>
+
+              <div class="progress-info">
+                <p>4 de 10 aulas concluídas</p>
+                <button class="continue-btn">Continue</button>
+              </div>
+            </div>
+            </div>
+            <div class="course-card">
+            <div class="course-info">
+              <h3>Ux/Ui Design</h3>
+              <small>Professor: Manuela Santos</small>
+
+              <div class="rating">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <span>3</span>
+              </div>
+
+              <div class="progress-container">
+                <div class="progress-bar" style="width: 65%"></div>
+              </div>
+
+              <div class="progress-info">
+                <p>8 de 12 aulas concluídas</p>
+                <button class="continue-btn">Continue</button>
+              </div>
+              </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-</body>
+    <%-include ('common/footer')-%>
+
+    <script>
+      const logoutButton = document.getElementById("logout");
+      logoutButton.addEventListener("click", function () {
+        window.location.href = "/logout";
+      });
+
+      const perfilButton = document.getElementById("perfil");
+      const userData = document.querySelector(".user-data");
+      const cursosList = document.querySelector(".user-courses");
+      perfilButton.addEventListener("click", function () {
+        userData.style.display = "flex";
+        cursosList.style.display = "none";
+      });
+
+      const cursosButton = document.getElementById("cursos");
+      cursosButton.addEventListener("click", function () {
+        cursosList.style.display = "flex";
+        userData.style.display = "none";
+      });
+    </script>
+  </body>
 </html>

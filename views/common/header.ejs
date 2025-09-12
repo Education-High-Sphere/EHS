@@ -1,0 +1,162 @@
+<head>
+  <style>
+    .top-header {
+      color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 12px;
+      display: flex;
+      width: 100vw;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .login {
+      font-size: large;
+      font-weight: 600;
+      color: #0f1e38;
+      padding: 10px;
+      text-decoration: none;
+      transition: all 0.3s ease-in-out;
+      margin-right: 20px;
+    }
+    .login a:hover {
+      background-color: #0f1e38;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .main-header {
+      background-color: #fff;
+      height: fit-content;
+      width: 100vw;
+      height: 70px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .nav-links a:hover {
+      text-decoration: none;
+      color: #4a78a6;
+    }
+    .logo {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #0f1e38;
+      border-radius: 0px 10px 0px 0px;
+      padding: 1px;
+      cursor: pointer;
+    }
+    .logo div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo img {
+      height: 36px;
+    }
+
+    .nav-links a {
+      margin: 0 10px;
+      color: #000;
+      text-decoration: none;
+    }
+
+    .search-bar {
+      display: flex;
+    }
+
+    .search-bar input {
+      padding: 5px;
+      border: 1px solid #ccc;
+    }
+    .search-bar input:focus {
+      outline: 1px solid #0f1e38;
+    }
+
+    .search-bar button {
+      background: #0f1e38;
+      color: white;
+      cursor: pointer;
+      border: none;
+      padding: 5px 10px;
+    }
+
+    .icons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+    }
+
+    .icons i {
+      font-size: 16px;
+      margin: 0 8px;
+      cursor: pointer;
+      color: #0f1e38;
+    }
+
+    .buttons .login {
+      margin-right: 10px;
+      color: #0f1e38;
+      text-decoration: none;
+    }
+
+    .buttons .aprendizado {
+      background: #0f1e38;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="icon" href="../src/logo.png" type="image/x-icon">
+</head>
+
+<header class="top-header">
+  <div class="main-header">
+    <div class="logo-container">
+      <div class="logo" onclick="window.location.href = '/'">
+        <img src="../src/logo.png" alt="Logo" />
+        <div>
+          <strong>EHS</strong>
+          <small>Educando Mentes do Futuro</small>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="/">Home</a>
+      <a href="#">Cursos</a>
+      <a href="#">Seja um Professor</a>
+      <a href="#">Comunidade</a>
+    </nav>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Procure por um curso..." />
+      <button><i class="fas fa-search"></i></button>
+    </div>
+
+    <div class="icons">
+      <i class="fas fa-bell"></i>
+      <i class="fas fa-heart"></i>
+      <i class="fas fa-shopping-cart"></i>
+    </div>
+    <div class="login">
+      <% if (user) { %>
+      <a href="/userScene">Olá, <%= user.name %></a>
+      <% } else { %>
+      <a href="/register">Login / Cadastro</a>
+      <% } %>
+    </div>
+  </div>
+</header>

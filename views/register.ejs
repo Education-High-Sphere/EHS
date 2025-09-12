@@ -30,6 +30,16 @@
 
         <div class="input-box">
           <input
+            name="birth_date"
+            placeholder="Data de nascimento"
+            type="date"
+            id="birthdate"
+            required
+          />
+        </div>
+
+        <div class="input-box">
+          <input
             name="email"
             placeholder="Endereço de e-mail"
             type="email"
@@ -42,24 +52,18 @@
 
         <div class="input-box">
           <input
-            name="birth_date"
-            placeholder="Data de nascimento"
-            type="date"
-            id="birthdate"
+            name="email_confirm"
+            placeholder="Confirme seu e-mail"
+            type="email"
             required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+            oninvalid="setCustomValidity('Por favor, insira um endereço de e-mail válido.')"
+            oninput="setCustomValidity('')"
           />
+
         </div>
 
-        <div class="input-box">
-          <select name="gender" id="" class="input-select">
-            <option value="" disabled selected>Selecione o gênero</option>
-            <option value="masculino">Masculino</option>
-            <option value="feminino">Feminino</option>
-            <option value="nao-binario">Não Binário</option>
-            <option value="transgenero">Transgênero</option>
-            <option value="outro">Outro</option>
-          </select>
-        </div>
+        
 
         <div class="input-box">
           <input name="job" placeholder="Cargo" type="text" required />
@@ -74,6 +78,7 @@
             required
           />
         </div>
+
 
         <div class="input-box">
           <input
@@ -196,6 +201,24 @@
 
         if (senha !== confirmar_senha) {
           alert("As senhas não coincidem, por favor, tente novamente.");
+          return false;
+        }
+
+        return true;
+      }
+
+      function verifyEmail() {
+        var emailInput = document.getElementById("email");
+        var confirmar_emailInput = document.getElementById("email_confirm");
+        if (!emailInput || !confirmar_emailInput) {
+          console.error("Falha ao acessar campos de formulário");
+          return false;
+        }
+
+        var email = emailInput.value;
+        var confirmar_email = confirmar_emailInput.value;
+        if (email !== confirmar_email) {
+          alert("Os e-mails não coincidem, por favor, tente novamente.");
           return false;
         }
 

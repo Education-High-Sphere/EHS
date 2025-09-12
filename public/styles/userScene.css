@@ -1,0 +1,228 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f4f4;
+  min-height: 130vh;
+}
+
+a{
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease-in-out;
+}
+
+.title{
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 28px;
+}
+.logout-button {
+  position: absolute;
+  top: 90px;
+  right: 20px;
+  background-color: #9c1111;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.body-content {
+  display: flex;
+  justify-content: space-around;
+  max-width: 100vw;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  width: 300px;
+  max-height: 600px;
+  background-color: #5d7aaa31;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.user-picture {
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 20px auto;
+}
+
+.user-picture img {
+  max-width: 150px;
+  object-fit: cover;
+}
+
+.user-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.user-email {
+  font-size: 16px;
+  color: #666;
+}
+
+.user-title{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-actions button {
+  background-color: #0f1e38;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+.user-actions button:hover {
+  background-color: #333;
+}
+
+/* Adicionei um estilo para a foto padrão */
+.user-picture img[src="../src/user.png"] {
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+.user-data {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-evenly;
+  text-align: left;
+  margin-top: 10px;
+  border-bottom: 2px solid #3333338c ;
+}
+
+.user-data p {
+  margin: 5px 0;
+}
+
+.user-trophies{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: 10px;
+}
+.user-trophy{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.user-trophy i{
+  font-size: 28px;
+}
+.user-trophy p{
+  font-size: 10px;
+}
+
+.user-courses {
+  display: flex;
+  width: 800px;
+  max-height: 600px;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+  margin-top: 10px;
+  background-color: #5d7aaa31;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.courses-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  gap: 20px;
+}
+
+.course-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: 650px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.course-card h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.course-card small {
+  color: #666;
+}
+
+.rating {
+  font-size: 1.1rem;
+  color: #f5a623; /* cor das estrelas */
+}
+
+.progress-container {
+  background: #c2c2c2;
+  border-radius: 8px;
+  height: 10px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #40577e, #818bc7);
+  border-radius: 8px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.course-card p {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.continue-btn {
+  background: #40577e;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.continue-btn:hover {
+  background: #818bc7;
+}
+
