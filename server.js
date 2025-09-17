@@ -3,7 +3,9 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import userRoutes from "./api/routes/user/userRoutes.js";
 import cursoRouter from "./api/routes/cursos/cursosRouter.js";
+import ongoingCourse from './api/controllers/cursos/cursoController.js';
 import cookieParser from "cookie-parser";
+
 
 // Carrega as variáveis de ambiente do arquivo .env
 dotenv.config();
@@ -65,6 +67,13 @@ app.get("/userScene", (req, res) => {
     return res.status(401).json({ error: "Usuário não autenticado" });
   }
   res.render("userScene", { user: res.locals.user });
+});
+
+app.get("/ongoingCourses", (req, res) => {
+  // if (!res.locals.user) {
+  //   return res.status(401).json({ error: "Usuário não autenticado" });
+  // }
+  res.render("ongoingCourses", { user: res.locals.user });
 });
 
 app.get("/register", (req, res) => {

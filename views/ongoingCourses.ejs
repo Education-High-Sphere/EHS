@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ongoingCourses</title>
+
+    <link rel="stylesheet" href="../styles/ongoingCourses.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <%- include('common/header'); %>
+
+     <h2 class="section-title">Continuar Estudando</h2>
+        
+        <div class="course-grid">
+            <!-- Curso 1 -->
+            <div class="course-card">
+                <span class="course-category">Produtividade e Processo</span>
+                <h3 class="course-title">Produtividade Ágil: Scrum e Kanban</h3>
+                <p class="course-instructor">Prof. João Jimin</p>
+                
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span class="progress-percent">65% concluído</span>
+                        <span>1/20 aulas</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%;"></div>
+                    </div>
+                </div>
+                
+                <div class="course-details">
+                    <span class="time-remaining">2h 30min restantes</span>
+                    <span class="a-value">1.250</span>
+                    <span class="rating">5</span>
+                </div>
+
+                <button class="continue-button">Continuar Curso</button>
+            </div>
+            
+            <!-- Curso 2 -->
+            <div class="course-card">
+                <span class="course-category">Lecturação e Gestão</span>
+                <h3 class="course-title">Gestão de Projetos do Zero ao Avançado</h3>
+                <p class="course-instructor">Prof. Maria Silva</p>
+                
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span class="progress-percent">30% concluído</span>
+                        <span>A/25 aulas</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 30%;"></div>
+                    </div>
+                </div>
+                
+                <div class="course-details">
+                    <span class="time-remaining">4h 15min restantes</span>
+                    <span class="a-value">900</span>
+                    <span class="rating">5</span>
+                </div>
+
+                <button class="continue-button">Continuar Curso</button>
+            </div>
+            
+            <!-- Curso 3 -->
+            <div class="course-card">
+                <span class="course-category">Produções e Processo</span>
+                <h3 class="course-title">Business Process Management (BPM)</h3>
+                <p class="course-instructor">Prof. Carlos Santos</p>
+                
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span class="progress-percent">85% concluído</span>
+                        <span>1%/15 aulas</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+                
+                <div class="course-details">
+                    <span class="time-remaining">45min restantes</span>
+                    <span class="a-value">700</span>
+                    <span class="rating">5</span>
+                </div>
+
+                <button class="continue-button">Continuar Curso</button>
+            </div>
+        </div>
+
+        <h2 class="section-title">Cursos Concluidos</h2>
+        
+          <div class="course-grid">
+            <!-- Curso 1 -->
+            <div class="course-card">
+                <span class="course-category">Produtividade e Processo</span>
+                <h3 class="course-title">Produtividade Ágil: Scrum e Kanban</h3>
+                <p class="course-instructor">Prof. João Jimin</p>
+                
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span class="progress-percent">65% concluído</span>
+                        <span>1/20 aulas</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%;"></div>
+                    </div>
+                </div>
+                
+                <div class="course-details">
+                    <span class="time-remaining">2h 30min restantes</span>
+                    <span class="a-value">1.250</span>
+                    <span class="rating">5</span>
+                </div>
+
+                <button class="continue-button">Continuar Curso</button>
+            </div>
+        </div>
+        
+    <%-include ('common/footer')-%>
+</body>
+</html>
