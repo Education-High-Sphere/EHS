@@ -71,6 +71,14 @@ app.get("/userScene", (req, res) => {
   res.render("userScene", { user: res.locals.user });
 });
 
+app.get("/courses", (req, res) => {
+  if (!res.locals.user) {
+    res.redirect("/register");
+  }
+  res.render("courses", { user: res.locals.user || null, courses: []});
+}
+);
+
 app.get("/ongoingCourses", async (req, res) => {
   try {
     if (!res.locals.user) {
