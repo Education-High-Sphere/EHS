@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import userRoutes from "./api/routes/user/userRoutes.js";
 import cursoRouter from "./api/routes/cursos/cursosRouter.js";
+import matriculasRouter from "./api/routes/matriculas/matriculasRouter.js";
 import ongoingCourse from './api/controllers/cursos/cursoController.js';
 import cookieParser from "cookie-parser";
 
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 // Rotas da API
 app.use("/users", userRoutes);
 app.use("/cursos", cursoRouter);
+app.use("/matriculas", matriculasRouter);
 
 // Middleware para cookies
 app.use(cookieParser());
@@ -69,11 +71,21 @@ app.get("/userScene", (req, res) => {
   res.render("userScene", { user: res.locals.user });
 });
 
-app.get("/ongoingCourses", (req, res) => {
-  // if (!res.locals.user) {
-  //   return res.status(401).json({ error: "Usuário não autenticado" });
-  // }
-  res.render("ongoingCourses", { user: res.locals.user });
+app.get("/ongoingCourses", async (req, res) => {
+  try {
+    if (!res.locals.user) {
+      return res.status(401).json({ error: "Usuário não autenticado" });
+    }
+    const response = await fetch(`http://localhost:3000/matriculas/user/${res.locals.user.id}/courses`);
+    const data = await response.json();
+    if (!data || !data.cursosConcluidos || !data.cursosEmAndamento) {
+      return res.status(500).json({ error: "Erro ao carregar cursos" });
+    }
+    res.render("ongoingCourses", { user: res.locals.user, cursosConcluidos: data.cursosConcluidos, cursosEmAndamento: data.cursosEmAndamento, matriculas: data.matriculas });
+  } catch (error) {
+    console.error("Erro ao carregar página de cursos em andamento:", error.message);
+    return res.status(500).json({ error: "Erro ao carregar página de cursos em andamento" });
+  }
 });
 
 app.get("/register", (req, res) => {

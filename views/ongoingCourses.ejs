@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,160 +15,102 @@
   <body>
     <%- include('common/header'); %>
 
-    <h2 class="section-title">📖 Continuar Estudando</h2>
+    <h2 class="section-title">Continuar Estudando</h2>
 
     <div class="course-grid">
+      <% if (cursosEmAndamento && cursosEmAndamento.length > 0) { %>
+      <% cursosEmAndamento.forEach(course => { %>
       <div class="course-card">
         <div class="course-info">
           <div class="info-top">
-            <span class="course-category">Produtividade e Processo</span>
-            <h3 class="course-title">Produtividade Ágil: Scrum e Kanban</h3>
-          </div>
-
-          <div class="info-img">
-            <img src="../src/ongoingCourses/Course1.png" alt="" />
-          </div>
-
-          <div class="info-bottom">
-            <p class="course-instructor">Prof. João Jimin</p>
-
-            <div class="progress-container">
-              <div class="progress-info">
-                <span class="progress-percent">65% concluído</span>
-                <span>1/20 aulas</span>
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 65%"></div>
-              </div>
-            </div>
-
-            <div class="course-details">
-              <span class="time-remaining">2h 30min restantes</span>
-              <span class="a-value">1.250</span>
-              <span class="rating">5</span>
-            </div>
-          </div>
-        </div>
-
-        <button class="continue-button">Continuar Curso</button>
-      </div>
-
-      <!-- Curso 2 -->
-      <div class="course-card">
-        <div class="course-info">
-          <div class="info-top">
-            <span class="course-category">Lecturação e Gestão</span>
-            <h3 class="course-title">Gestão de Projetos do Zero ao Avançado</h3>
-          </div>
-          <div class="info-img">
-            <img
-              src="../src/ongoingCourses/Course2.png"
-              alt="Gestão de Projetos do Zero ao Avançado"
-            />
-          </div>
-
-          <div class="info-bottom">
-            <p class="course-instructor">Prof. Maria Silva</p>
-            <div class="progress-container">
-              <div class="progress-info">
-                <span class="progress-percent">30% concluído</span>
-                <span>A/25 aulas</span>
-              </div>
-              <div class="progress-bar">
-                <div class="progress-fill" style="width: 30%"></div>
-              </div>
-            </div>
-
-            <div class="course-details">
-              <span class="time-remaining">4h 15min restantes</span>
-              <span class="a-value">900</span>
-              <span class="rating">5</span>
-            </div>
-          </div>
-        </div>
-
-        <button class="continue-button">Continuar Curso</button>
-      </div>
-
-      <!-- Curso 3 -->
-      <div class="course-card">
-        <div class="course-info">
-          <div class="info-top">
-            <span class="course-category">Produções e Processo</span>
-            <h3 class="course-title">Business Process Management (BPM)</h3>
+            <span class="course-category"><%= course.categoria %></span>
+            <h3 class="course-title"><%= course.nome %></h3>
           </div>
 
           <div class="info-img">
             <img
-              src="../src/ongoingCourses/Course3.png"
-              alt="Business Process Management (BPM)"
+              src="<%= course.imagem ? course.imagem : '' %>"
+              alt="<%= course.nome ? course.nome : '' %>"
             />
           </div>
 
           <div class="info-bottom">
-            <p class="course-instructor">Prof. Carlos Santos</p>
+            <% if (course.matricula && course.matricula.progresso) { %>
             <div class="progress-container">
               <div class="progress-info">
-                <span class="progress-percent">85% concluído</span>
-                <span>1%/15 aulas</span>
+                <span class="progress-percent"
+                  ><%= Math.round(course.matricula.progresso) %>%
+                  concluido</span
+                >
               </div>
               <div class="progress-bar">
-                <div class="progress-fill" style="width: 85%"></div>
+                <div
+                  class="progress-fill"
+                  style="
+                    width: <%= Math.round(course.matricula.progresso) %>%;
+                  "
+                ></div>
               </div>
             </div>
-          </div>
-
-          <div class="course-details">
-            <span class="time-remaining">45min restantes</span>
-            <span class="a-value">700</span>
-            <span class="rating">5</span>
+            <% } %>
           </div>
         </div>
-
         <button class="continue-button">Continuar Curso</button>
       </div>
+      <% }); %>
+      <% } else { %>
+      <p>Nenhum curso em andamento.</p>
+      <% } %>
     </div>
 
-    <h2 class="section-title">📚 Cursos Concluidos</h2>
+    <h2 class="section-title">Cursos Concluidos</h2>
 
     <div class="course-grid">
-      <!-- Curso 1 -->
+      <% if (cursosConcluidos && cursosConcluidos.length > 0) { %>
+      <% cursosConcluidos.forEach(course => { %>
       <div class="course-card">
         <div class="course-info">
           <div class="info-top">
-            <span class="course-category">Produtividade e Processo</span>
-            <h3 class="course-title">Produtividade Ágil: Scrum e Kanban</h3>
+            <span class="course-category"><%= course.categoria ? course.categoria : '' %></span>
+            <h3 class="course-title"><%= course.nome ? course.nome : '' %></h3>
           </div>
 
           <div class="info-img">
             <img
-              src="../src/ongoingCourses/Course1.png"
-              alt="Produtividade Ágil: Scrum e Kanban"
+              src="<%= course.imagem ? course.imagem : '' %>"
+              alt="<%= course.nome ? course.nome : '' %>"
             />
           </div>
+
           <div class="info-bottom">
-            <p class="course-instructor">Prof. João Jimin</p>
+            <% if (course.matricula && course.matricula.progresso) { %>
             <div class="progress-container">
               <div class="progress-info">
-                <span class="progress-percent">65% concluído</span>
-                <span>1/20 aulas</span>
+                <span class="progress-percent"
+                  ><%= Math.round(course.matricula.progresso) %>%
+                  concluido</span
+                >
               </div>
               <div class="progress-bar">
-                <div class="progress-fill" style="width: 65%"></div>
+                <div
+                  class="progress-fill"
+                  style="
+                    width: <%= Math.round(course.matricula.progresso) %>%;
+                  "
+                ></div>
               </div>
             </div>
-          </div>
-
-          <div class="course-details">
-            <span class="time-remaining">2h 30min restantes</span>
-            <span class="a-value">1.250</span>
-            <span class="rating">5</span>
+            <% } %>
           </div>
         </div>
-
-        <button class="certificate-button">Ver certificado</button>
+        <button class="continue-button">Ver Certificado</button>
       </div>
+      <% }); %>
+      <% } else { %>
+      <p>Nenhum curso concluido.</p>
+      <% } %>
     </div>
+
 
     <%-include ('common/footer')-%>
   </body>
