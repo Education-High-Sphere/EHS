@@ -6,12 +6,14 @@ import cursoRouter from "./api/routes/cursos/cursosRouter.js";
 import matriculasRouter from "./api/routes/matriculas/matriculasRouter.js";
 import ongoingCourse from './api/controllers/cursos/cursoController.js';
 import cookieParser from "cookie-parser";
+import open from 'open'
 
 
 // Carrega as variáveis de ambiente do arquivo .env
 dotenv.config();
 
 const app = express();
+
 
 // Configurando views
 app.set("view engine", "ejs");
@@ -71,13 +73,28 @@ app.get("/userScene", (req, res) => {
   res.render("userScene", { user: res.locals.user });
 });
 
-app.get("/courses", (req, res) => {
-  if (!res.locals.user) {
-    res.redirect("/register");
+app.get("/courses", async (req,res)=>{
+  if(!res.locals.user){
+    return res.status(401).json({ error: "Usuário não autenticado" });
   }
-  res.render("courses", { user: res.locals.user || null, courses: []});
-}
-);
+  try{
+    const courses = await fetch(`http://localhost:3000/cursos`);
+    const data = await courses.json();
+    res.render("courses", { user: res.locals.user, courses: data });
+  }catch(error){
+    console.error("Erro ao carregar página de cursos:", error.message);
+    return res.status(500).json({ error: "Erro ao carregar página de cursos" });
+  }
+});
+
+app.get("/course/:id" , async (req, res) => {
+  //if (!res.locals.user) {
+    //return res.status(401).json({ error: "Usuário não autenticado" });
+  //}
+  
+  res.render("course", { user: res.locals.user });
+})
+
 
 app.get("/ongoingCourses", async (req, res) => {
   try {
@@ -120,5 +137,8 @@ process.on("unhandledRejection", (reason, promise) => {
 
 // Inicializando servidor
 app.listen(3000, () => {
-  console.log("API rodando na porta 3000");
+  console.log("Aplicação rodando na porta 3000");
+
+  open('http://localhost:3000');
+
 });

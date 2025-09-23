@@ -6,6 +6,13 @@ export default {
         return rows;
     },
 
+    async search(searchTerm){
+        const data = await this.findAll();
+        return data.filter(course => course.nome.toLowerCase().includes(searchTerm.toLowerCase())
+        || (course.descricao && course.descricao.toLowerCase().includes(searchTerm.toLowerCase()))
+        || course.categoria.toLowerCase().includes(searchTerm.toLowerCase()));  
+    },
+
     async findById(id) {
         const [rows] = await db.query("SELECT * FROM cursos WHERE id = ?", [id]);
         return rows[0]; // retorna só um

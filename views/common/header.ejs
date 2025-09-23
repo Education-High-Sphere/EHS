@@ -4,14 +4,14 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
+      font-family: "Poppins", sans-serif;
     }
-    body{
+    body {
       min-height: 100vh;
       min-width: 100vw;
     }
 
-    a{
+    a {
       text-decoration: none;
       color: inherit;
     }
@@ -65,7 +65,7 @@
       align-items: center;
       background-color: #0f1e38;
       border-radius: 0px 10px 0px 0px;
-      padding: 1px;
+      padding: 0.8px;
       cursor: pointer;
     }
     .logo div {
@@ -73,6 +73,10 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+    }
+    .logo small{
+      font-size: 9px;
+      color: #fff;
     }
 
     .logo img {
@@ -133,8 +137,15 @@
       border-radius: 4px;
     }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="icon" href="../src/logo.png" type="image/x-icon">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+  />
+  <link rel="icon" href="../src/logo.png" type="image/x-icon" />
 </head>
 
 <header class="top-header">
@@ -151,14 +162,16 @@
 
     <nav class="nav-links">
       <a href="/">Home</a>
-      <a href="#">Cursos</a>
+      <a href="/courses">Cursos</a>
       <a href="#">Seja um Professor</a>
       <a href="#">Comunidade</a>
     </nav>
 
     <div class="search-bar">
-      <input type="text" placeholder="Procure por um curso..." />
-      <button><i class="fas fa-search"></i></button>
+      <form action="/courses" method="GET">
+        <input type="text" name="search" placeholder="Pesquisar" />
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </form>
     </div>
 
     <div class="icons">
@@ -175,3 +188,6 @@
     </div>
   </div>
 </header>
+<script>
+  // Adiciona funcionalidade de pesquisa
+</script>

@@ -9,6 +9,14 @@ export default {
             throw new Error("Erro ao buscar cursos: " + error.message);
         }
     },
+    async searchCourses(searchTerm) {
+        try {
+            const courses = await cursoRepository.search(searchTerm);
+            return courses;
+        } catch (error) {
+            throw new Error("Erro ao buscar cursos: " + error.message);
+        }
+    },
 
     async getCourseById(id) {
         try {

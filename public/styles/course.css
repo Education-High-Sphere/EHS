@@ -1,0 +1,18 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    min-height: 130vh;
+}
+
+.title{
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 28px;
+}

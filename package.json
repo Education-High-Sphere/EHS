@@ -23,7 +23,8 @@
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "mysql2": "^3.14.2",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "open": "^10.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.3",
