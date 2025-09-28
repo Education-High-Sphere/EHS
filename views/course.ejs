@@ -1,30 +1,84 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styles/course.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles/course.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <title>Curso</title>
-</head>
-<body>
+  </head>
+  <body>
     <%- include('common/header'); %>
-    
+
     <h1>Essa é a tela do curso</h1>
 
     <div class="tutor-container">
-        <h1>Seu instrutor</h1>
-        <div class="tutor-card">
-            <div class="tutor-info">
-                <div class="info-top">
-                    <img src="" alt="">
-                    <h3 class="tutor-name"></h3>
-                    <span class="tutor-role"></span>
-                </div>
-                <div class="info-bottom"></div>
+      <h1 class="tutor-title">Seu instrutor</h1>
+      <div class="tutor-card">
+        <div class="tutor-info">
+          <div class="info-top">
+            <img
+              src="../public/src/professor/professor.png"
+              alt="imagem professor"
+              class="tutor-image"
+            />
+            <h3 class="tutor-name">João Jimin</h3>
+            <span class="tutor-role">Especialista em gestão de projetos</span>
+          </div>
+          <div class="info-bottom">
+            <div class="stars">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star-half-stroke"></i>
+              <span>4.9 (2.500+ avaliações)</span>
             </div>
-            <div class="tutor-description"></div>
+            <div class="info-xtra">
+              <div class="tutor-students">
+                <i class="fa-solid fa-user-graduate"></i>
+                <span>25.000+</span>
+                <span>Alunos</span>
+              </div>
+              <div class="tutor-courses">
+                <i class="fa-solid fa-book"></i>
+                <span>15</span>
+                <span>Cursos</span>
+              </div>
+            </div>
+          </div>
         </div>
+        <div class="tutor-profile">
+          <div class="tutor-description">
+            <h3>Sobre o instrutor</h3>
+            <span
+              >Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Laudantium architecto quam ducimus tenetur perferendis sequi
+              dolore adipisci quas ipsam mollitia?</span
+            >
+          </div>
+          <div class="tutor-experience">
+            <h3>Experiência Profissional</h3>
+            <ul>
+              <li>Head of Agile Transformation - TechCorp (2020-2024)</li>
+              <li>Certified Scrum Master (CSM) - Scrum Alliance (2018)</li>
+              <li>Project Manager - Innovate Solutions (2015-2020)</li>
+              <li>Agile Coach - ConsultingPro (2015-2017)</li>
+            </ul>
+          </div>
+          <div class="tutor-certificates">
+            <h3>Certificações</h3>
+            <span>Certified Scrum Master (CSM)</span>
+            <span>Professional Scrum Master (PSM)</span>
+            <span>Kanban Management Professional</span>
+            <span>PMP - Project Management Professional</span>
+          </div>
+        </div>
+      </div>
     </div>
     <%- include('common/footer'); %>
-</body>
+  </body>
 </html>
