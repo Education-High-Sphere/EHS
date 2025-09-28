@@ -24,6 +24,8 @@ body{
 }
 
 
+
+/* Seu instrutor e Card de Instrutor */
 .tutor-container {
   display: flex;
   flex-direction: column;
@@ -37,11 +39,12 @@ body{
   background: #f9fcff;
   border: 1px solid #e0e0e0;
   border-radius: 10px;
-  padding: 30px;
+  padding: 50px;
   max-width: 1000px;
   display: flex;
-  gap: 30px;
+  gap: 50px;
   box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+
 }
 
 .tutor-title {
@@ -91,26 +94,43 @@ body{
   display: flex;
   justify-content: center;
   gap: 20px;
-  font-size: 14px;
-  color: #555;
+  font-size: 18px;
+  color: #3b82f6;
+}
+
+.tutot-students,
+.tutor-courses {
+  flex-direction: column;
+}
+
+
+.tutor-students i,
+.tutor-courses i,
+.tutor-students span,
+.tutor-courses span {
+  display: block;
 }
 
 .info-xtra div span:first-child {
   font-weight: bold;
   display: block;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 /* Coluna da direita */
 
 .tutor-profile {
-
+  justify-content: space-evenly;
 }
 
 .tutor-description,
 .tutor-experience,
 .tutor-certificates {
   margin-bottom: 20px;
+}
+
+.tutor-certificates {
+  overflow-x: auto;
 }
 
 .tutor-description h3,
@@ -139,15 +159,20 @@ body{
 
 .tutor-experience ul li,
 .tutor-certificates ul li {
-  font-size: 10px;
+  font-size: 13px;
   margin-bottom: 6px;
   color: #444;
 }
 
 .tutor-certificates span {
-    font-size: 10px;
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 13px;
     border: #444 1px solid;
     border-radius: 20px;
     padding: 5px;
     background-color: #f4f4f4;
+    margin: 4px 2px;
 }
+
+/* fim do Seu instrutor */
