@@ -74,9 +74,6 @@ app.get("/userScene", (req, res) => {
 });
 
 app.get("/courses", async (req,res)=>{
-  if(!res.locals.user){
-    return res.status(401).json({ error: "Usuário não autenticado" });
-  }
   try{
     const courses = await fetch(`http://localhost:3000/cursos`);
     const data = await courses.json();

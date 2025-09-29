@@ -15,7 +15,55 @@ body{
     background-color: #f4f4f4;
     min-height: 130vh;
 }
+/* Benefits Section */
+.benefits {
+  padding: 4rem 0;
+  background: white;
+}
 
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+  color: #1a1a1a;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.benefit-card {
+  background: #f8fafc;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.benefit-card:hover {
+  transform: translateY(-4px);
+}
+
+.benefit-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.benefit-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+}
+
+.benefit-card p {
+  color: #64748b;
+  line-height: 1.6;
+}
+/* Instrutor */
 .title{
     margin-top: 10px;
     text-align: center;
@@ -82,6 +130,10 @@ body{
 
 .info-bottom {
   margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .stars {
