@@ -227,4 +227,137 @@ body{
     margin: 4px 2px;
 }
 
+
+.ehs-wrapper {
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    max-width: 1180px;
+    margin: 40px auto;
+    padding: 0 20px;
+    color: #2b3440;
+  }
+
+  .ehs-heading {
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .ehs-heading h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .ehs-heading p {
+    margin: 6px 0 28px;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .ehs-grid {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 28px;
+    align-items: start;
+  }
+
+  /* coluna da esquerda depoimentos */
+  .testimonials {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .testimonial-card {
+    background: #f1f8fc; /* cor do card */
+    border-radius: 10px;
+    padding: 22px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.6);
+    border: 1px solid rgba(9,30,66,0.06);
+  }
+
+  .testimonial-top {
+    display: flex;
+    gap: 16px;
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#e8eef6,#f6fbff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9aa7b7;
+    font-weight: 600;
+    flex-shrink: 0;
+    border: 1px solid rgba(9,30,66,0.04);
+  }
+
+  .stars {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .testimonial-quote {
+    font-style: italic;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 6px;
+  }
+
+  .testimonial-author {
+    margin-top: 12px;
+    font-weight: 600;
+    color: #0f1724;
+    font-size: 14px;
+  }
+  .testimonial-role {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+
+  /* Coluna da direita */
+  .diferenciais {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .features-card {
+    background: #f1f8fc;
+    border-radius: 10px;
+    padding: 18px 20px;
+    border: 1px solid rgba(9,30,66,0.06);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+  }
+
+  .features-card ul {
+    padding-left: 18px;
+    margin: 0;
+    color: #213547;
+    list-style: disc;
+  }
+  .features-card li {
+    margin: 10px 0;
+    font-size: 14px;
+  }
+
+  .satisfaction {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid rgba(9,30,66,0.06);
+    font-size: 13.5px;
+    color: #3b4650;
+  }
+  .testimonial-top .stars i{
+    color: #fbbf24;
+    margin-right: 4px;
+    font-size: 50px;
+  }
+
 /* fim do Seu instrutor */
