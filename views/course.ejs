@@ -8,12 +8,24 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <title>Curso</title>
+    <title><%= course.nome %></title>
   </head>
   <body>
     <%- include('common/header'); %>
 
-    <h1>Essa é a tela do curso</h1>
+    <section class="course-hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('<%= course.imagem %>');">
+        <div class="hero-content">
+            <h1 class="course-title"><%= course.nome %></h1>
+            <p class="course-description"><%= course.descricao %></p>
+            
+            <div class="course-meta">
+                <span class="meta-item">🕒 Duração: <%= course.duracao %></span>
+                <span class="meta-item">📈 Nível: <%= course.nivel %></span>
+            </div>
+
+            <a href="#" class="cta-button">Inscreva-se Agora</a>
+        </div>
+    </section>
 
     <section class="benefits">
       <div class="container">
@@ -48,6 +60,46 @@
         </div>
       </div>
     </section>
+
+  <h2>Planos Corporativos</h2>
+  <div class="cards">
+    <!-- Card 1 -->
+    <div class="card">
+      <h3>Treinamento em Grupo</h3>
+      <p class="target">Para equipes de 5 a 20 pessoas</p>
+      <ul>
+        <li>Turmas exclusivas para sua empresa</li>
+        <li>Horários flexíveis adaptados à rotina</li>
+        <li>Projetos customizados com cases da empresa</li>
+        <li>Suporte dedicado durante 6 meses</li>
+      </ul>
+      <button class="btn btn-light">Solicitar Proposta</button>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card">
+      <h3>Licenciamento Corporativo</h3>
+      <p class="target">Para empresas com mais de 20 colaboradores</p>
+      <ul>
+        <li>Acesso ilimitado para todos os funcionários</li>
+        <li>Dashboard de acompanhamento de progresso</li>
+        <li>Relatórios de performance e engajamento</li>
+        <li>Consultoria para implementação das metodologias</li>
+      </ul>
+      <button class="btn btn-primary">Falar com Especialista</button>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="card special">
+      <h3>Pronto para Transformar sua Empresa?</h3>
+      <p>Agende uma consultoria gratuita ou baixe nosso material corporativo para conhecer todos os detalhes.</p>
+      <div class="special-buttons">
+        <button class="btn btn-primary">Agendar Consultoria Gratuita</button>
+        <button class="btn btn-light">Baixar Material Corporativo</button>
+      </div>
+    </div>
+  </div>
+
 
     <div class="tutor-container">
       <h1 class="tutor-title">Seu instrutor</h1>

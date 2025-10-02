@@ -88,8 +88,16 @@ app.get("/course/:id" , async (req, res) => {
   //if (!res.locals.user) {
     //return res.status(401).json({ error: "Usuário não autenticado" });
   //}
+  try{
+    const course = await fetch(`http://localhost:3000/cursos/${req.params.id}`);
+    const data = await course.json();
+    res.render("course", { user: res.locals.user, course: data });
+  }catch(error){
+    console.error("Erro ao carregar página de cursos:", error.message);
+    return res.status(500).json({ error: "Erro ao carregar página de cursos" });
+  }
   
-  res.render("course", { user: res.locals.user });
+  
 })
 
 
