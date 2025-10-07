@@ -1,29 +1,27 @@
-import mysql from 'mysql2/promise';
+import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config('../.env'); // Carrega as variáveis de ambiente do arquivo .env
+// Carrega as variáveis de ambiente do arquivo .env
+const envPath = path.resolve(process.cwd(), '.env');
+dotenv.config({ path: envPath });
+console.log(process.env); // Adicione esta linha para depuração
 
-// Verifica se as variáveis de ambiente estão definidas
-if (!process.env.DB_HOST || !process.env.DB_USER  || !process.env.DB_NAME) {
-  throw new Error('Variáveis de ambiente do banco de dados não estão definidas');
+// Verifica se as novas variáveis de ambiente do Supabase estão definidas
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ROLE_KEY) {
+  throw new Error('As variáveis SUPABASE_URL e SUPABASE_ROLE_KEY precisam estar definidas no arquivo .env');
 }
 
-// Cria pool de conexões (melhor para múltiplas requisições)
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ROLE_KEY
+);
 
-if (!pool) {
-  throw new Error('Não foi possível criar o pool de conexões com o banco de dados');
-}else{
-  console.log('Pool de conexões criado com sucesso');
+if (!supabase) {
+  throw new Error('Não foi possível criar o cliente Supabase.');
+} else {
+  console.log('Cliente Supabase conectado com sucesso.');
 }
 
-export default pool;
-
+// Exporta o cliente Supabase para ser usado em outras partes do seu código
+export default supabase;

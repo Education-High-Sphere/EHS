@@ -1,59 +1,117 @@
-import db from "../../../.config/db.js"; // conexão MySQL centralizada
+import supabase from "../../../.config/db.js"; // conexão MySQL centralizada
 
 export default {
-    async findAll() {
-        const [rows] = await db.query("SELECT * FROM cursos");
-        return rows;
-    },
-
-    async search(searchTerm){
-        const data = await this.findAll();
-        return data.filter(course => course.nome.toLowerCase().includes(searchTerm.toLowerCase())
-        || (course.descricao && course.descricao.toLowerCase().includes(searchTerm.toLowerCase()))
-        || course.categoria.toLowerCase().includes(searchTerm.toLowerCase()));  
-    },
-
-    async findById(id) {
-        const [rows] = await db.query("SELECT * FROM cursos WHERE id = ?", [id]);
-        return rows[0]; // retorna só um
-    },
-    async findByIds(ids) {
-        if (ids.length === 0) return [];
-        const placeholders = ids.map(() => '?').join(',');
-        const [rows] = await db.query(`SELECT * FROM cursos WHERE id IN (${placeholders})`, ids);
-        return rows; // retorna todos os encontrados
-    },
-    async findByCategoria(categoria) {
-        const [rows] = await db.query("SELECT * FROM cursos WHERE categoria = ?", [categoria]);
-        return rows; // retorna todos da categoria
-    },
-
-    async create(courseData) {
-        const { nome, descricao, imagem, categoria, preco, duracao, nivel } = courseData;
-
-        const [result] = await db.query(
-            `INSERT INTO cursos (nome, descricao, imagem, categoria, preco, duracao, nivel) 
-             VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [nome, descricao, imagem, categoria, preco, duracao, nivel]
-        );
-
-        return { id: result.insertId, ...courseData };
-    },
-
-    async update(id, courseData) {
-        const { nome, descricao, imagem, categoria, preco, duracao, nivel } = courseData;
-
-        await db.query(
-            `UPDATE cursos 
-             SET nome = ?, descricao = ?, imagem = ?, categoria = ?, preco = ?, duracao = ?, nivel = ?
-             WHERE id = ?`,
-            [nome, descricao, imagem, categoria, preco, duracao, nivel, id]
-        );
-
-        return { id, ...courseData };
-    },
-
-    async delete(id) {
-        await db.query("DELETE FROM cursos WHERE id = ?", [id]);
+  async findAll() {
+    const { data, error } = await supabase.from("cursos").select("*");
+    if (error) {
+      console.error("Erro ao buscar cursos:", error);
+      return [];
     }
+    return data;
+  },
+
+  async search(searchTerm) {
+    const { data, error } = await supabase
+      .from("cursos")
+      .select("*")
+      .or(`nome.ilike.%${searchTerm}%, descricao.ilike.%${searchTerm}%`);
+    if (error) {
+      console.error("Erro ao buscar cursos:", error);
+      return [];
+    }
+    return data;
+  },
+
+  async findById(id) {
+    const { data, error } = await supabase
+      .from("cursos")
+      .select("*")
+      .eq("id", id)
+      .single();
+    if (error) {
+      console.error("Erro ao buscar curso:", error);
+      return null;
+    }
+    return data;
+  },
+  async findByIds(ids) {
+    if (!ids || ids.length === 0) return [];
+    const { data, error } = await supabase
+      .from("cursos")
+      .select("*")
+      .in("id", ids);
+    if (error) {
+      console.error("Erro ao buscar cursos:", error);
+      return [];
+    }
+    return data;
+  },
+  async findByCategoria(categoria) {
+    const { data, error } = await supabase
+      .from("cursos")
+      .select("*")
+      .eq("categoria", categoria);
+    if (error) {
+      console.error("Erro ao buscar cursos:", error);
+      return [];
+    }
+    return data;
+  },
+
+  async create(courseData) {
+    const { nome, descricao, imagem, categoria, preco, duracao, nivel } =
+      courseData;
+
+    const { data, error } = await supabase
+      .from("cursos")
+      .insert([{ nome, descricao, imagem, categoria, preco, duracao, nivel }])
+      .single();
+
+    if (error) {
+      console.error("Erro ao criar curso:", error);
+      return null;
+    }
+    return data;
+  },
+
+  async update(id, courseData) {
+    const { nome, descricao, imagem, categoria, preco, duracao, nivel } =
+      courseData;
+
+    const { data, error } = await supabase
+      .from("cursos")
+      .update({ nome, descricao, imagem, categoria, preco, duracao, nivel })
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      console.error("Erro ao atualizar curso:", error);
+      return null;
+    }
+    return data;
+  },
+
+  async delete(id) {
+    const curso = await this.findById(id);
+
+    if (curso && curso.imagem) {
+      const imageName = curso.imagem.split("/").pop();
+
+      const imagePath = `cursos/${imageName}`;
+      
+      const { data, error } = await supabase.storage
+        .from("assets") 
+        .remove([imagePath]); 
+      if (error) {
+        console.error("Erro ao deletar imagem do curso:", error);
+      } else {
+        console.log("Imagem do curso deletada com sucesso:", data);
+      }
+    }
+    if (error) {
+      console.error("Erro ao deletar curso:", error);
+      return false;
+    }
+    return true;
+  },
 };

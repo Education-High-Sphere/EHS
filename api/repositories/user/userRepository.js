@@ -1,41 +1,59 @@
-import pool from '../../../.config/db.js';  // importa o pool do db.js
+import supabase from '../../../.config/db.js';  // importa o pool do db.js
 
 export async function findUserById(id) {
-  const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
-  return rows[0]; // retorna o usuário ou undefined se não existir
+  const { data, error } = await supabase.from('users').select('*').eq('id', id).single();
+  if (error) {
+    console.error('Erro ao buscar usuário:', error);
+    return null;
+  }
+  return data;
 }
 
 export async function findUserByEmail(email) {
-  const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
-  return rows[0];
+  const { data, error } = await supabase.from('users').select('*').eq('email', email).single();
+  if (error) {
+    console.error('Erro ao buscar usuário:', error);
+    return null;
+  }
+  return data;
 }
 
 export async function createUser(userData) {
-  const { name, email, passwordHash, job, birth_date,phone } = userData;
-  const [result] = await pool.query(
-    'INSERT INTO users (name, email, password, job, birth_date,phone) VALUES (?, ?, ?, ?, ?,?)',
-    [name, email, passwordHash, job, birth_date,phone]
-  );
-  return result.insertId;
+  const { name, email, passwordHash, job, birth_date } = userData;
+  const { data, error } = await supabase.from('users').insert({ name, email, password: passwordHash, job, birth_date }).single();
+  if (error) {
+    console.error('Erro ao criar usuário:', error);
+    return null;
+  }
+  return data;
 }
 
 export async function updateUser(id, userData) {
   const { name, email, passwordHash, job, birth_date } = userData;
-  await pool.query(
-    'UPDATE users SET name = ?, email = ?, password = ?, job = ?, birth_date = ? WHERE id = ?',
-    [name, email, passwordHash, job, birth_date, id]
-  );
-  return true;
+  const { data, error } = await supabase.from('users').update({ name, email, password: passwordHash, job, birth_date }).eq('id', id).single();
+  if (error) {
+    console.error('Erro ao atualizar usuário:', error);
+    return null;
+  }
+  return data;
 }
 
 export async function deleteUser(id) {
-  await pool.query('DELETE FROM users WHERE id = ?', [id]);
+  const { error } = await supabase.from('users').delete().eq('id', id);
+  if (error) {
+    console.error('Erro ao deletar usuário:', error);
+    return false;
+  }
   return true;
 }
 
 export async function findAllUsers() {
-  const [rows] = await pool.query('SELECT * FROM users');
-  return rows;
+  const { data, error } = await supabase.from('users').select('*');
+  if (error) {
+    console.error('Erro ao buscar usuários:', error);
+    return [];
+  }
+  return data;
 }
 export default {
   findById: findUserById,

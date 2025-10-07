@@ -1,72 +1,103 @@
-import pool from '../../../.config/db.js'; // importa o pool do db.js
+import supabase from '../../../.config/db.js'; // importa o pool do db.js
 
 export default {
     async findById(id) {
-        const [rows] = await pool.query('SELECT * FROM usuarios_cursos WHERE id = ?', [id]);
-        return rows[0]; // retorna a matrícula ou undefined se não existir
+        const{ data, error } = await supabase
+            .from('usuarios_cursos')
+            .select('*')
+            .eq('id', id)
+            .single();
+        if (error) {
+            console.error('Erro ao buscar matricula:', error);
+            return null;
+        }
+        return data;
     },
 
     async findAll() {
-        const [rows] = await pool.query('SELECT * FROM usuarios_cursos');
-        return rows;
+        const { data, error } = await supabase.from('usuarios_cursos').select('*');
+        if (error) {
+            console.error('Erro ao buscar matriculas:', error);
+            return [];
+        }
+        return data;
     },
 
     async findByUser(userId) {
-        const [rows] = await pool.query('SELECT * FROM usuarios_cursos WHERE user_id = ?', [userId]);
-        return rows;
+        const { data, error } = await supabase
+            .from('usuarios_cursos')
+            .select('*')
+            .eq('user_id', userId);
+        if (error) {
+            console.error('Erro ao buscar matriculas:', error);
+            return [];
+        }
+        return data;
     },
 
     async findByCourse(courseId) {
-        const [rows] = await pool.query('SELECT * FROM usuarios_cursos WHERE curso_id = ?', [courseId]);
-        return rows;
+        const { data, error } = await supabase
+            .from('usuarios_cursos')
+            .select('*')
+            .eq('curso_id', courseId);
+        if (error) {
+            console.error('Erro ao buscar matriculas:', error);
+            return [];
+        }
+        return data;
     },
 
     async findByUserAndCourse(userId, courseId) {
-        const [rows] = await pool.query(
-            'SELECT * FROM usuarios_cursos WHERE user_id = ? AND curso_id = ?',
-            [userId, courseId]
-        );
-        return rows[0];
+        const { data, error } = await supabase
+            .from('usuarios_cursos')
+            .select('*')
+            .eq('user_id', userId)
+            .eq('curso_id', courseId)
+            .single();
+        if (error) {
+            console.error('Erro ao buscar matricula:', error);
+            return null;
+        }
+        return data;
     },
 
     async createMatricula(matriculaData) {
-        const { userId,courseId} = matriculaData;
-        const [result] = await pool.query(
-            'INSERT INTO usuarios_cursos (user_id, curso_id, concluido, progresso, data_inicio, data_conclusao, criado_em) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [userId,courseId, false, 0, new Date(), null, new Date()]
-        );
-        // retorna a matrícula completa
-        return this.findById(result.insertId);
+        const { user_id, curso_id, data_inicio } = matriculaData;
+        const { data, error } = await supabase
+            .from('usuarios_cursos')
+            .insert([{ user_id, curso_id, data_inicio }])
+            .select()
+            .single();
+        if (error) {
+            console.error('Erro ao criar matricula:', error);
+            return null;
+        }
+        return this.findById(data.id); // retorna a matrícula completa
     },
 
     async updateMatricula(id, data) {
-    // pega os dados atuais
-    const matricula = await this.findById(id);
-    if (!matricula) {
-        throw new Error('Matrícula não encontrada');
-    }
-
-    // atualiza só os campos que podem mudar
-    const { concluido, progresso, data_inicio, data_conclusao } = data;
-
-    await pool.query(
-        `UPDATE usuarios_cursos 
-         SET concluido = ?, progresso = ?, data_inicio = ?, data_conclusao = ? 
-         WHERE id = ?`,
-        [
-            concluido ?? matricula.concluido,
-            progresso ?? matricula.progresso,
-            data_inicio ?? matricula.data_inicio,
-            data_conclusao ?? matricula.data_conclusao,
-            id
-        ]
-    );
-
-    return this.findById(id); // retorna a matrícula atualizada
+        const { data: updatedData, error } = await supabase
+            .from('usuarios_cursos')
+            .update(data)
+            .eq('id', id)
+            .select()
+            .single();
+        if (error) {
+            console.error('Erro ao atualizar matricula:', error);
+            return null;
+        }
+        return this.findById(updatedData.id); // retorna a matrícula completa
 },
 
     async deleteMatricula(id) {
-        await pool.query('DELETE FROM usuarios_cursos WHERE id = ?', [id]);
+        const { error } = await supabase
+            .from('usuarios_cursos')
+            .delete()
+            .eq('id', id);
+        if (error) {
+            console.error('Erro ao deletar matricula:', error);
+            return false;
+        }
         return true;
     }
 };

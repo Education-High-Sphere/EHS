@@ -78,16 +78,23 @@
         <div class="course-info">
           <div class="info-top">
             <% const categories = {
-              tecnologia: '#4a78a6',
-              marketing: '#e67e73',
-              empreendedorismo: '#8b9467',
-              softskills: '#4299e1',
-              design: '#ff9900',
-              linguas: '#6495ed',
+              'tecnologia': '#4a78a6',
+              'marketing': '#e67e73',
+              'empreendedorismo': '#8b9467',
+              'softskills': '#4299e1',
+              'design': '#ff9900',
+              'linguas': '#6495ed',
               'ciencia de dados': '#9bc9e6',
               'financas e investimentos': '#ffcc00',
               'saude e bem-estar': '#8bc34a',
               'educacao e ensino': '#607d8b',
+              'programacao': '#f28a8c',              // Um tom de vermelho/rosa suave
+              'fotografia e video': '#9d81ba',    // Roxo/lavanda elegante
+              'musica e artes': '#a68a64',            // Marrom terroso, bom para artes
+              'culinaria': '#f4a261',                 // Laranja vibrante, como comida
+              'direito e legislacao': '#52796f',     // Verde escuro, sóbrio e profissional
+              'gestao de projetos': '#7e9a9a',
+              'negócios & finanças': '#f5a623',               
             };
             const backgroundColor = categories[course.categoria.toLowerCase()] || '#01a3a3'; %>
             <span
