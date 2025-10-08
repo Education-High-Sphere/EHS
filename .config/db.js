@@ -5,7 +5,6 @@ import path from 'path';
 // Carrega as variáveis de ambiente do arquivo .env
 const envPath = path.resolve(process.cwd(), '.env');
 dotenv.config({ path: envPath });
-console.log(process.env); // Adicione esta linha para depuração
 
 // Verifica se as novas variáveis de ambiente do Supabase estão definidas
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_ROLE_KEY) {

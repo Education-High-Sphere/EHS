@@ -1,0 +1,74 @@
+import courseService from '../services/cursos/cursoService.js'; // Vamos importar dos controllers da API
+import matriculasController from './matriculas/matriculasController.js'; // Exemplo, adapte ao nome real
+import courseController from './cursos/cursoController.js';
+
+// Página Inicial
+export const getHomePage = async (req, res) => {
+  try{
+    const courses = await courseService.getAllCourses(); // Reutiliza a lógica do serviço
+    res.render("index", { user: res.locals.user || null, courses: courses, categoria: "tecnologia" }); 
+  } catch (error) {
+    console.error("Erro ao carregar página inicial:", error.message);
+    res.status(500).render("error", { message: "Não foi possível carregar os cursos." });
+  }
+};
+
+// Página de Cursos (com busca)
+export const getCoursesPage = async (req, res) => {
+  try {
+    // Reutiliza a mesma lógica do controller da API!
+    const { coursesData, categoria, searchQuery } = await courseController.listOrSearchCourses(req.query.search || "");
+    
+    res.render("courses", {
+      user: res.locals.user || null,
+      courses: coursesData,
+      categoria: categoria,
+      searchQuery: searchQuery || ""
+    });
+  } catch (error) {
+    console.error("Erro ao carregar página de cursos:", error.message);
+    res.status(500).render("error", { message: "Não foi possível carregar os cursos." });
+  }
+};
+
+// Página de Detalhe do Curso
+export const getCourseDetailPage = async (req, res) => {
+  try {
+    const course = await courseController.getCourseById(req.params.id); // Chamada direta!
+    if (!course) {
+      return res.status(404).render("error", { message: "Curso não encontrado." });
+    }
+    res.render("course", { user: res.locals.user, course: course });
+  } catch (error) {
+    console.error("Erro ao carregar página do curso:", error.message);
+    res.status(500).render("error", { message: "Erro ao carregar o curso." });
+  }
+};
+
+// Página "Meus Cursos"
+export const getOngoingCoursesPage = async (req, res) => {
+    if (!res.locals.user) return res.redirect('/'); // Se não há user, não há cursos
+    
+    try {
+        const userId = res.locals.user.id;
+        const data = await matriculasController.getMatriculasByUser(userId); // Chamada direta!
+        res.render("ongoingCourses", { 
+            user: res.locals.user, 
+            cursosConcluidos: data.cursosConcluidos, 
+            cursosEmAndamento: data.cursosEmAndamento, 
+            matriculas: data.matriculas 
+        });
+    } catch (error) {
+        console.error("Erro ao carregar página de cursos em andamento:", error.message);
+        res.status(500).render("error", { message: "Erro ao carregar seus cursos." });
+    }
+};
+
+// Outras páginas estáticas
+export const getRegisterPage = (req, res) => res.render("register", { user: res.locals.user });
+export const getEditPage = (req, res) => res.render("edit", { user: res.locals.user });
+export const getUserScenePage = (req, res) => res.render("userScene", { user: res.locals.user });
+export const logout = (req, res) => {
+    res.clearCookie("jwt");
+    res.redirect("/");
+};

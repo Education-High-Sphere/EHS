@@ -59,7 +59,7 @@
       <div class="category-buttons">
         <a onclick="filterCategory('tecnologia')">Tecnologia e Inovação</a>
         <a onclick="filterCategory('marketing')">Marketing Digital</a>
-        <a onclick="filterCategory('empreendedorismo')">Empreendedorismo</a>
+        <a onclick="filterCategory('finanças')">Finanças</a>
         <a onclick="filterCategory('softskills')">Soft Skills</a>
       </div>
 
@@ -197,41 +197,60 @@
    * @returns {Promise<void>}
    */
       async function filterCategory(category) {
-        const categories = ["Tecnologia", "Marketing", "Empreendedorismo", "Softskills"];
-        document.querySelector('.cards-area h1').innerText = category.charAt(0).toUpperCase() + category.slice(1);
-        categories.forEach(cat => {
-          document.querySelectorAll(`.card.${cat.toLowerCase()}`).forEach(card => {
-            card.style.display = cat.toLowerCase() === category ? 'block' : 'none';
-          });
-        });
-        try{
-          const res = await fetch(`/cursos/category/${category}`);
-          const data = await res.json();
-          console.log(data);
-          if (data.length === 0) {
-            document.querySelector('.cards-area .cards').innerHTML = '<h4 style="color: red; font-size: 20px; font-weight: 500; text-align: center;">Nenhum curso encontrado nessa categoria!</h4>';
-          } else {
-            const cardsArea = document.querySelector('.cards-area .cards');
-            cardsArea.innerHTML = '';
-            data.forEach(course => {
-              const card = document.createElement('div');
-              card.className = `card ${category}`;
-              card.innerHTML = `
-                <div class="img" style="background-image: url('${course.imagem}')"></div>
-                <h3>${course.nome}</h3>
-                <p>${course.descricao}</p>
-              `;
-              cardsArea.appendChild(card);
-            });
-          }
-        } catch (error) {
-          console.error(error);
+    const cardsArea = document.querySelector('.cards-area .cards');
+    
+    // 1. Muda o título e mostra um feedback de carregamento
+    document.querySelector('.cards-area h1').innerText = category.charAt(0).toUpperCase() + category.slice(1);
+    cardsArea.innerHTML = '<h4 class="loading">Carregando cursos...</h4>';
 
-        }
+    try {
+        const res = await fetch(`/api/cursos/category/${category}`);
         
-      };
+        // Trata erros de requisição (como 404, 500)
+        if (!res.ok) {
+            throw new Error(`Erro na requisição: ${res.statusText}`);
+        }
 
-      filterCategory("Tecnologia");
+        const data = await res.json();
+
+        // 2. Limpa a área antes de adicionar os novos cards
+        cardsArea.innerHTML = ''; 
+
+        if (data.length === 0) {
+            cardsArea.innerHTML = '<h4 class="empty" style="color: #4a78a6">Nenhum curso encontrado nessa categoria!</h4>';
+        } else {
+            data.forEach(course => {
+                const card = document.createElement('div');
+                card.className = `card ${category.toLowerCase()}`; // Use a categoria real
+                
+                // Usar textContent para segurança contra XSS em vez de innerHTML direto
+                const imgDiv = document.createElement('div');
+                imgDiv.className = 'img';
+                imgDiv.style.backgroundImage = `url('${course.imagem}')`;
+
+                const title = document.createElement('h3');
+                title.textContent = course.nome;
+
+                const description = document.createElement('p');
+                description.textContent = course.descricao;
+
+                card.appendChild(imgDiv);
+                card.appendChild(title);
+                card.appendChild(description);
+                card.onclick = () => {
+                  window.location.href = `/courses/${course.id}`; // Redireciona para a página do curso
+                };
+                cardsArea.appendChild(card);
+            });
+        }
+    } catch (error) {
+        console.error("Erro ao buscar cursos:", error);
+        cardsArea.innerHTML = '<h4 class="error">Oops! Algo deu errado ao buscar os cursos. Tente novamente.</h4>';
+    }
+}
+
+// Chamar a função para carregar a categoria inicial
+filterCategory("Tecnologia");
 
 
     </script>

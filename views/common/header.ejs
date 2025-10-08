@@ -190,4 +190,20 @@
 </header>
 <script>
   // Adiciona funcionalidade de pesquisa
+  document.querySelector('.search-bar form').addEventListener('submit', function (e) {
+    try {
+      const searchInput = this.querySelector('input[name="search"]');
+      if (!searchInput) {
+        throw new Error('searchInput is null');
+      }
+      const query = searchInput.value.trim();
+      if (query) {
+        window.location.href = `/courses?search=${encodeURIComponent(query)}`;
+      }
+      e.preventDefault();
+      searchInput.value = query; // Mantém o valor na barra de pesquisa
+    } catch (error) {
+      console.error('Erro ao submeter formulário de pesquisa', error);
+    }
+  });
 </script>

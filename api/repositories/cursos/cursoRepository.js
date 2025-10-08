@@ -50,7 +50,7 @@ export default {
     const { data, error } = await supabase
       .from("cursos")
       .select("*")
-      .eq("categoria", categoria);
+      .ilike("categoria", categoria);
     if (error) {
       console.error("Erro ao buscar cursos:", error);
       return [];

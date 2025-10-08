@@ -1,4 +1,5 @@
 import cursoService from '../../services/cursos/cursoService.js';
+import { searchCourses } from '../../services/searchService.js';
 
 export default {
     async getAllCourses(req, res) {
@@ -50,12 +51,20 @@ export default {
         }
 
     },
-    async renderCoursesPage(req, res) {
-        try {
-            const courses = await cursoService.getAllCourses();
-            res.render('courses', { title: 'Cursos', courses });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
+      async listOrSearchCourses (searchQuery){
+        let coursesData;
+        let categoria = null;
+
+        if (!searchQuery || searchQuery.trim() === "") {
+            coursesData = await cursoService.getAllCourses();
+            categoria = "Todos os Cursos";
+        } else {
+            const searchResults = await searchCourses(searchQuery);
+            coursesData = searchResults.map(result => result.item);
+            categoria = searchResults.categoria;
         }
+
+        return { coursesData, categoria, searchQuery: searchQuery || "" };
     }
+
 };
