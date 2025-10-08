@@ -34,11 +34,12 @@ export const getCoursesPage = async (req, res) => {
 // Página de Detalhe do Curso
 export const getCourseDetailPage = async (req, res) => {
   try {
-    const course = await courseController.getCourseById(req.params.id); // Chamada direta!
+    const id = req.params.id;
+    const course = await courseService.getCourseById(id); // Chamada direta!
     if (!course) {
       return res.status(404).render("error", { message: "Curso não encontrado." });
     }
-    res.render("course", { user: res.locals.user, course: course });
+    res.render("course", { user: res.locals.user || null, course: course });
   } catch (error) {
     console.error("Erro ao carregar página do curso:", error.message);
     res.status(500).render("error", { message: "Erro ao carregar o curso." });
