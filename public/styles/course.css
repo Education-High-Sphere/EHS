@@ -102,6 +102,90 @@ body{
         transform: translateY(0);
     }
 }
+
+.course-content {
+  background-color: #ffffff;
+  color: #1a1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 60px 0;
+}
+
+.course-content .container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.course-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.module {
+  background-color: #f9fbfd;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.module:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.module-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.module-description {
+  font-size: 1rem;
+  color: #213547;
+  line-height: 1.6;
+  margin-top: 0;
+  margin-bottom: 24px;
+}
+
+.lesson-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lesson-item {
+  font-size: 1rem;
+  color: #1b1b1b;
+  padding: 16px 0;
+  border-top: 1px solid #0052cc;
+  display: flex;
+  align-items: center;
+}
+
+.lesson-item:first-child {
+  border-top: none;
+}
+
+.lesson-item::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%230d6efd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.7;
+}
 /* Benefits Section */
 .benefits {
   padding: 4rem 0;

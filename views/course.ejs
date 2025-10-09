@@ -21,10 +21,39 @@
             <div class="course-meta">
                 <span class="meta-item">🕒 Duração: <%= course.duracao %></span>
                 <span class="meta-item">📈 Nível: <%= course.nivel %></span>
+                <span class="meta-item">💸 Preço: R$<%= course.preco %></span>
             </div>
 
             <a href="#" class="cta-button">Inscreva-se Agora</a>
         </div>
+    </section>
+
+    <section class="course-content">
+      <div class="container">
+        <h2>Conteúdo do Curso</h2>
+        <div class="content-list">
+          <% if (content && content.length > 0) { %>
+            <% content.forEach(function(module, index) { %>
+              <div class="module">
+                <h3 class="module-title">Módulo <%= index + 1 %>: <%= module.titulo %></h3>
+                <p class="module-description"><%= module.descricao %></p>
+                <ul class="lesson-list">
+                  <% if (module.lessions && module.lessions.length > 0) { %>
+                    <% module.lessions.slice(0, 3).forEach(function(lession) { %>
+                      <li class="lesson-item"><%= lession.titulo %></li>
+                    <% }); %>
+                  <% } else { %>
+                    <li class="lesson-item">Nenhuma aula disponível no momento.</li>
+                  <% } %>
+                </ul>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <p>Conteúdo do curso não disponível no momento.</p>
+          <% } %>
+
+      </div>
+
     </section>
 
     <section class="benefits">

@@ -1,6 +1,8 @@
 import courseService from '../services/cursos/cursoService.js'; // Vamos importar dos controllers da API
 import matriculasController from './matriculas/matriculasController.js'; // Exemplo, adapte ao nome real
 import courseController from './cursos/cursoController.js';
+import courseContentService from '../services/cursos/cursoContentService.js';
+import lessionsService from '../services/cursos/lessionsService.js';
 
 // Página Inicial
 export const getHomePage = async (req, res) => {
@@ -18,6 +20,7 @@ export const getCoursesPage = async (req, res) => {
   try {
     // Reutiliza a mesma lógica do controller da API!
     const { coursesData, categoria, searchQuery } = await courseController.listOrSearchCourses(req.query.search || "");
+    
     
     res.render("courses", {
       user: res.locals.user || null,
@@ -39,7 +42,15 @@ export const getCourseDetailPage = async (req, res) => {
     if (!course) {
       return res.status(404).render("error", { message: "Curso não encontrado." });
     }
-    res.render("course", { user: res.locals.user || null, course: course });
+    const courseContentList = await courseContentService.getContentByCourseId(id); // Chamada direta! 
+
+    const populatedContent = await Promise.all(courseContentList.map(async (contentItem) => {
+      const lessions = await lessionsService.getLessionsByContentId(contentItem.id);
+      return { ...contentItem, lessions };
+    }));
+    console.log(populatedContent);
+    
+    res.render("course", { user: res.locals.user || null, course: course, content: populatedContent });
   } catch (error) {
     console.error("Erro ao carregar página do curso:", error.message);
     res.status(500).render("error", { message: "Erro ao carregar o curso." });
