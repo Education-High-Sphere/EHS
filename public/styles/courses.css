@@ -80,13 +80,13 @@ body {
 
 .course-card {
   background-color: #e5e5e5;
-  width: 300px;
+  width: 350px;
   border-radius: 5px;
   padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(61, 61, 61, 0.342);
   margin: 10px;
   overflow: hidden;
-  transition: transform 0.2s ease;
+  transition: all 0.5s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -94,6 +94,8 @@ body {
 
 .course-card:hover {
   transform: translateY(-5px);
+  border: 1px solid #0f1e38;
+  box-shadow: 0 4px 8px rgba(3, 0, 202, 0.2);
 }
 
 .course-info {
@@ -129,6 +131,8 @@ body {
   width: 250px;
   height: 200px;
   object-fit: cover;
+  border: 2px solid #ccc;
+  border-radius: 5px;
 }
 .info-bottom {
   padding-top: 20px;
