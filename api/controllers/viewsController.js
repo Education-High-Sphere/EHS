@@ -3,6 +3,8 @@ import matriculasController from './matriculas/matriculasController.js'; // Exem
 import courseController from './cursos/cursoController.js';
 import courseContentService from '../services/cursos/cursoContentService.js';
 import lessionsService from '../services/cursos/lessionsService.js';
+import { getRandomDepoimentos} from '../services/details/depoimentoServices.js';
+import { getAllDiferenciais } from '../services/details/diferenciaisServices.js';
 
 // Página Inicial
 export const getHomePage = async (req, res) => {
@@ -49,8 +51,23 @@ export const getCourseDetailPage = async (req, res) => {
       return { ...contentItem, lessions };
     }));
     console.log(populatedContent);
+
+    const [ 
+      depoimentos,
+      diferenciais 
+    ] = await Promise.all([
+      getRandomDepoimentos(),
+      getAllDiferenciais()
+    ]);
     
-    res.render("course", { user: res.locals.user || null, course: course, content: populatedContent });
+    res.render("course", {
+       user: res.locals.user || null, 
+       course: course, 
+       content: populatedContent,
+       depoimentos: depoimentos,
+       diferenciais: diferenciais
+      
+      });
   } catch (error) {
     console.error("Erro ao carregar página do curso:", error.message);
     res.status(500).render("error", { message: "Erro ao carregar o curso." });

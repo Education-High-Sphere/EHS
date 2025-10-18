@@ -205,106 +205,57 @@
       </div>
 
       <div class="ehs-grid">
-        <!-- Coluna esquerda: testimonials -->
+        
         <div class="testimonials">
-          <!-- Card 1 -->
-          <div class="testimonial-card">
-            <div class="testimonial-top">
-              <div>
-                <div class="stars" aria-hidden="true">
-                  <!--  estrelas -->
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                </div>
-                <div style="font-size: 13px; color: #334155">
-                  “O curso transformou completamente a forma como gerencio minha
-                  equipe. Em 3 meses, aumentamos nossa produtividade em 45%
-                  usando Scrum.”
-                </div>
-              </div>
-            </div>
+            
+            <% if (typeof depoimentos !== 'undefined' && depoimentos.length > 0) { %>
 
-            <div class="testimonial-author">Rodolfa Silvana</div>
-            <div class="testimonial-role">Gerente de Projetos, TechStart</div>
-          </div>
+                <% depoimentos.forEach(depoimento => { %>
+                    <div class="testimonial-card">
+                        <div class="testimonial-top">
+                            <div>
+                                <div class="stars" aria-hidden="true">
+                                    <% for(let i = 0; i < depoimento.avaliacao; i++) { %>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    <% } %>
+                                </div>
+                                <div style="font-size: 13px; color: #334155">
+                                    “<%- depoimento.texto_depoimento %>”
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-author"><%- depoimento.nome_autor %></div>
+                        <div class="testimonial-role"><%- depoimento.cargo_autor %></div>
+                    </div>
+                <% }) %>
 
-          <!-- Card 2 -->
-          <div class="testimonial-card">
-            <div class="testimonial-top">
-              <div>
-                <div class="stars" aria-hidden="true">
-                  <!--  estrelas -->
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                </div>
-                <div style="font-size: 13px; color: #334155">
-                  “Conteúdo excepcional e muito prático. O Professor consegue
-                  explicar conceitos complexos de forma simples. Recomendo para
-                  toda equipe de liderança.”
-                </div>
-              </div>
-            </div>
+            <% } else { %>
+                <p>Veja o que nossos alunos dizem sobre nós!</p>
+            <% } %>
 
-            <div class="testimonial-author">Carlos Drummond</div>
-            <div class="testimonial-role">CTO, InnovaCorp</div>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="testimonial-card">
-            <div class="testimonial-top">
-              <div>
-                <div class="stars" aria-hidden="true">
-                  <!-- estrelas -->
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                  <i class="fa fa-star" aria-hidden="true"></i>
-                </div>
-                <div style="font-size: 13px; color: #334155">
-                  “Aprendi a aplicar metodologias ágeis no dia a dia da minha
-                  equipe. O curso é objetivo e os exemplos são muito próximos da
-                  realidade. Excelente investimento para minha carreira.”
-                </div>
-              </div>
-            </div>
-
-            <div class="testimonial-author">Ana Maria</div>
-            <div class="testimonial-role">Product Owner, AgileWorks</div>
-          </div>
         </div>
 
-        <!-- Coluna direita -->
         <aside class="diferenciais">
-          <div class="features-card">
-            <ul>
-              <li>Metodologia 100% prática com projetos reais</li>
-              <li>Suporte direto do instrutor por 6 meses</li>
-              <li>Comunidade exclusiva de alunos e networking</li>
-              <li>Certificado reconhecido pelo mercado</li>
-              <li>Acesso vitalício ao conteúdo e atualizações</li>
-              <li>Garantia de satisfação de 30 dias</li>
-            </ul>
-          </div>
+            <div class="features-card">
+                <ul>
+                    <% if (typeof diferenciais !== 'undefined' && diferenciais.length > 0) { %>
+                        <% diferenciais.forEach(item => { %>
+                            <li><%- item.texto_diferencial %></li>
+                        <% }) %> 
+                    
+                    <% } %>
+                </ul>
+            </div>
 
-          <div class="satisfaction">
-            <strong>Garantia de Satisfação</strong>
-            <p style="margin: 8px 0 0; color: #475569">
-              Não ficou satisfeito? Devolvemos 100% do seu investimento em até
-              30 dias, sem perguntas ou burocracias.
-            </p>
-          </div>
+            <div class="satisfaction">
+                <strong>Garantia de Satisfação</strong>
+                <p style="margin: 8px 0 0; color: #475569">
+                    Não ficou satisfeito? Devolvemos 100% do seu investimento em até
+                    30 dias, sem perguntas ou burocracias.
+                </p>
+            </div>
         </aside>
-      </div>
+    </div>
     </div>
     <%- include('common/footer'); %>
   </body>
