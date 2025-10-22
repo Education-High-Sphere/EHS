@@ -16,11 +16,7 @@ export default {
       // Set cookie com token
       res.cookie('jwt', token, { httpOnly: true, sameSite: 'Lax', secure: false });
 
-      // Redireciona para /userScene
-      
-      setTimeout(() => {
-        res.redirect('/userScene');
-      }, 2000);
+      res.redirect('/userScene');
 
     } catch (error) {
       res.status(400).json({ error: error.message });
