@@ -3,6 +3,7 @@ import matriculasController from './matriculas/matriculasController.js'; // Exem
 import courseController from './cursos/cursoController.js';
 import courseContentService from '../services/cursos/cursoContentService.js';
 import lessionsService from '../services/cursos/lessionsService.js';
+import userService from '../services/user/userService.js';
 import { getRandomDepoimentos} from '../services/details/depoimentoServices.js';
 import { getAllDiferenciais } from '../services/details/diferenciaisServices.js';
 
@@ -96,7 +97,15 @@ export const getOngoingCoursesPage = async (req, res) => {
 // Outras páginas estáticas
 export const getRegisterPage = (req, res) => res.render("register", { user: res.locals.user });
 export const getEditPage = (req, res) => res.render("edit", { user: res.locals.user });
-export const getUserScenePage = (req, res) => res.render("userScene", { user: res.locals.user });
+
+export const getUserScenePage = async (req, res) => {
+    if (!res.locals.user) return res.redirect('/register'); // Se não há user, não há cena de usuário
+    console.log("Rendering userScene for user ID:", res.locals.user.id);
+    const user = await userService.getProfile(res.locals.user.id); // Chamada direta! 
+    console.log("User data for userScene:", user);
+    res.render("userScene", { user: user });
+};
+
 export const logout = (req, res) => {
     res.clearCookie("jwt");
     res.redirect("/");

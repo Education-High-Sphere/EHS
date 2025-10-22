@@ -10,7 +10,7 @@ export async function findUserById(id) {
 }
 
 export async function findUserByEmail(email) {
-  const { data, error } = await supabase.from('users').select('*').eq('email', email).single();
+  const { data, error } = await supabase.from('users').select('*').eq('email', email).maybeSingle();
   if (error) {
     console.error('Erro ao buscar usuário:', error);
     return null;
@@ -19,13 +19,38 @@ export async function findUserByEmail(email) {
 }
 
 export async function createUser(userData) {
-  const { name, email, passwordHash, job, birth_date } = userData;
-  const { data, error } = await supabase.from('users').insert({ name, email, password: passwordHash, job, birth_date }).single();
-  if (error) {
-    console.error('Erro ao criar usuário:', error);
-    return null;
+  const { name, email, passwordHash, job, birth_date, phone } = userData;
+  console.log("TENTANDO INSERIR USUÁRIO:", email);
+
+  const {error: insertError} = await supabase
+  .from('users')
+  .insert({ name, email, password: passwordHash, job, birth_date, phone });
+
+  if (insertError) {
+    console.error('Erro no insert', insertError);
+    throw new Error(insertError.message);
   }
-  return data;
+  console.log ("USUÁRIO INSERIDO COM SUCESSO:", email);
+  console.log("RECUPERANDO USUÁRIO INSERIDO:", email);
+
+  const { data: selectData, error:selectError } = await supabase
+  .from('users')
+  .select('*')
+  .eq('email', email)
+  .single();
+
+  if (selectError) {
+    console.error('Erro ao recuperar usuário inserido:', selectError);
+    throw new Error(selectError.message);
+  }
+
+  if (!selectData) {
+    console.error('Usuário inserido não encontrado e retornou null');
+    throw new Error('Usuário inserido não encontrado');
+  }
+
+  console.log('Usuário inserido recuperado com sucesso:', selectData);
+  return selectData;
 }
 
 export async function updateUser(id, userData) {
