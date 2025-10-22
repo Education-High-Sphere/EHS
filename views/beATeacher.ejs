@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/beATeacher.css">
+    <title>Seja um Professor</title>
+</head>
+<body>
+    <%- include('common/header') -%>
+
+    <div class="container">
+    <div class="profile-form-container">
+        <h2>Antes de se tornar um de nossos professores, precisaremos de algumas informações</h2>
+        
+        <form id="profile-form">
+
+            <div class="form-group">
+                <label for="bio">Descrição (Bio)</label>
+                <textarea id="bio" name="bio" rows="5" placeholder="Fale um pouco sobre você, sua metodologia..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="experience-input">Experiências Profissionais</label>
+                <div class="input-group">
+                    <input type="text" id="experience-input" placeholder="Ex: Desenvolvedor Sênior na Google (2018-2022)">
+                    <button type="button" id="add-experience-btn" title="Adicionar experiência">+</button>
+                </div>
+                <ul id="experience-list" class="item-list"></ul>
+            </div>
+
+            <div class="form-group">
+                <label for="certificate-input">Certificações e Formações</label>
+                <div class="input-group">
+                    <input type="text" id="certificate-input" placeholder="Ex: Bacharel em Ciência da Computação - USP">
+                    <button type="button" id="add-certificate-btn" title="Adicionar certificação">+</button>
+                </div>
+                <ul id="certificate-list" class="item-list"></ul>
+            </div>
+
+            <button type="submit" class="submit-btn">Enviar Informações</button>
+
+        </form>
+    </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Função Reutilizável para Listas Dinâmicas ---
+            // Recebe os IDs do botão, do input e da lista (ul)
+            function setupDynamicList(buttonId, inputId, listId) {
+                const addButton = document.getElementById(buttonId);
+                const inputField = document.getElementById(inputId);
+                const list = document.getElementById(listId);
+
+                // Adiciona o evento de clique ao botão "Adicionar"
+                addButton.addEventListener('click', () => {
+                    const text = inputField.value.trim(); // Pega o texto e remove espaços em branco
+
+                    if (text === "") {
+                        // Não faz nada se o campo estiver vazio
+                        return;
+                    }
+
+                    // 1. Cria o elemento <li>
+                    const li = document.createElement('li');
+
+                    // 2. Cria o <span> para o texto
+                    const span = document.createElement('span');
+                    span.textContent = text;
+                    
+                    // 3. Cria o botão de deletar (adicionei como bônus, é essencial)
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = '×'; // 'x' elegante
+                    deleteButton.className = 'delete-btn';
+                    deleteButton.type = 'button'; // Previne envio do formulário
+
+                    // 4. Adiciona o evento de clique ao botão de deletar
+                    deleteButton.addEventListener('click', () => {
+                        li.remove(); // Remove o <li> pai
+                    });
+
+                    // 5. Monta o <li>
+                    li.appendChild(span);
+                    li.appendChild(deleteButton);
+
+                    // 6. Adiciona o <li> à lista <ul>
+                    list.appendChild(li);
+
+                    // 7. Limpa o campo de input e foca nele
+                    inputField.value = '';
+                    inputField.focus();
+                });
+            }
+
+            // --- Inicializa as duas listas dinâmicas ---
+            setupDynamicList('add-experience-btn', 'experience-input', 'experience-list');
+            setupDynamicList('add-certificate-btn', 'certificate-input', 'certificate-list');
+
+
+            // --- Manipulação do Envio do Formulário (Submit) ---
+            const form = document.getElementById('profile-form');
+            form.addEventListener('submit', (event) => {
+                event.preventDefault(); // Impede o envio real do formulário
+
+                // 1. Pega o valor da Bio
+                const bio = document.getElementById('bio').value;
+
+                // 2. Coleta os dados das listas dinâmicas
+                // A função auxiliar 'collectListData' pega o texto de cada <li>
+                const experiences = collectListData('experience-list');
+                const certificates = collectListData('certificate-list');
+
+                // 3. Monta o objeto de dados final
+                const formData = {
+                    bio: bio,
+                    professionalExperiences: experiences,
+                    certifications: certificates
+                };
+
+                // 4. Mostra o JSON no console (Aqui você enviaria para o seu backend)
+                console.log('Dados prontos para enviar ao backend:');
+                console.log(JSON.stringify(formData, null, 2));
+
+                alert('Perfil salvo com sucesso! (Verifique o console para ver os dados em JSON)');
+            });
+
+            // Função auxiliar para coletar dados das listas <ul>
+            function collectListData(listId) {
+                const list = document.getElementById(listId);
+                const items = [];
+                // Pega todos os <span> dentro dos <li> da lista específica
+                list.querySelectorAll('li span').forEach(item => {
+                    items.push(item.textContent);
+                });
+                return items;
+            }
+
+        });
+    </script>
+
+</body>
+</html>

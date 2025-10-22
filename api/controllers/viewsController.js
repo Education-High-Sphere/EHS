@@ -97,6 +97,12 @@ export const getOngoingCoursesPage = async (req, res) => {
 // Outras páginas estáticas
 export const getRegisterPage = (req, res) => res.render("register", { user: res.locals.user });
 export const getEditPage = (req, res) => res.render("edit", { user: res.locals.user });
+export const getBeATeacherPage = (req,res) => {
+  if (!res.locals.user) 
+    return res.redirect('/register');
+  
+  res.render("beATeacher",{user:res.locals.user})
+};
 
 export const getUserScenePage = async (req, res) => {
     if (!res.locals.user) return res.redirect('/register'); // Se não há user, não há cena de usuário
