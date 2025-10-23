@@ -500,7 +500,7 @@ h2 {
   color: #444;
 }
 
-.tutor-certificates span {
+.tutor-certificates li {
     display: inline-block;
     white-space: nowrap;
     font-size: 13px;

@@ -5,6 +5,9 @@ import courseContentService from '../services/cursos/cursoContentService.js';
 import lessionsService from '../services/cursos/lessionsService.js';
 import { getRandomDepoimentos} from '../services/details/depoimentoServices.js';
 import { getAllDiferenciais } from '../services/details/diferenciaisServices.js';
+import professorService from '../services/professor/professorService.js';
+import experienciaProfessorService from '../services/professor/experienciaProfessorService.js';
+import certificacoesProfessorService from '../services/professor/certificacoesProfessorService.js';
 
 // Página Inicial
 export const getHomePage = async (req, res) => {
@@ -41,16 +44,21 @@ export const getCourseDetailPage = async (req, res) => {
   try {
     const id = req.params.id;
     const course = await courseService.getCourseById(id); // Chamada direta!
+    const professor = await professorService.getProfessorById("1"); // Chamada direta!
+
     if (!course) {
       return res.status(404).render("error", { message: "Curso não encontrado." });
     }
-    const courseContentList = await courseContentService.getContentByCourseId(id); // Chamada direta! 
-
+    const courseContentList = await courseContentService.getContentByCourseId(id); // Chamada direta!
     const populatedContent = await Promise.all(courseContentList.map(async (contentItem) => {
       const lessions = await lessionsService.getLessionsByContentId(contentItem.id);
       return { ...contentItem, lessions };
     }));
-    console.log(populatedContent);
+    
+    const experienciaList = await experienciaProfessorService.getexperienciaProfessorById(professor.id);
+    professor.experiencias = experienciaList;
+    const certificacoesList = await certificacoesProfessorService.getcertificacoesProfessorById(professor.id);
+    professor.certificacoes = certificacoesList;  
 
     const [ 
       depoimentos,
@@ -65,9 +73,10 @@ export const getCourseDetailPage = async (req, res) => {
        course: course, 
        content: populatedContent,
        depoimentos: depoimentos,
-       diferenciais: diferenciais
-      
+       diferenciais: diferenciais,
+       professor: professor
       });
+
   } catch (error) {
     console.error("Erro ao carregar página do curso:", error.message);
     res.status(500).render("error", { message: "Erro ao carregar o curso." });
@@ -92,6 +101,7 @@ export const getOngoingCoursesPage = async (req, res) => {
         res.status(500).render("error", { message: "Erro ao carregar seus cursos." });
     }
 };
+
 
 // Outras páginas estáticas
 export const getRegisterPage = (req, res) => res.render("register", { user: res.locals.user });

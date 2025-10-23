@@ -140,27 +140,41 @@
               alt="imagem professor"
               class="tutor-image"
             />
-            <h3 class="tutor-name">João Jimin</h3>
-            <span class="tutor-role">Especialista em gestão de projetos</span>
+            <h3 class="tutor-name"><%= professor.nome %></h3>
+            <span class="tutor-role"><%= professor.cargo%></span>
           </div>
           <div class="info-bottom">
             <div class="stars">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
-              <span>4.9 (2.500+ avaliações)</span>
-            </div>
+    <% 
+      const rating = professor.avaliacao_media;
+      const fullStars = Math.floor(rating); // estrelas cheias
+      const halfStar = rating % 1 >= 0.5;   // estrela pela metade
+      const emptyStars = 5 - fullStars - (halfStar ? 1 : 0); // estrelas vazias
+    %>
+
+    <% for(let i = 0; i < fullStars; i++) { %>
+      <i class="fa-solid fa-star"></i>
+    <% } %>
+
+    <% if (halfStar) { %>
+      <i class="fa-solid fa-star-half-stroke"></i>
+    <% } %>
+
+    <% for(let i = 0; i < emptyStars; i++) { %>
+      <i class="fa-regular fa-star"></i>
+    <% } %>
+
+    <span><%= rating %> (<%= professor.total_avaliacoes%> avaliações)</span>
+  </div>
             <div class="info-xtra">
               <div class="tutor-students">
                 <i class="fa-solid fa-user-graduate"></i>
-                <span>25.000+</span>
+                <span><%= professor.total_alunos%></span>
                 <span>Alunos</span>
               </div>
               <div class="tutor-courses">
                 <i class="fa-solid fa-book"></i>
-                <span>15</span>
+                <span><%= professor.total_cursos%></span>
                 <span>Cursos</span>
               </div>
             </div>
@@ -170,27 +184,29 @@
           <div class="tutor-description">
             <h3>Sobre o instrutor</h3>
             <span
-              >João Jimin é Certified Scrum Master (CSM) e Professional Scrum
-              Master (PSM) com mais de 15 anos de experiência em transformação
-              digital e implementação de metodologias ágeis em empresas de
-              diversos portes, desde startups até multinacionais.</span
+              ><%= professor.sobre%></span
             >
           </div>
-          <div class="tutor-experience">
+         <div class="tutor-experience">
             <h3>Experiência Profissional</h3>
             <ul>
-              <li>Head of Agile Transformation - TechCorp (2020-2024)</li>
-              <li>Certified Scrum Master (CSM) - Scrum Alliance (2018)</li>
-              <li>Project Manager - Innovate Solutions (2015-2020)</li>
-              <li>Agile Coach - ConsultingPro (2015-2017)</li>
+              <% professor.experiencias.forEach(experiencia => { %>
+                <li><%= experiencia.descricao %></li>
+              <% }) %>
             </ul>
           </div>
           <div class="tutor-certificates">
-            <h3>Certificações</h3>
-            <span>Certified Scrum Master (CSM)</span>
-            <span>Professional Scrum Master (PSM)</span>
-            <span>Kanban Management Professional</span>
-            <span>PMP - Project Management Professional</span>
+              <h3>Certificações</h3>
+              <ul>
+                <% if (professor.certificacoes && professor.certificacoes.length > 0) { %>
+                  <% professor.certificacoes.forEach(certificado => { %>
+                    <li><%= certificado.nome_certificacao %></li>
+                  <% }) %>
+                <% } else { %>
+                  <li>Nenhuma certificação cadastrada.</li>
+                <% } %>
+              </ul>
+          </div>
           </div>
         </div>
       </div>

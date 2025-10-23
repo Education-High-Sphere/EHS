@@ -95,5 +95,5 @@ process.on("unhandledRejection", (reason, promise) => {
 app.listen(3000, () => {
   console.log("Aplicação rodando na porta 3000");
   console.log('Documentação Swagger: http://localhost:3000/api-docs');
-  open('http://localhost:3000');
+  //open('http://localhost:3000');
 });
