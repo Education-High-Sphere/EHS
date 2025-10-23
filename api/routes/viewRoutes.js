@@ -14,6 +14,7 @@ router.get("/logout", viewController.logout);
 router.get("/ongoingCourses", checkUserMiddleware, viewController.getOngoingCoursesPage);
 router.get("/userScene", checkUserMiddleware, viewController.getUserScenePage);
 router.get("/edit", checkUserMiddleware, viewController.getEditPage);
-router.get("/beATeacher", checkUserMiddleware,viewController.getBeATeacherPage)
+router.get("/beATeacher", checkUserMiddleware,viewController.getBeATeacherPage);
+router.get("/teacherScene", checkUserMiddleware,viewController.getTeacherScenePage);
 
 export default router;

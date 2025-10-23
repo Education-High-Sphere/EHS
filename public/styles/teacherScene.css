@@ -1,0 +1,264 @@
+:root {
+  --cor-fundo: #1b2232;
+  --cor-texto-principal: #f4f4f4;
+  --cor-acento-azul: #4a78a6;
+  --cor-borda-cinza: #d3d3d3;
+  --cor-item-lista: #2a344a; /* Tom mais claro que o fundo */
+  --cor-verde-publicado: #2ecc71;
+  --cor-vermelho-deletar: #e74c3c;
+}
+
+/* --- Estilos Globais --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto-principal);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* --- Container Principal do Dashboard --- */
+.dashboard-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2em auto;
+}
+
+/* --- Cabeçalho do Dashboard (Saudação + Ações) --- */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Para telas menores */
+  gap: 1em;
+  padding-bottom: 1.5em;
+  border-bottom: 2px solid var(--cor-acento-azul);
+  margin-bottom: 2em;
+}
+
+.salutation h1 {
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+.salutation p {
+  font-size: 1.1rem;
+  color: var(--cor-borda-cinza);
+}
+
+.header-actions {
+  display: flex;
+  gap: 1em;
+}
+
+/* --- Botões --- */
+.btn {
+  padding: 0.8em 1.5em;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: var(--cor-texto-principal);
+}
+
+.btn-primary {
+  background-color: var(--cor-acento-azul);
+}
+.btn-primary:hover {
+  background-color: #3a6896;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 2px solid var(--cor-acento-azul);
+}
+.btn-secondary:hover {
+  background-color: var(--cor-acento-azul);
+}
+
+.btn-edit {
+  background-color: transparent;
+  border: 1px solid var(--cor-acento-azul);
+  color: var(--cor-acento-azul);
+  padding: 0.5em 1em;
+}
+.btn-edit:hover {
+  background-color: var(--cor-acento-azul);
+  color: var(--cor-texto-principal);
+}
+
+.btn-delete {
+  background-color: transparent;
+  border: 1px solid var(--cor-vermelho-deletar);
+  color: var(--cor-vermelho-deletar);
+  padding: 0.5em 1em;
+}
+.btn-delete:hover {
+  background-color: var(--cor-vermelho-deletar);
+  color: var(--cor-texto-principal);
+}
+
+/* --- (Extra) Cards de Estatísticas --- */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5em;
+  margin-bottom: 2.5em;
+}
+
+.stat-card {
+  background-color: var(--cor-item-lista);
+  padding: 1.5em;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  border-left: 5px solid var(--cor-acento-azul);
+}
+.stat-card .icon {
+  font-size: 2.5rem;
+  color: var(--cor-acento-azul);
+}
+.stat-card h3 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.stat-card p {
+  color: var(--cor-borda-cinza);
+}
+
+/* --- Seção de Lista de Cursos --- */
+.course-list-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1em;
+}
+
+.course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+/* --- Card de Curso Individual --- */
+.course-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5em;
+  background-color: var(--cor-item-lista);
+  padding: 1.5em;
+  border-radius: 8px;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.course-card .course-info h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.course-card .course-info p {
+  font-size: 0.9rem;
+  color: var(--cor-borda-cinza);
+  margin-top: 0.3em;
+}
+
+.course-actions {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  flex-wrap: wrap; /* Para telas menores */
+}
+
+/* --- (Requisito) Switch de Publicar/Despublicar --- */
+.publish-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+.publish-switch .switch-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  width: 70px; /* Largura fixa para não "pular" */
+}
+.publish-switch .switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+.publish-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #555;
+  transition: 0.4s;
+  border-radius: 26px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: var(--cor-verde-publicado);
+}
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* --- (Extra) Estado Vazio --- */
+.empty-state {
+  display: none; /* O JS vai controlar a exibição */
+  text-align: center;
+  padding: 4em 2em;
+  background-color: var(--cor-item-lista);
+  border-radius: 8px;
+  border: 2px dashed var(--cor-acento-azul);
+}
+.empty-state i {
+  font-size: 3rem;
+  color: var(--cor-acento-azul);
+  margin-bottom: 0.5em;
+}
+.empty-state h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5em;
+}
+.empty-state p {
+  color: var(--cor-borda-cinza);
+}

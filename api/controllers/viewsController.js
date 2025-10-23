@@ -1,20 +1,26 @@
-import courseService from '../services/cursos/cursoService.js'; // Vamos importar dos controllers da API
-import matriculasController from './matriculas/matriculasController.js'; // Exemplo, adapte ao nome real
-import courseController from './cursos/cursoController.js';
-import courseContentService from '../services/cursos/cursoContentService.js';
-import lessionsService from '../services/cursos/lessionsService.js';
-import userService from '../services/user/userService.js';
-import { getRandomDepoimentos} from '../services/details/depoimentoServices.js';
-import { getAllDiferenciais } from '../services/details/diferenciaisServices.js';
+import courseService from "../services/cursos/cursoService.js"; // Vamos importar dos controllers da API
+import matriculasController from "./matriculas/matriculasController.js"; // Exemplo, adapte ao nome real
+import courseController from "./cursos/cursoController.js";
+import courseContentService from "../services/cursos/cursoContentService.js";
+import lessionsService from "../services/cursos/lessionsService.js";
+import userService from "../services/user/userService.js";
+import { getRandomDepoimentos } from "../services/details/depoimentoServices.js";
+import { getAllDiferenciais } from "../services/details/diferenciaisServices.js";
 
 // Página Inicial
 export const getHomePage = async (req, res) => {
-  try{
+  try {
     const courses = await courseService.getAllCourses(); // Reutiliza a lógica do serviço
-    res.render("index", { user: res.locals.user || null, courses: courses, categoria: "tecnologia" }); 
+    res.render("index", {
+      user: res.locals.user || null,
+      courses: courses,
+      categoria: "tecnologia",
+    });
   } catch (error) {
     console.error("Erro ao carregar página inicial:", error.message);
-    res.status(500).render("error", { message: "Não foi possível carregar os cursos." });
+    res
+      .status(500)
+      .render("error", { message: "Não foi possível carregar os cursos." });
   }
 };
 
@@ -22,18 +28,20 @@ export const getHomePage = async (req, res) => {
 export const getCoursesPage = async (req, res) => {
   try {
     // Reutiliza a mesma lógica do controller da API!
-    const { coursesData, categoria, searchQuery } = await courseController.listOrSearchCourses(req.query.search || "");
-    
-    
+    const { coursesData, categoria, searchQuery } =
+      await courseController.listOrSearchCourses(req.query.search || "");
+
     res.render("courses", {
       user: res.locals.user || null,
       courses: coursesData,
       categoria: categoria,
-      searchQuery: searchQuery || ""
+      searchQuery: searchQuery || "",
     });
   } catch (error) {
     console.error("Erro ao carregar página de cursos:", error.message);
-    res.status(500).render("error", { message: "Não foi possível carregar os cursos." });
+    res
+      .status(500)
+      .render("error", { message: "Não foi possível carregar os cursos." });
   }
 };
 
@@ -43,32 +51,36 @@ export const getCourseDetailPage = async (req, res) => {
     const id = req.params.id;
     const course = await courseService.getCourseById(id); // Chamada direta!
     if (!course) {
-      return res.status(404).render("error", { message: "Curso não encontrado." });
+      return res
+        .status(404)
+        .render("error", { message: "Curso não encontrado." });
     }
-    const courseContentList = await courseContentService.getContentByCourseId(id); // Chamada direta! 
+    const courseContentList = await courseContentService.getContentByCourseId(
+      id
+    ); // Chamada direta!
 
-    const populatedContent = await Promise.all(courseContentList.map(async (contentItem) => {
-      const lessions = await lessionsService.getLessionsByContentId(contentItem.id);
-      return { ...contentItem, lessions };
-    }));
+    const populatedContent = await Promise.all(
+      courseContentList.map(async (contentItem) => {
+        const lessions = await lessionsService.getLessionsByContentId(
+          contentItem.id
+        );
+        return { ...contentItem, lessions };
+      })
+    );
     console.log(populatedContent);
 
-    const [ 
-      depoimentos,
-      diferenciais 
-    ] = await Promise.all([
+    const [depoimentos, diferenciais] = await Promise.all([
       getRandomDepoimentos(),
-      getAllDiferenciais()
+      getAllDiferenciais(),
     ]);
-    
+
     res.render("course", {
-       user: res.locals.user || null, 
-       course: course, 
-       content: populatedContent,
-       depoimentos: depoimentos,
-       diferenciais: diferenciais
-      
-      });
+      user: res.locals.user || null,
+      course: course,
+      content: populatedContent,
+      depoimentos: depoimentos,
+      diferenciais: diferenciais,
+    });
   } catch (error) {
     console.error("Erro ao carregar página do curso:", error.message);
     res.status(500).render("error", { message: "Erro ao carregar o curso." });
@@ -77,42 +89,70 @@ export const getCourseDetailPage = async (req, res) => {
 
 // Página "Meus Cursos"
 export const getOngoingCoursesPage = async (req, res) => {
-    if (!res.locals.user) return res.redirect('/'); // Se não há user, não há cursos
-    
-    try {
-        const userId = res.locals.user.id;
-        const data = await matriculasController.getMatriculasByUser(userId); // Chamada direta!
-        res.render("ongoingCourses", { 
-            user: res.locals.user, 
-            cursosConcluidos: data.cursosConcluidos, 
-            cursosEmAndamento: data.cursosEmAndamento, 
-            matriculas: data.matriculas 
-        });
-    } catch (error) {
-        console.error("Erro ao carregar página de cursos em andamento:", error.message);
-        res.status(500).render("error", { message: "Erro ao carregar seus cursos." });
-    }
+  if (!res.locals.user) return res.redirect("/"); // Se não há user, não há cursos
+
+  try {
+    const userId = res.locals.user.id;
+    const data = await matriculasController.getMatriculasByUser(userId); // Chamada direta!
+    res.render("ongoingCourses", {
+      user: res.locals.user,
+      cursosConcluidos: data.cursosConcluidos,
+      cursosEmAndamento: data.cursosEmAndamento,
+      matriculas: data.matriculas,
+    });
+  } catch (error) {
+    console.error(
+      "Erro ao carregar página de cursos em andamento:",
+      error.message
+    );
+    res
+      .status(500)
+      .render("error", { message: "Erro ao carregar seus cursos." });
+  }
 };
 
 // Outras páginas estáticas
-export const getRegisterPage = (req, res) => res.render("register", { user: res.locals.user });
-export const getEditPage = (req, res) => res.render("edit", { user: res.locals.user });
-export const getBeATeacherPage = (req,res) => {
-  if (!res.locals.user) 
-    return res.redirect('/register');
-  
-  res.render("beATeacher",{user:res.locals.user})
+export const getRegisterPage = (req, res) =>
+  res.render("register", { user: res.locals.user });
+export const getEditPage = (req, res) =>
+  res.render("edit", { user: res.locals.user });
+export const getBeATeacherPage = (req, res) => {
+  if (!res.locals.user) {
+    return res.redirect("/register");
+  }
+
+  const hasTeacherRole = (user) => {
+  return user && user.roles && user.roles.includes("teacher");
+};
+
+  if (hasTeacherRole(res.locals.user)) {
+    return res.redirect("/teacherScene");
+  }else{
+  res.render("beATeacher", { user: res.locals.user });
+  }
 };
 
 export const getUserScenePage = async (req, res) => {
-    if (!res.locals.user) return res.redirect('/register'); // Se não há user, não há cena de usuário
-    console.log("Rendering userScene for user ID:", res.locals.user.id);
-    const user = await userService.getProfile(res.locals.user.id); // Chamada direta! 
-    console.log("User data for userScene:", user);
-    res.render("userScene", { user: user });
+  if (!res.locals.user) return res.redirect("/register"); // Se não há user, não há cena de usuário
+  console.log("Rendering userScene for user ID:", res.locals.user.id);
+  const user = await userService.getProfile(res.locals.user.id); // Chamada direta!
+  console.log("User data for userScene:", user);
+  res.render("userScene", { user: user });
+};
+
+export const getTeacherScenePage = async (req, res) => {
+  if (!res.locals.user) 
+    return res.redirect("/register"); // Se não há user, não há cena de usuário
+
+  console.log("Rendering teacherScene for user ID:", res.locals.user.id);
+  const user = await userService.getProfile(res.locals.user.id); // Chamada direta!
+
+  console.log("User data for teacherScene:", user);
+
+  res.render("teacherScene", { user: user });
 };
 
 export const logout = (req, res) => {
-    res.clearCookie("jwt");
-    res.redirect("/");
+  res.clearCookie("jwt");
+  res.redirect("/");
 };
