@@ -8,14 +8,14 @@ export default {
     try {
       const user = await userService.register(req.body);
 
-      const payload = {id: user.id, name: user.name, email: user.email, phone : user.phone, createdAt: user.createdAt, job : user.job };
+      const payload = {id: user.id, name: user.name, email: user.email, phone : user.phone, createdAt: user.createdAt, job : user.job, roles: user.roles };
 
       // Cria token JWT
       const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
       // Set cookie com token
       res.cookie('jwt', token, { httpOnly: true, sameSite: 'Lax', secure: false });
-      // Redireciona para /userScene
+
       res.redirect('/userScene');
 
     } catch (error) {
@@ -27,7 +27,7 @@ export default {
     try {
       const user = await userService.login(req.body);
 
-      const payload = { id: user.id, name: user.name, email: user.email, phone : user.phone, createdAt: user.createdAt, job : user.job }; 
+      const payload = { id: user.id, name: user.name, email: user.email, phone : user.phone, createdAt: user.createdAt, job : user.job, roles:user.roles }; 
 
       const token = jwt.sign(
         payload,

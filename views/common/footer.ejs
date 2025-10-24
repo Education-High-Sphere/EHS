@@ -1,66 +1,260 @@
 <head>
   <style>
+    /* Para o código funcionar, estou adicionando as variáveis de cor
+      que definimos para o header e dashboard.
+    */
+    :root {
+      --cor-fundo: #1b2232;
+      --cor-texto-principal: #f4f4f4;
+      --cor-acento-azul: #4a78a6;
+      --cor-borda-cinza: #d3d3d3;
+      --cor-item-lista: #2a344a; 
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    /* Links globais para o footer */
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    body {
+      /* Garante que o footer grude no fim da página */
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      /* Faz o conteúdo principal "empurrar" o footer para baixo */
+      flex: 1;
+    }
+
+    /* --- 1. Estrutura Principal do Footer --- */
     footer {
-      background-color: #0f1e38;
-      color: white;
+      /* Consistente com o header */
+      background-color: var(--cor-fundo); 
+      color: var(--cor-texto-principal);
+      padding: 3em 0 1.5em; /* Mais preenchimento */
+      margin-top: 2em;
+    }
+
+    .footer-container {
+      /* Consistente com o header-container */
+      width: 90%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* --- 2. Layout de Colunas Moderno --- */
+    .footer-content {
+      display: grid;
+      /* Cria 4 colunas que se ajustam sozinhas em telas menores */
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2em;
+      margin-bottom: 2em;
+    }
+
+    .footer-column h4 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--cor-texto-principal);
+      margin-bottom: 1em;
+      /* Linha de destaque sutil */
+      position: relative;
+      padding-bottom: 0.5em;
+    }
+
+    .footer-column h4::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background-color: var(--cor-acento-azul);
+    }
+    
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: 0.8em;
+    }
+
+    .footer-column p,
+    .footer-column a {
+      font-size: 0.95rem;
+      color: var(--cor-borda-cinza); /* Texto mais sutil */
+      transition: color 0.2s ease;
+    }
+    
+    .footer-column a:hover {
+      color: var(--cor-acento-azul); /* Destaque no hover */
+      text-decoration: underline;
+    }
+
+    .footer-column i {
+       /* Ícones de contato */
+      margin-right: 8px;
+      color: var(--cor-acento-azul);
+      width: 20px; /* Alinha os ícones */
+    }
+
+    /* --- 3. Coluna da Logo (Consistente com Header) --- */
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1em;
+    }
+    .footer-logo img {
+      height: 40px;
+    }
+    .footer-logo div {
+      line-height: 1.2;
+    }
+    .footer-logo strong {
+      font-size: 1.2rem;
+      color: var(--cor-texto-principal);
+    }
+    .footer-logo small {
+      font-size: 9px;
+      color: var(--cor-borda-cinza);
+    }
+
+    /* --- 4. Ícones Sociais Modernos --- */
+    .social-links {
+      display: flex;
+      gap: 0.8em;
+      margin-top: 1em;
+    }
+
+    .social-links a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      padding: 20px 0;
-      margin-top: 20px;
-      position: sticky;
-      top: 100%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      border: 1px solid var(--cor-borda-cinza);
+      border-radius: 50%;
+      color: var(--cor-borda-cinza);
+      transition: all 0.2s ease-in-out;
     }
-    .top-info {
-      display: flex;
-      width: 100%;
-      justify-content: space-evenly;
-      align-items: flex-start;
+    
+    .social-links a:hover {
+      background-color: var(--cor-acento-azul);
+      border-color: var(--cor-acento-azul);
+      color: var(--cor-texto-principal);
+      transform: translateY(-3px); /* Efeito sutil de "levantar" */
+      text-decoration: none;
     }
-
-    .phone {
-      margin-right: 20px;
-      font-size: 12px;
+    .social-links a i{
+      margin: 0 auto;
+      transition: all 0.2s ease-in-out;
     }
-    .email {
-      font-size: 12px;
-      color: #fff;
-    }
-    .social {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
+    .social-links a:hover i{
+      color: var(--cor-borda-cinza);
     }
 
-    .social h4 {
-      margin: auto 10px auto 0;
-      font-size: 10px;
+    /* --- 5. Linha de Copyright --- */
+    .footer-bottom {
+      text-align: center;
+      padding-top: 1.5em;
+      border-top: 1px solid var(--cor-item-lista); /* Linha divisória */
+      font-size: 0.9rem;
+      color: var(--cor-borda-cinza);
     }
 
-    .social i {
-      margin-right: 10px;
-      cursor: pointer;
-      color: #fff;
-    }
   </style>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+  />
 </head>
 
+<main>
+  </main>
+
+
 <footer>
-  <div class="top-info">
-    <div>
-      <span class="phone"><i class="fas fa-phone"></i> +55 (81) 9962-3659</span>
-      <a href="mailto:educationhighsphere@gmail.com"
-        ><span class="email">
-          <i class="fas fa-envelope"></i> educationhighsphere@gmail.com</span
-        ></a
-      >
+  <div class="footer-container">
+    <div class="footer-content">
+      
+      <div class="footer-column">
+        <div class="footer-logo" onclick="window.location.href = '/'">
+          <img src="../src/logo.png" alt="Logo" />
+          <div>
+            <strong>EHS</strong>
+            <small>Educando Mentes do Futuro</small>
+          </div>
+        </div>
+        <p>
+          Uma plataforma dedicada a conectar os melhores professores aos
+          alunos mais motivados.
+        </p>
+      </div>
+
+      <div class="footer-column">
+        <h4>Links Rápidos</h4>
+        <nav>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/courses">Cursos</a></li>
+            <li><a href="/beATeacher">Seja um Professor</a></li>
+            <li><a href="#">Comunidade</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer-column">
+        <h4>Contato</h4>
+        <ul>
+          <li>
+            <i class="fas fa-phone"></i>
+            <span>+55 (81) 9962-3659</span>
+          </li>
+          <li>
+            <i class="fas fa-envelope"></i>
+            <a href="mailto:educationhighsphere@gmail.com">
+              educationhighsphere@gmail.com
+            </a>
+          </li>
+          <li>
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Caruaru, PE - Brasil</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Redes Sociais</h4>
+        <p>Siga-nos para mais novidades:</p>
+        <div class="social-links">
+          <a href="#" title="Youtube"><i class="fab fa-youtube"></i></a>
+          <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
     </div>
-    <div class="social">
-      <h4>Redes Sociais:</h4>
-      <a href="#"><i class="fab fa-youtube"></i></a>
-      <a href="#"><i class="fab fa-instagram"></i></a>
-      <a href="#"><i class="fab fa-facebook-f"></i></a>
-      <a href="#"><i class="fab fa-linkedin-in"></i></a>
+
+    <div class="footer-bottom">
+      &copy; 2025 Education High Sphere. Todos os direitos reservados.
     </div>
   </div>
-  <br />
-  <div>&copy; 2025 Education High Sphere. Todos os direitos reservados.</div>
 </footer>
