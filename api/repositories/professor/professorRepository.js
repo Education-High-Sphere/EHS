@@ -13,4 +13,16 @@ export default {
     }
     return data;
   },
+  async findByUserId(userId) {
+    const { data, error } = await supabase
+      .from("professores")
+      .select("*")
+      .eq("user_id", userId)
+      .single();
+    if (error) {
+      console.error("Erro ao buscar professor:", error);
+      return null;
+    }
+    return data;
+  },
 }

@@ -1,230 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styles/teacherScene.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles/teacherScene.css" />
     <title>Área do Professor</title>
-</head>
-<body>
-
+  </head>
+  <body>
     <%- include('common/header') -%>
 
     <div class="dashboard-container">
-
-        <header class="dashboard-header">
-            <div class="salutation">
-                <h1>Bem-vindo <%= user.name %></h1>
-                <p>Aqui você gerencia todos os seus cursos.</p>
-            </div>
-            <div class="header-actions">
-                <a href="#" class="btn btn-secondary"><i class="fas fa-user-edit"></i> Editar Perfil</a>
-                <button class="btn btn-primary" id="create-course-btn"><i class="fas fa-plus"></i> Criar Novo Curso</button>
-            </div>
-        </header>
-
-        <main class="dashboard-content">
-
-            <section class="stats-cards">
-                <div class="stat-card">
-                    <div class="icon"><i class="fas fa-book"></i></div>
-                    <div class="stat-info">
-                        <h3 id="stat-courses">2</h3>
-                        <p>Cursos Publicados</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="icon"><i class="fas fa-users"></i></div>
-                    <div class="stat-info">
-                        <h3 id="stat-students">842</h3>
-                        <p>Total de Alunos</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="icon"><i class="fas fa-star"></i></div>
-                    <div class="stat-info">
-                        <h3 id="stat-rating">4.8</h3>
-                        <p>Avaliação Média</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="course-list-section">
-                <h2>Meus Cursos</h2>
-                <div id="course-list" class="course-list"></div>
-                
-                <div id="empty-state" class="empty-state">
-                    <i class="fas fa-drafting-compass"></i>
-                    <h3>Você ainda não tem cursos</h3>
-                    <p>Clique em "Criar Novo Curso" para começar a ensinar.</p>
-                </div>
-            </section>
-
-        </main>
-    </div>
-
-    <template id="course-card-template">
-        <div class="course-card">
-            <div class="course-info">
-                <h3 class="course-title">Título do Curso</h3>
-                <p>Alunos: <span class="course-students">0</span> | Avaliação: <span class="course-rating">N/A</span></p>
-            </div>
-            <div class="course-actions">
-                <div class="publish-switch">
-                    <span class="switch-label">Rascunho</span>
-                    <label class="switch">
-                        <input type="checkbox" class="publish-toggle">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <button class="btn btn-edit edit-btn"><i class="fas fa-pen"></i> Editar</button>
-                <button class="btn btn-delete delete-btn"><i class="fas fa-trash"></i> Deletar</button>
-            </div>
+      <header class="dashboard-header">
+        <div class="salutation">
+          <h1>Bem-vindo <%= user.name %></h1>
+          <p>Aqui você gerencia todos os seus cursos.</p>
         </div>
-    </template>
+        <div class="header-actions">
+          <a href="#" class="btn btn-secondary"
+            ><i class="fas fa-user-edit"></i> Editar Perfil</a
+          >
+          <button class="btn btn-primary" id="create-course-btn" onclick="redirectToCreateACourse()">
+            <i class="fas fa-plus"></i> Criar Novo Curso
+          </button>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <section class="stats-cards">
+          <div class="stat-card">
+            <div class="icon"><i class="fas fa-book"></i></div>
+            <div class="stat-info">
+              <h3 id="stat-courses">
+                <%= courses.filter(c => c.publicated).length || 0 %>
+              </h3>
+              <p>Cursos Publicados</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="icon"><i class="fas fa-users"></i></div>
+            <div class="stat-info">
+              <h3 id="stat-students"><%= professor.total_alunos || 0 %></h3>
+              <p>Total de Alunos</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="icon"><i class="fas fa-star"></i></div>
+            <div class="stat-info">
+              <h3 id="stat-rating">
+                <%= (professor.avaliacao_media && professor.avaliacao_media > 0) ?
+                professor.avaliacao_media.toFixed(1) : 'N/A' %>
+              </h3>
+              <p>Avaliação Média</p>
+            </div>
+          </div>
+        </section>
+
+    <section class="course-list-section">
+  <h2>Meus Cursos</h2>
+  
+  <div id="course-list" class="course-list">
+    
+    <% if (courses && courses.length > 0) { %>
+      <% courses.forEach(course => { %>
+        
+        <div class="course-card" data-id="<%= course.id %>">
+          <div class="course-info">
+            <h3 class="course-title"><%= course.nome %></h3>
+            <p>
+              Alunos: <span class="course-students"><%= course.alunos || 0 %></span>
+              | Avaliação: <span class="course-rating"><%= (course.avaliacao_media && course.avaliacao_media > 0) ? course.avaliacao_media.toFixed(1) : 'N/A' %></span>
+            </p>
+          </div>
+          <div class="course-actions">
+            <div class="publish-switch">
+              <span class="switch-label"><%= course.publicated ? 'Publicado' : 'Rascunho' %></span>
+              <label class="switch">
+                <input type="checkbox" class="publish-toggle" <%= course.publicated ? 'checked' : '' %> />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <button class="btn btn-edit edit-btn">
+              <i class="fas fa-pen"></i> Editar
+            </button>
+            <button class="btn btn-delete delete-btn">
+              <i class="fas fa-trash"></i> Deletar
+            </button>
+          </div>
+        </div>
+        
+      <% }); %>
+    <% } else { %>
+      
+      <div id="empty-state" class="empty-state" style="display: block;">
+        <i class="fas fa-drafting-compass"></i>
+        <h3>Você ainda não tem cursos</h3>
+        <p>Clique em "Criar Novo Curso" para começar a ensinar.</p>
+      </div>
+      
+      <% } %>
+  </div>
+</section>
 
     <%- include('common/footer') -%>
 
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-            // --- Dados Falsos (Mock Data) ---
-            // Em um app real, isso viria da sua API (ex: /api/professor/cursos)
-            let myCourses = [
-                { id: 1, title: "Curso Completo de Node.js e Express", students: 452, rating: 4.9, published: true },
-                { id: 2, title: "Design de APIs REST com Supabase", students: 390, rating: 4.7, published: true },
-                { id: 3, title: "Frontend Moderno com Vue.js 3", students: 0, rating: 0, published: false }
-            ];
-
-            // --- Seletores do DOM ---
-            const courseListContainer = document.getElementById('course-list');
-            const emptyState = document.getElementById('empty-state');
-            const courseTemplate = document.getElementById('course-card-template');
-            const createCourseBtn = document.getElementById('create-course-btn');
-
-            // --- Função Principal para Renderizar os Cursos ---
-            function renderCourses() {
-                // 1. Limpa a lista atual
-                courseListContainer.innerHTML = '';
-
-                // 2. Verifica se há cursos
-                if (myCourses.length === 0) {
-                    emptyState.style.display = 'block'; // Mostra o "Estado Vazio"
-                } else {
-                    emptyState.style.display = 'none'; // Esconde o "Estado Vazio"
-                    
-                    // 3. Itera sobre os dados e cria os cards
-                    myCourses.forEach(course => {
-                        const courseCard = createCourseCardElement(course);
-                        courseListContainer.appendChild(courseCard);
-                    });
-                }
-                
-                // (Bônus) Atualiza as estatísticas
-                updateStats();
+            function redirectToCreateACourse() {
+              window.location.href = "/createACourse";
             }
-
-            // --- Função para Criar um Card (Elemento HTML) ---
-            function createCourseCardElement(course) {
-                // Clona o conteúdo do template
-                const cardClone = courseTemplate.content.cloneNode(true);
-
-                // Pega os elementos de dentro do clone
-                const cardElement = cardClone.querySelector('.course-card');
-                const titleEl = cardClone.querySelector('.course-title');
-                const studentsEl = cardClone.querySelector('.course-students');
-                const ratingEl = cardClone.querySelector('.course-rating');
-                const switchLabelEl = cardClone.querySelector('.switch-label');
-                const switchInputEl = cardClone.querySelector('.publish-toggle');
-                const editBtn = cardClone.querySelector('.edit-btn');
-                const deleteBtn = cardClone.querySelector('.delete-btn');
-
-                // Associa o ID do curso ao elemento HTML (essencial!)
-                cardElement.dataset.id = course.id;
-
-                // Preenche os dados
-                titleEl.textContent = course.title;
-                studentsEl.textContent = course.students;
-                ratingEl.textContent = course.rating > 0 ? course.rating : 'N/A';
-                
-                // Configura o Switch
-                switchInputEl.checked = course.published;
-                switchLabelEl.textContent = course.published ? 'Publicado' : 'Rascunho';
-
-                // --- Adiciona Event Listeners para os botões ---
-                
-                // (Requisito) Switch de Publicar
-                switchInputEl.addEventListener('change', (event) => {
-                    const isPublished = event.target.checked;
-                    // Atualiza o dado no array (simulação de banco de dados)
-                    course.published = isPublished;
-                    // Atualiza o texto
-                    switchLabelEl.textContent = isPublished ? 'Publicado' : 'Rascunho';
-                    // (Bônus) Atualiza os stats
-                    updateStats();
-                    
-                    console.log(`Curso ${course.id} alterado para: ${isPublished ? 'Publicado' : 'Rascunho'}`);
-                    // (Aqui você faria a chamada fetch/axios para seu backend)
-                });
-                
-                // (Requisito) Botão Editar
-                editBtn.addEventListener('click', () => {
-                    console.log(`Clicou em EDITAR o curso ${course.id}`);
-                    // (Aqui você redirecionaria para a página de edição de curso)
-                    alert(`Redirecionando para editar: ${course.title}`);
-                });
-
-                // (Requisito) Botão Deletar
-                deleteBtn.addEventListener('click', () => {
-                    // Pede confirmação
-                    if (confirm(`Tem certeza que deseja deletar o curso "${course.title}"?`)) {
-                        console.log(`Clicou em DELETAR o curso ${course.id}`);
-                        
-                        // Remove o curso do array (simulação de banco de dados)
-                        myCourses = myCourses.filter(c => c.id !== course.id);
-                        
-                        // Re-renderiza a lista inteira
-                        renderCourses();
-                    }
-                });
-
-                return cardElement;
-            }
-            
-            // --- (Extra) Função para atualizar os cards de stats ---
-            function updateStats() {
-                const publishedCourses = myCourses.filter(c => c.published).length;
-                const totalStudents = myCourses.reduce((sum, course) => sum + course.students, 0);
-                const avgRating = (myCourses.reduce((sum, course) => sum + course.rating, 0) / myCourses.length).toFixed(1);
-                
-                document.getElementById('stat-courses').textContent = publishedCourses;
-                document.getElementById('stat-students').textContent = totalStudents;
-                document.getElementById('stat-rating').textContent = myCourses.D ? avgRating : 'N/A';
-            }
-            
-            // --- Event Listener para "Criar Novo Curso" ---
-            createCourseBtn.addEventListener('click', () => {
-                console.log('Clicou em "Criar Novo Curso"');
-                // Simula a criação de um novo curso (em um app real, iria para um formulário)
-                const newTitle = prompt('Qual o nome do novo curso?', 'Curso de Teste');
-                if (newTitle) {
-                    const newCourse = {
-                        id: Math.max(...myCourses.map(c => c.id), 0) + 1, // Gera um novo ID
-                        title: newTitle,
-                        students: 0,
-                        rating: 0,
-                        published: false
-                    };
-                    myCourses.push(newCourse); // Adiciona ao array
-                    renderCourses(); // Re-renderiza a lista
-                }
-            });
-
-            // --- Renderização Inicial ---
-            renderCourses();
-
-        });
-    </script>
-</body>
+        </script>
+  </body>
 </html>

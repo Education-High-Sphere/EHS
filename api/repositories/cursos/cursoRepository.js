@@ -57,21 +57,72 @@ export default {
     }
     return data;
   },
-
-  async create(courseData) {
-    const { nome, descricao, imagem, categoria, preco, duracao, nivel } =
-      courseData;
-
+  async findByProfessorId(professorId) {
     const { data, error } = await supabase
       .from("cursos")
-      .insert([{ nome, descricao, imagem, categoria, preco, duracao, nivel }])
-      .single();
-
+      .select("*")
+      .eq("professor_id", professorId);
     if (error) {
-      console.error("Erro ao criar curso:", error);
-      return null;
+      console.error("Erro ao buscar cursos:", error);
+      return [];
     }
     return data;
+  },
+
+  async create(courseData) {
+    const {
+      nome,
+      descricao,
+      imagem,
+      categoria,
+      preco,
+      duracao,
+      nivel,
+      publicated,
+      professor_id,
+      alunos,
+      avaliacao_media,
+    } = courseData;
+
+    const { data: insertData, error: insertError } = await supabase
+      .from("cursos")
+      .insert([
+        {
+          nome,
+          descricao,
+          imagem,
+          categoria,
+          preco,
+          duracao,
+          nivel,
+          publicated,
+          professor_id,
+          alunos,
+          avaliacao_media,
+        },
+      ])
+      .select("id") // Pega SÓ o ID de volta
+      .single();
+
+    if (insertError || !insertData) {
+      console.error("Erro na etapa de INSERT:", insertError);
+      throw new Error("Falha ao inserir o curso no banco.");
+    }
+
+    console.log("Curso inserido com ID:", insertData.id);
+    const { data: selectData, error: selectError } = await supabase
+      .from("cursos")
+      .select("*") // Pega todos os dados
+      .eq("id", insertData.id) // Do curso que acabamos de criar
+      .single();
+
+    if (selectError) {
+      console.error("Erro na etapa de SELECT:", selectError);
+      throw new Error("Falha ao buscar o curso após a criação.");
+    }
+
+    // Retorna o objeto completo do curso
+    return selectData;
   },
 
   async update(id, courseData) {
@@ -98,10 +149,10 @@ export default {
       const imageName = curso.imagem.split("/").pop();
 
       const imagePath = `cursos/${imageName}`;
-      
+
       const { data, error } = await supabase.storage
-        .from("assets") 
-        .remove([imagePath]); 
+        .from("assets")
+        .remove([imagePath]);
       if (error) {
         console.error("Erro ao deletar imagem do curso:", error);
       } else {
@@ -114,6 +165,4 @@ export default {
     }
     return true;
   },
-
-  
 };

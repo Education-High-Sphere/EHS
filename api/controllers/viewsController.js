@@ -54,7 +54,8 @@ export const getCourseDetailPage = async (req, res) => {
   try {
     const id = req.params.id;
     const course = await courseService.getCourseById(id); // Chamada direta!
-    const professor = await professorService.getProfessorById("1"); // Chamada direta!
+    const professor_id = course.professor_id
+    const professor = await professorService.getProfessorById(professor_id); // Chamada direta!
 
     if (!course) {
       return res
@@ -70,19 +71,15 @@ export const getCourseDetailPage = async (req, res) => {
     const experienciaList = await experienciaProfessorService.getexperienciaProfessorById(professor.id);
     professor.experiencias = experienciaList;
     const certificacoesList = await certificacoesProfessorService.getcertificacoesProfessorById(professor.id);
-    professor.certificacoes = certificacoesList;  
-
-    const [depoimentos, diferenciais] = await Promise.all([
-      getRandomDepoimentos(),
-      getAllDiferenciais(),
-    ]);
+    professor.certificacoes = certificacoesList; 
+    const professorInfo = await userService.getProfile(professor.user_id);
+    professor.nome = professorInfo.name;
+    professor.cargo = professorInfo.cargo;
 
     res.render("course", {
        user: res.locals.user || null, 
        course: course, 
        content: populatedContent,
-       depoimentos: depoimentos,
-       diferenciais: diferenciais,
        professor: professor
       });
 
@@ -139,10 +136,10 @@ export const getBeATeacherPage = (req, res) => {
 };
 
 export const getUserScenePage = async (req, res) => {
-  if (!res.locals.user) return res.redirect("/register"); // Se não há user, não há cena de usuário
+  if (!res.locals.user) return res.redirect("/register"); // Se não há user, não há cena de usuário 
+
   console.log("Rendering userScene for user ID:", res.locals.user.id);
   const user = await userService.getProfile(res.locals.user.id); // Chamada direta!
-  console.log("User data for userScene:", user);
   res.render("userScene", { user: user });
 };
 
@@ -152,10 +149,21 @@ export const getTeacherScenePage = async (req, res) => {
 
   console.log("Rendering teacherScene for user ID:", res.locals.user.id);
   const user = await userService.getProfile(res.locals.user.id); // Chamada direta!
+  const professorInfo = await professorService.getProfessorByUserId(res.locals.user.id);
+  const courses = await courseService.getCoursesByProfessorId(professorInfo.id);
 
-  console.log("User data for teacherScene:", user);
+  res.render("teacherScene", { user: user, professor: professorInfo, courses: courses });
+};
 
-  res.render("teacherScene", { user: user });
+export const getCreateACoursePage = async (req, res) => {
+  if (!res.locals.user) return res.redirect("/register"); // Se não há user, não há cena de usuário
+
+  if (res.locals.user.roles.includes("teacher")) {
+    res.render("createACourse", { user: res.locals.user });
+  } else {
+    res.redirect("/beATeacher");
+  }
+    
 };
 
 export const logout = (req, res) => {

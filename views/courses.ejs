@@ -66,8 +66,7 @@
     <h2 class="section-title">Nossos Cursos</h2>
 
     <div class="course-grid">
-      <% if (courses && courses.length > 0) { %> <% courses.forEach(course => {
-      %>
+      <% if (courses && courses.length > 0) { %> <% courses.forEach(course => { if (course.publicated) { %>
       <div
         class="course-card"
         data-level="<%= course.nivel %>"
@@ -92,7 +91,7 @@
               'fotografia e video': '#9d81ba',    // Roxo/lavanda elegante
               'musica e artes': '#a68a64',            // Marrom terroso, bom para artes
               'culinaria': '#f4a261',                 // Laranja vibrante, como comida
-              'direito e legislacao': '#52796f',     // Verde escuro, sóbrio e profissional
+              'direito e Legislacao': '#52796f',     // Verde escuro, sóbrio e profissional
               'gestao de projetos': '#7e9a9a',
               'negócios & finanças': '#f5a623',               
             };
@@ -122,7 +121,7 @@
         </div>
         <button class="continue-button" onclick="location.href='/course/<%= course.id %>'">Assistir curso</button>
       </div>
-      <% }); %> <% } else { %>
+      <% } }); %> <% } else { %>
       <p>Nenhum curso encontrado</p>
       <% } %>
     </div>

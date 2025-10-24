@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar um curso</title>
+    <link rel="stylesheet" href="../styles/createACourse.css">
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Criar Novo Curso</h2>
+        
+        <form id="create-course-form" enctype="multipart/form-data">
+
+            <div class="form-group full-width">
+                <label for="nome">Título do Curso</label>
+                <input type="text" id="nome" name="nome" placeholder="Ex: Python para Análise de Dados" required>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="descricao">Descrição</label>
+                <textarea id="descricao" name="descricao" rows="5" placeholder="Aprenda a manipular, analisar e visualizar dados com..." required></textarea>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="categoria">Categoria</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="" disabled selected>Selecione uma categoria</option>
+                        <option value="Tecnologia">Tecnologia</option>
+                        <option value="Negócios">Negócios</option>
+                        <option value="Design">Design</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Outra">Outra</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="nivel">Nível</label>
+                    <select id="nivel" name="nivel" required>
+                        <option value="" disabled selected>Selecione o nível</option>
+                        <option value="Iniciante">Iniciante</option>
+                        <option value="Intermediário">Intermediário</option>
+                        <option value="Avançado">Avançado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="preco">Preço (R$)</label>
+                    <input type="number" id="preco" name="preco" min="0" step="0.01" placeholder="Ex: 179.90" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="duracao">Duração</label>
+                    <input type="text" id="duracao" name="duracao" placeholder="Ex: 30 horas" required>
+                </div>
+            </div> <div class="form-group full-width">
+                <label>Imagem da Capa</label>
+                <div class="file-drop-area" id="file-drop-area">
+                    <i class="fas fa-upload"></i>
+                    <p>Arraste e solte a imagem aqui, ou clique para selecionar</p>
+                    <input type="file" id="imagem" name="imagem" accept="image/*" required>
+                </div>
+                <img id="image-preview" src="#" alt="Preview da Imagem" />
+            </div>
+
+            <div class="form-group full-width">
+                <div class="publish-container">
+                    <label>Status do Curso</label>
+                    <div class="publish-switch">
+                        <span class="switch-label">Rascunho</span>
+                        <label class="switch">
+                            <input type="checkbox" id="publicated-toggle" name="publicated" value="true">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Criar Curso</button>
+
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropArea = document.getElementById('file-drop-area');
+            const fileInput = document.getElementById('imagem');
+            const imagePreview = document.getElementById('image-preview');
+
+            // --- 1. Lógica do Preview de Imagem ---
+
+            function showPreview(file) {
+                // Verifica se é uma imagem
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    }
+                    
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            // --- 2. Lógica do Clique para Upload ---
+            fileInput.addEventListener('change', (e) => {
+                if (fileInput.files.length > 0) {
+                    showPreview(fileInput.files[0]);
+                }
+            });
+
+            // --- 3. Lógica do Drag & Drop ---
+            
+            // Prevenir comportamentos padrões
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
+            });
+
+            // Adicionar classe visual ao "arrastar sobre"
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => {
+                    dropArea.classList.add('dragover');
+                }, false);
+            });
+
+            // Remover classe visual ao "sair"
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => {
+                    dropArea.classList.remove('dragover');
+                }, false);
+            });
+
+            // Lidar com o "soltar" o arquivo
+            dropArea.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+
+                if (files.length > 0) {
+                    // Sincroniza o input[type=file] com o arquivo solto
+                    fileInput.files = files;
+                    // Mostra o preview
+                    showPreview(files[0]);
+                }
+            }, false);
+
+            // --- 4. Lógica do Switch Label ---
+            const publishToggle = document.getElementById('publicated-toggle');
+            const switchLabel = document.querySelector('.publish-switch .switch-label');
+
+            publishToggle.addEventListener('change', (e) => {
+                switchLabel.textContent = e.target.checked ? 'Publicado' : 'Rascunho';
+            });
+            
+            // --- 5. Lógica de Envio do Formulário ---
+            const form = document.getElementById('create-course-form');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault(); // Impede o envio real (para teste)
+
+                // Coleta todos os dados do formulário
+                const formData = new FormData(form);
+
+                // --- Teste: Loga os dados no console ---
+                console.log('--- Formulário Pronto para Enviar ---');
+                for (let [key, value] of formData.entries()) {
+                    // O 'imagem' mostrará [object File]
+                    console.log(`${key}:`, value);
+                }
+                
+                fetch('/api/cursos/create', {
+                    method: 'POST',
+                    body: formData // Envia o FormData (incluindo o arquivo)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Sucesso:', data);
+                    alert('Curso criado com sucesso!');
+                    window.location.href = '/teacherScene'; // Redireciona
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao criar curso.');
+                });
+            });
+
+        });
+    </script>
+
+</body>
+</html>

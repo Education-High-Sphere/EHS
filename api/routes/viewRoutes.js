@@ -16,5 +16,6 @@ router.get("/userScene", checkUserMiddleware, viewController.getUserScenePage);
 router.get("/edit", checkUserMiddleware, viewController.getEditPage);
 router.get("/beATeacher", checkUserMiddleware,viewController.getBeATeacherPage);
 router.get("/teacherScene", checkUserMiddleware,viewController.getTeacherScenePage);
+router.get("/createACourse", checkUserMiddleware,viewController.getCreateACoursePage);
 
 export default router;
