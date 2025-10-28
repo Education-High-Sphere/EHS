@@ -166,6 +166,19 @@ export const getCreateACoursePage = async (req, res) => {
     
 };
 
+export const getEditACoursePage = async (req, res) => {
+  if (!res.locals.user) return res.redirect("/register"); // Se não há user, não há cena de usuário
+
+  const curso = cursoService.getCourseById(req.params.id);
+
+  if (res.locals.user.roles.includes("teacher")) {
+    res.render("editACourse", { user: res.locals.user }, { curso: curso });
+  } else {
+    res.redirect("/beATeacher");
+  }
+    
+};
+
 export const logout = (req, res) => {
   res.clearCookie("jwt");
   res.redirect("/");
