@@ -67,66 +67,6 @@
         <h1 style="color: #4a78a6">Tecnologia</h1>
 
         <div class="cards">
-
-          <!-- Tecnologia -->
-           <div class="card tecnologia">
-            <% if (courses && courses.length > 0) { %>
-    <% courses.forEach(course => { %>
-      <div class="card <%= categoria.toLowerCase() %>">
-        <div class="img" style="background-image: url('<%= course.imagem %>')"></div>
-        <h3><%= course.nome %></h3>
-        <p><%= course.descricao %></p>
-      </div>
-    <% }) %>
-  <% } else { %>
-    <p>Nenhum curso de <%= categoria %> encontrado.</p>
-  <% } %>
-  </div>
-          <!-- Marketing -->
-          <div class="card marketing">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img5.jpg')"
-            ></div>
-            <h3>Marketing de Conteúdo</h3>
-            <p>Criação de textos, SEO e engajamento.</p>
-          </div>
-          <div class="card marketing">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img6.jpg')"
-            ></div>
-            <h3>Tráfego Pago</h3>
-            <p>Facebook Ads, Google Ads, etc.</p>
-          </div>
-
-          <!-- Empreendedorismo -->
-          <div class="card empreendedorismo">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img7.jpg')"
-            ></div>
-            <h3>Criação de Negócios</h3>
-            <p>Do zero ao seu próprio negócio digital.</p>
-          </div>
-          <div class="card empreendedorismo">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img8.jpg')"
-            ></div>
-            <h3>Gestão Financeira</h3>
-            <p>Controle de finanças para empreendedores.</p>
-          </div>
-
-          <!-- Soft Skills -->
-          <div class="card softskills">
-            <h3>Comunicação Eficaz</h3>
-            <p>Como falar bem em público e no trabalho.</p>
-          </div>
-          <div class="card softskills">
-            <h3>Liderança</h3>
-            <p>Como liderar equipes e tomar decisões.</p>
-          </div>
         </div>
       </div>
     </section>
@@ -191,68 +131,54 @@
     </section>
     <%- include('common/footer'); %>
     <script>
-  /**
-   * Fun o que filtra os cursos por categoria
-   * @param {string} category - Categoria a ser filtrada
-   * @returns {Promise<void>}
-   */
-      async function filterCategory(category) {
-    const cardsArea = document.querySelector('.cards-area .cards');
-    
-    // 1. Muda o título e mostra um feedback de carregamento
-    document.querySelector('.cards-area h1').innerText = category.charAt(0).toUpperCase() + category.slice(1);
-    cardsArea.innerHTML = '<h4 class="loading">Carregando cursos...</h4>';
+      const allCourses = <%- JSON.stringify(courses || []) %>;
 
-    try {
-        const res = await fetch(`/api/cursos/category/${category}`);
-        
-        // Trata erros de requisição (como 404, 500)
-        if (!res.ok) {
-            throw new Error(`Erro na requisição: ${res.statusText}`);
-        }
+      async function filterCategory(categoryName){
+        const cardsArea = document.querySelector(".cards-area .cards")
+        const titleElement = document.querySelector(".cards-area h1")
 
-        const data = await res.json();
+        titleElement.innerText = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
 
-        // 2. Limpa a área antes de adicionar os novos cards
-        cardsArea.innerHTML = ''; 
+        cardsArea.innerHTML = "";
 
-        if (data.length === 0) {
-            cardsArea.innerHTML = '<h4 class="empty" style="color: #4a78a6">Nenhum curso encontrado nessa categoria!</h4>';
-        } else {
-            data.forEach(course => {
-                const card = document.createElement('div');
-                card.className = `card ${category.toLowerCase()}`; // Use a categoria real
-                
-                // Usar textContent para segurança contra XSS em vez de innerHTML direto
-                const imgDiv = document.createElement('div');
-                imgDiv.className = 'img';
-                imgDiv.style.backgroundImage = `url('${course.imagem}')`;
+        const filteredCourses = allCourses.filter(
+          (course) =>
+          course.categoria.toLowerCase() === categoryName.toLowerCase() &&
+          course.publicated
+        );
 
-                const title = document.createElement('h3');
-                title.textContent = course.nome;
+        if (filteredCourses.length === 0) {
+    cardsArea.innerHTML =
+      '<h4 class="empty" style="color: #4a78a6">Nenhum curso encontrado nessa categoria!</h4>';
+  } else {
+    filteredCourses.forEach((course) => {
+      const card = document.createElement("div");
+      
+      // Usa a categoria correta do curso
+      card.className = `card ${course.categoria.toLowerCase()}`;
 
-                const description = document.createElement('p');
-                description.textContent = course.descricao;
+      const imgDiv = document.createElement("div");
+      imgDiv.className = "img";
+      imgDiv.style.backgroundImage = `url('${course.imagem}')`;
 
-                card.appendChild(imgDiv);
-                card.appendChild(title);
-                card.appendChild(description);
-                card.onclick = () => {
-                  window.location.href = `/course/${course.id}`; // Redireciona para a página do curso
-                };
-                cardsArea.appendChild(card);
-            });
-        }
-    } catch (error) {
-        console.error("Erro ao buscar cursos:", error);
-        cardsArea.innerHTML = '<h4 class="error">Oops! Algo deu errado ao buscar os cursos. Tente novamente.</h4>';
-    }
+      const title = document.createElement("h3");
+      title.textContent = course.nome;
+
+      const description = document.createElement("p");
+      description.textContent = course.descricao;
+
+      card.appendChild(imgDiv);
+      card.appendChild(title);
+      card.appendChild(description);
+      card.onclick = () => {
+        window.location.href = `/course/${course.id}`; // Redireciona para a página do curso
+      };
+      cardsArea.appendChild(card);
+    });
+  }
 }
 
-// Chamar a função para carregar a categoria inicial
-filterCategory("Tecnologia");
-
-
+      filterCategory("tecnologia")
     </script>
   </body>
 </html>
