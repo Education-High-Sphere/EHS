@@ -99,12 +99,57 @@ export default {
     }
   },
 
-  async updateCourse(id, courseData) {
+  async updateCourse(id, courseData, file) {
     try {
       const existingCourse = await cursoRepository.findById(id);
       if (!existingCourse) {
         throw new Error("Curso não encontrado");
       }
+
+      if (file) {
+        const fileName = `${Date.now()}-${file.originalname}`;
+        const filePath = `cursos/${fileName}`;
+
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from("assets")
+          .upload(filePath, file.buffer, {
+            contentType: file.mimetype,
+          });
+        console.log("Imagem uploadada com sucesso:", uploadData);
+
+        if (uploadError) {
+          throw new Error(
+            "Erro ao fazer upload da imagem: " + uploadError.message
+          );
+        }
+
+        const { data: urlData } = await supabase.storage
+          .from("assets")
+          .getPublicUrl(filePath);
+
+        const imageUrl = urlData.publicUrl;
+
+        courseData.imagem = imageUrl;
+      }
+
+      if (file && existingCourse.imagem) {
+        try {
+          const originalImageName = existingCourse.imagem.split("/").pop();
+          const { data, error: storageError } = await supabase.storage
+            .from("assets")
+            .remove([`cursos/${originalImageName}`]);
+          if (storageError) {
+            throw new Error(
+              "Erro ao deletar imagem do curso: " + storageError.message
+            );
+          } else {
+            console.log("Imagem do curso deletada com sucesso:", data);
+          }
+        } catch (error) {
+          console.error("Erro ao deletar imagem do curso:", error);
+        }
+      }
+
       const updatedCourse = await cursoRepository.update(id, courseData);
       return updatedCourse;
     } catch (error) {
