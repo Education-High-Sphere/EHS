@@ -82,4 +82,19 @@ export default {
 
     return { coursesData, categoria, searchQuery: searchQuery || "" };
   },
+
+  async togglePublish(req, res) {
+    try {
+      const {id} = req.params;
+      const updatedCourse = await cursoService.toggleCoursePublish(id);
+      res.json({
+        success: true,
+        message : `Curso ${updatedCourse.title} ${updatedCourse.publicated ? 'publicado' : 'despublicado'}`,
+        course: updatedCourse
+      });
+
+    } catch (error) {
+      res.status(404).json({ success: false, message: error.message });
+    }
+  },
 };

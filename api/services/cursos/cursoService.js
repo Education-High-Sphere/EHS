@@ -48,7 +48,7 @@ export default {
     }
   },
 
-  async createCourse(courseData,file,professorId) {
+  async createCourse(courseData, file, professorId) {
     try {
       if (!courseData.nome || !courseData.descricao) {
         throw new Error("Nome e descrição são obrigatórios");
@@ -64,7 +64,7 @@ export default {
         .upload(filePath, file.buffer, {
           contentType: file.mimetype,
         });
-        console.log("Imagem uploadada com sucesso:", uploadData);
+      console.log("Imagem uploadada com sucesso:", uploadData);
 
       if (uploadError) {
         throw new Error(
@@ -118,9 +118,28 @@ export default {
       if (!existingCourse) {
         throw new Error("Curso não encontrado");
       }
+
+      console.log("Deletando curso com ID:", id);
       await cursoRepository.delete(id);
+      console.log("Curso deletado com sucesso");
     } catch (error) {
+      console.log("Erro capturado no catch:", error);
+      console.log("Stack trace: ", error.stack);
       throw new Error("Erro ao deletar curso: " + error.message);
     }
   },
+
+  async toggleCoursePublish(id){
+    try{
+      const course = await cursoRepository.findById(id);
+      if (!course) {
+        throw new Error("Curso nao encontrado");
+        
+      }
+      const uptadedCourse = await cursoRepository.update(id, {publicated: !course.publicated});
+      return uptadedCourse;
+    } catch (error) {
+      throw new Error("Erro ao atualizar curso: " + error.message);
+    }
+  }
 };

@@ -15,8 +15,9 @@ router.get("/:id", courseController.getCourseById);   // Listar por ID
 router.get("/", courseController.getAllCourses);
 
 
-router.post("/create",checkUserMiddleware, upload.single('imagem'),  courseController.createCourse);       // Criar novo
-router.put("/update/:id",checkUserMiddleware, upload.single('imagem'),  courseController.updateCourse);     // Atualizar
+router.post("/create",checkUserMiddleware, upload.single('imagem'),  courseController.createCourse);  // Criar  
+router.put('/:id/publish',checkUserMiddleware, courseController.togglePublish);  // Publicar ou despublicar
+router.put("/:id",checkUserMiddleware, upload.single('imagem'),  courseController.updateCourse); // Atualizar
 router.delete("/:id",checkUserMiddleware, courseController.deleteCourse);  // Deletar
 
 export default router;

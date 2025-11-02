@@ -126,13 +126,17 @@ export default {
   },
 
   async update(id, courseData) {
-    const { nome, descricao, imagem, categoria, preco, duracao, nivel } =
-      courseData;
+    const existing = await this.findById(id);
+    if (!existing) {
+      throw new Error("Curso nao encontrado");
+    }
+    
 
     const { data, error } = await supabase
       .from("cursos")
-      .update({ nome, descricao, imagem, categoria, preco, duracao, nivel })
+      .update({ ...courseData })
       .eq("id", id)
+      .select()
       .single();
 
     if (error) {
@@ -150,18 +154,25 @@ export default {
 
       const imagePath = `cursos/${imageName}`;
 
-      const { data, error } = await supabase.storage
+      const { data, error: storageError } = await supabase.storage
         .from("assets")
         .remove([imagePath]);
-      if (error) {
-        console.error("Erro ao deletar imagem do curso:", error);
+      if (storageError) {
+        console.error("Erro ao deletar imagem do curso:", storageError);
       } else {
         console.log("Imagem do curso deletada com sucesso:", data);
       }
-    }
-    if (error) {
-      console.error("Erro ao deletar curso:", error);
-      return false;
+
+      const { data: deleteData, error: deleteError } = await supabase
+        .from("cursos")
+        .delete()
+        .eq("id", id)
+        .single();
+      if (deleteError) {
+        console.error("Erro ao deletar curso:", deleteError);
+        return null;
+      }
+      return deleteData;
     }
     return true;
   },
