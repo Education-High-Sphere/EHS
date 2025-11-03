@@ -261,6 +261,154 @@
           }
         }
       }
+  },
+  "/api/cursos/create": {
+      "post": {
+        "tags": ["Cursos"],
+        "summary": "Criar novo curso (rota /create)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": { "$ref": "#/components/schemas/CursoInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Curso criado com sucesso" }
+        }
+      }
+    },
+    "/api/cursos/{id}/publish": {
+      "put": {
+        "tags": ["Cursos"],
+        "summary": "Publicar ou despublicar curso por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 101 }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Status de publicação alterado com sucesso" },
+          "404": { "description": "Curso não encontrado" }
+        }
+      }
+    },
+    "/api/matriculas": {
+      "get": {
+        "tags": ["Matriculas"],
+        "summary": "Listar todas as matrículas",
+        "responses": {
+          "200": { "description": "Lista de matrículas retornada com sucesso" }
+        }
+      },
+      "post": {
+        "tags": ["Matriculas"],
+        "summary": "Criar nova matrícula",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userId", "courseId"],
+                "properties": {
+                  "userId": { "type": "integer", "example": 1 },
+                  "courseId": { "type": "integer", "example": 101 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Matrícula criada com sucesso" }
+        }
+      }
+    },
+    "/api/matriculas/{matriculaId}": {
+      "get": {
+        "tags": ["Matriculas"],
+        "summary": "Obter matrícula por ID",
+        "parameters": [
+          { "name": "matriculaId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Matrícula retornada com sucesso" },
+          "404": { "description": "Matrícula não encontrada" }
+        }
+      },
+      "patch": {
+        "tags": ["Matriculas"],
+        "summary": "Atualizar parcialmente uma matrícula",
+        "parameters": [
+          { "name": "matriculaId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "properties": { "concluido": { "type": "boolean" } } }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Matrícula atualizada com sucesso" },
+          "404": { "description": "Matrícula não encontrada" }
+        }
+      },
+      "delete": {
+        "tags": ["Matriculas"],
+        "summary": "Deletar matrícula por ID",
+        "parameters": [
+          { "name": "matriculaId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "204": { "description": "Matrícula deletada com sucesso" },
+          "404": { "description": "Matrícula não encontrada" }
+        }
+      }
+    },
+    "/api/matriculas/user/{userId}": {
+      "get": {
+        "tags": ["Matriculas"],
+        "summary": "Obter matrículas por usuário",
+        "parameters": [
+          { "name": "userId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Matrículas retornadas com sucesso" },
+          "404": { "description": "Nenhuma matrícula encontrada para o usuário" }
+        }
+      }
+    },
+    "/api/matriculas/course/{courseId}": {
+      "get": {
+        "tags": ["Matriculas"],
+        "summary": "Obter matrículas por curso",
+        "parameters": [
+          { "name": "courseId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Matrículas para o curso retornadas com sucesso" },
+          "404": { "description": "Nenhuma matrícula encontrada para o curso" }
+        }
+      }
+    },
+    "/api/matriculas/user/{userId}/courses": {
+      "get": {
+        "tags": ["Matriculas"],
+        "summary": "Obter cursos do usuário (concluídos e em andamento)",
+        "parameters": [
+          { "name": "userId", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Cursos do usuário retornados com sucesso" },
+          "404": { "description": "Nenhum curso encontrado para o usuário" }
+        }
+      }
     }
   },
   "components": {
@@ -317,6 +465,35 @@
           "nome": { "type": "string", "example": "Maria Silva" },
           "email": { "type": "string", "format": "email", "example": "maria@example.com" },
           "avatarUrl": { "type": "string", "example": "https://meusite.com/imagens/maria.jpg" }
+        }
+      }
+      ,
+      "Matricula": {
+        "type": "object",
+        "required": ["id", "userId", "curso_id", "concluido"],
+        "properties": {
+          "id": { "type": "integer", "example": 1001 },
+          "userId": { "type": "integer", "example": 1 },
+          "curso_id": { "type": "integer", "example": 101 },
+          "dataMatricula": { "type": "string", "format": "date-time", "example": "2025-11-03T12:34:56Z" },
+          "concluido": { "type": "boolean", "example": false }
+        }
+      },
+      "MatriculaInput": {
+        "type": "object",
+        "required": ["userId", "courseId"],
+        "properties": {
+          "userId": { "type": "integer", "example": 1 },
+          "courseId": { "type": "integer", "example": 101 }
+        }
+      },
+      "CourseWithMatricula": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 101 },
+          "titulo": { "type": "string", "example": "Introdução ao Node.js" },
+          "descricao": { "type": "string", "example": "Curso básico sobre Node.js" },
+          "matricula": { "$ref": "#/components/schemas/Matricula" }
         }
       }
     }
