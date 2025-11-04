@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Curso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="../styles/createACourse.css"> 
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Editar Curso</h2> 
+        
+        <form id="edit-course-form" enctype="multipart/form-data" data-course-id="<%= course.id %>">
+
+            <div class="form-group full-width">
+                <label for="nome">Título do Curso</label>
+                <input type="text" id="nome" name="nome" placeholder="Ex: Python para Análise de Dados" value="<%= course.nome %>" required>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="descricao">Descrição</label>
+                <textarea id="descricao" name="descricao" rows="5" placeholder="Aprenda a manipular, analisar e visualizar dados com..." required><%= course.descricao %></textarea>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="categoria">Categoria</label>
+                    <select id="categoria" name="categoria" required>
+                        <option value="" disabled>Selecione uma categoria</option>
+                        <option value="Tecnologia" <%= course.categoria === 'Tecnologia' ? 'selected' : '' %>>Tecnologia</option>
+                        <option value="Negócios" <%= course.categoria === 'Negócios' ? 'selected' : '' %>>Negócios</option>
+                        <option value="Design" <%= course.categoria === 'Design' ? 'selected' : '' %>>Design</option>
+                        <option value="Marketing" <%= course.categoria === 'Marketing' ? 'selected' : '' %>>Marketing</option>
+                        <option value="Outra" <%= course.categoria === 'Outra' ? 'selected' : '' %>>Outra</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="nivel">Nível</label>
+                    <select id="nivel" name="nivel" required>
+                        <option value="" disabled>Selecione o nível</option>
+                        <option value="Iniciante" <%= course.nivel === 'Iniciante' ? 'selected' : '' %>>Iniciante</option>
+                        <option value="Intermediário" <%= course.nivel === 'Intermediário' ? 'selected' : '' %>>Intermediário</option>
+                        <option value="Avançado" <%= course.nivel === 'Avançado' ? 'selected' : '' %>>Avançado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="preco">Preço (R$)</label>
+                    <input type="number" id="preco" name="preco" min="0" step="0.01" placeholder="Ex: 179.90" value="<%= course.preco %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="duracao">Duração</label>
+                    <input type="text" id="duracao" name="duracao" placeholder="Ex: 30 horas" value="<%= course.duracao %>" required>
+                </div>
+            </div> 
+            
+            <div class="form-group full-width">
+                <label>Imagem da Capa</label>
+                <div class="file-drop-area" id="file-drop-area">
+                    <i class="fas fa-upload"></i>
+                    <p>Arraste e solte a imagem aqui, ou clique para selecionar</p>
+                    <input type="file" id="imagem" name="imagem" accept="image/*"> 
+                </div>
+                <img id="image-preview" src="<%= course.imagem || '#' %>" alt="Preview da Imagem" style="<%= course.imagem ? 'display: block;' : 'display: none;' %>" />
+            </div>
+
+            <div class="form-group full-width">
+                <div class="publish-container">
+                    <label>Status do Curso</label>
+                    <div class="publish-switch">
+                        <span class="switch-label"><%= course.publicated ? 'Publicado' : 'Rascunho' %></span>
+                        <label class="switch">
+                            <input type="checkbox" id="publicated-toggle" name="publicated" value="true" <%= course.publicated ? 'checked' : '' %>>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Salvar Alterações</button>
+
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropArea = document.getElementById('file-drop-area');
+            const fileInput = document.getElementById('imagem');
+            const imagePreview = document.getElementById('image-preview');
+            const form = document.getElementById('edit-course-form'); 
+            const courseId = form.dataset.courseId; 
+
+            // --- 1. Lógica do Preview de Imagem (igual ao de criação) ---
+            function showPreview(file) {
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            fileInput.addEventListener('change', (e) => {
+                if (fileInput.files.length > 0) {
+                    showPreview(fileInput.files[0]);
+                } else if (!imagePreview.src || imagePreview.src === window.location.href + '#') {
+                    // Se nenhum arquivo novo foi selecionado e não havia imagem anterior, esconde o preview
+                    imagePreview.style.display = 'none';
+                }
+            });
+
+            // --- 2. Lógica do Drag & Drop (igual ao de criação) ---
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
+            });
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => {
+                    dropArea.classList.add('dragover');
+                }, false);
+            });
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => {
+                    dropArea.classList.remove('dragover');
+                }, false);
+            });
+            dropArea.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    showPreview(files[0]);
+                }
+            }, false);
+
+            // --- 3. Lógica do Switch Label (igual ao de criação) ---
+            const publishToggle = document.getElementById('publicated-toggle');
+            const switchLabel = document.querySelector('.publish-switch .switch-label');
+
+            publishToggle.addEventListener('change', (e) => {
+                switchLabel.textContent = e.target.checked ? 'Publicado' : 'Rascunho';
+            });
+            
+            // --- 4. Lógica de ENVIO do Formulário (AGORA PARA EDIÇÃO) ---
+            form.addEventListener('submit', (e) => {
+                e.preventDefault(); 
+
+                const formData = new FormData(form);
+
+
+                // Log para debug
+                console.log('--- Formulário de EDIÇÃO pronto para enviar ---');
+                for (let [key, value] of formData.entries()) {
+                    console.log(`${key}:`, value);
+                }
+                
+                // Fetch para a API de EDIÇÃO
+                fetch(`/api/cursos/${courseId}`, { // Use o ID do curso na URL
+                    method: 'PUT', // Método HTTP para atualização
+                    body: formData 
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Sucesso:', data);
+                    alert('Curso atualizado com sucesso!');
+                    window.location.href = '/teacherScene'; // Redireciona
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao atualizar curso.');
+                });
+            });
+
+        });
+    </script>
+
+</body>
+</html>

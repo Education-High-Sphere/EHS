@@ -85,11 +85,11 @@ export default {
         preco: parseFloat(courseData.preco),
         duracao: courseData.duracao,
         nivel: courseData.nivel,
-        publicated: courseData.publicated === "true", // Converte string para booleano
-        imagem: imageUrl, // A URL correta!
-        professor_id: professorId, // O ID do professor logado
-        alunos: 0, // Valor inicial
-        avaliacao_media: 0, // Valor inicial
+        publicated: courseData.publicated === "true",
+        imagem: imageUrl, 
+        professor_id: professorId, 
+        alunos: 0, 
+        avaliacao_media: 0, 
       };
 
       const newCourse = await cursoRepository.create(finalCourseData);
