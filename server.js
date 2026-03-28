@@ -49,6 +49,7 @@ app.use((req, res, next) => {
     }
   }
   res.locals.user = user;
+  res.locals.RECAPTCHA_SITE_KEY = process.env.RECAPTCHA_SITE_KEY;
   next();
 });
 
