@@ -58,75 +58,15 @@
     <section class="categories">
       <div class="category-buttons">
         <a onclick="filterCategory('tecnologia')">Tecnologia e Inovação</a>
-        <a onclick="filterCategory('marketing')">Marketing Digital</a>
-        <a onclick="filterCategory('empreendedorismo')">Empreendedorismo</a>
-        <a onclick="filterCategory('softskills')">Soft Skills</a>
+        <a onclick="filterCategory('idiomas')">Idiomas</a>
+        <a onclick="filterCategory('design & criação')">Design & Criação</a>
+        <a onclick="filterCategory('negócios & finanças')">Negócios & Finanças</a>
       </div>
 
       <div class="cards-area">
         <h1 style="color: #4a78a6">Tecnologia</h1>
 
         <div class="cards">
-
-          <!-- Tecnologia -->
-           <div class="card tecnologia">
-            <% if (courses && courses.length > 0) { %>
-    <% courses.forEach(course => { %>
-      <div class="card <%= categoria.toLowerCase() %>">
-        <div class="img" style="background-image: url('<%= course.imagem %>')"></div>
-        <h3><%= course.nome %></h3>
-        <p><%= course.descricao %></p>
-      </div>
-    <% }) %>
-  <% } else { %>
-    <p>Nenhum curso de <%= categoria %> encontrado.</p>
-  <% } %>
-  </div>
-          <!-- Marketing -->
-          <div class="card marketing">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img5.jpg')"
-            ></div>
-            <h3>Marketing de Conteúdo</h3>
-            <p>Criação de textos, SEO e engajamento.</p>
-          </div>
-          <div class="card marketing">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img6.jpg')"
-            ></div>
-            <h3>Tráfego Pago</h3>
-            <p>Facebook Ads, Google Ads, etc.</p>
-          </div>
-
-          <!-- Empreendedorismo -->
-          <div class="card empreendedorismo">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img7.jpg')"
-            ></div>
-            <h3>Criação de Negócios</h3>
-            <p>Do zero ao seu próprio negócio digital.</p>
-          </div>
-          <div class="card empreendedorismo">
-            <div
-              class="img"
-              style="background-image: url('../src/cards/card-img8.jpg')"
-            ></div>
-            <h3>Gestão Financeira</h3>
-            <p>Controle de finanças para empreendedores.</p>
-          </div>
-
-          <!-- Soft Skills -->
-          <div class="card softskills">
-            <h3>Comunicação Eficaz</h3>
-            <p>Como falar bem em público e no trabalho.</p>
-          </div>
-          <div class="card softskills">
-            <h3>Liderança</h3>
-            <p>Como liderar equipes e tomar decisões.</p>
-          </div>
         </div>
       </div>
     </section>
@@ -157,7 +97,7 @@
             <span class="docker">
               <div
                 class="docker-header"
-                style="background-image: url('../src/curso3.jpg')"
+                style="background-image: url('../src/cursos/curso3.jpg')"
               ></div>
               <div class="docker-body">
                 <h3>Clube de Carreira</h3>
@@ -191,49 +131,54 @@
     </section>
     <%- include('common/footer'); %>
     <script>
-  /**
-   * Fun o que filtra os cursos por categoria
-   * @param {string} category - Categoria a ser filtrada
-   * @returns {Promise<void>}
-   */
-      async function filterCategory(category) {
-        const categories = ["Tecnologia", "Marketing", "Empreendedorismo", "Softskills"];
-        document.querySelector('.cards-area h1').innerText = category.charAt(0).toUpperCase() + category.slice(1);
-        categories.forEach(cat => {
-          document.querySelectorAll(`.card.${cat.toLowerCase()}`).forEach(card => {
-            card.style.display = cat.toLowerCase() === category ? 'block' : 'none';
-          });
-        });
-        try{
-          const res = await fetch(`/cursos/category/${category}`);
-          const data = await res.json();
-          console.log(data);
-          if (data.length === 0) {
-            document.querySelector('.cards-area .cards').innerHTML = '<h4 style="color: red; font-size: 20px; font-weight: 500; text-align: center;">Nenhum curso encontrado nessa categoria!</h4>';
-          } else {
-            const cardsArea = document.querySelector('.cards-area .cards');
-            cardsArea.innerHTML = '';
-            data.forEach(course => {
-              const card = document.createElement('div');
-              card.className = `card ${category}`;
-              card.innerHTML = `
-                <div class="img" style="background-image: url('${course.imagem}')"></div>
-                <h3>${course.nome}</h3>
-                <p>${course.descricao}</p>
-              `;
-              cardsArea.appendChild(card);
-            });
-          }
-        } catch (error) {
-          console.error(error);
+      const allCourses = <%- JSON.stringify(courses || []) %>;
 
-        }
-        
+      async function filterCategory(categoryName){
+        const cardsArea = document.querySelector(".cards-area .cards")
+        const titleElement = document.querySelector(".cards-area h1")
+
+        titleElement.innerText = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+
+        cardsArea.innerHTML = "";
+
+        const filteredCourses = allCourses.filter(
+          (course) =>
+          course.categoria.toLowerCase() === categoryName.toLowerCase() &&
+          course.publicated
+        );
+
+        if (filteredCourses.length === 0) {
+    cardsArea.innerHTML =
+      '<h4 class="empty" style="color: #4a78a6">Nenhum curso encontrado nessa categoria!</h4>';
+  } else {
+    filteredCourses.forEach((course) => {
+      const card = document.createElement("div");
+      
+      // Usa a categoria correta do curso
+      card.className = `card ${course.categoria.toLowerCase()}`;
+
+      const imgDiv = document.createElement("div");
+      imgDiv.className = "img";
+      imgDiv.style.backgroundImage = `url('${course.imagem}')`;
+
+      const title = document.createElement("h3");
+      title.textContent = course.nome;
+
+      const description = document.createElement("p");
+      description.textContent = course.descricao;
+
+      card.appendChild(imgDiv);
+      card.appendChild(title);
+      card.appendChild(description);
+      card.onclick = () => {
+        window.location.href = `/course/${course.id}`; // Redireciona para a página do curso
       };
+      cardsArea.appendChild(card);
+    });
+  }
+}
 
-      filterCategory("Tecnologia");
-
-
+      filterCategory("tecnologia")
     </script>
   </body>
 </html>

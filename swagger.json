@@ -1,0 +1,324 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Cursos",
+    "version": "1.0.0",
+    "description": "API para gerenciar cursos e usuários"
+  },
+  "paths": {
+    "/api/users/register": {
+      "post": {
+        "tags": ["Usuários"],
+        "summary": "Registrar novo usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRegisterInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Usuário registrado com sucesso" }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": ["Usuários"],
+        "summary": "Login do usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Login realizado com sucesso" },
+          "401": { "description": "Credenciais inválidas" }
+        }
+      }
+    },
+    "/api/users/edit": {
+      "post": {
+        "tags": ["Usuários"],
+        "summary": "Editar perfil do usuário (com avatar)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UserEditInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Usuário atualizado com sucesso" }
+        }
+      }
+    },
+    "/api/users/profile/{id}": {
+      "get": {
+        "tags": ["Usuários"],
+        "summary": "Obter perfil do usuário por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 1 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Perfil retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfile"
+                }
+              }
+            }
+          },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": ["Usuários"],
+        "summary": "Listar todos os usuários",
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserProfile"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/logout": {
+      "get": {
+        "tags": ["Usuários"],
+        "summary": "Logout do usuário",
+        "responses": {
+          "200": { "description": "Logout realizado com sucesso" }
+        }
+      }
+    },
+
+    "/api/cursos": {
+      "get": {
+        "tags": ["Cursos"],
+        "summary": "Listar todos os cursos",
+        "responses": {
+          "200": {
+            "description": "Lista de cursos retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Curso" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Cursos"],
+        "summary": "Criar novo curso",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CursoInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Curso criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Curso" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cursos/{id}": {
+      "get": {
+        "tags": ["Cursos"],
+        "summary": "Listar curso por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 101 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Curso retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Curso" }
+              }
+            }
+          },
+          "404": { "description": "Curso não encontrado" }
+        }
+      },
+      "put": {
+        "tags": ["Cursos"],
+        "summary": "Atualizar curso por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 101 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CursoInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Curso atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Curso" }
+              }
+            }
+          },
+          "404": { "description": "Curso não encontrado" }
+        }
+      },
+      "delete": {
+        "tags": ["Cursos"],
+        "summary": "Deletar curso por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 101 }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Curso deletado com sucesso" },
+          "404": { "description": "Curso não encontrado" }
+        }
+      }
+    },
+    "/api/cursos/category/{categoria}": {
+      "get": {
+        "tags": ["Cursos"],
+        "summary": "Listar cursos por categoria",
+        "parameters": [
+          {
+            "name": "categoria",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "example": "programacao" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cursos retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Curso" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Curso": {
+        "type": "object",
+        "required": ["id", "titulo", "descricao", "categoria", "duracaoHoras"],
+        "properties": {
+          "id": { "type": "integer", "example": 101 },
+          "titulo": { "type": "string", "example": "Introdução ao Node.js" },
+          "descricao": { "type": "string", "example": "Curso básico sobre Node.js para iniciantes" },
+          "categoria": { "type": "string", "example": "programacao" },
+          "duracaoHoras": { "type": "integer", "example": 20 }
+        }
+      },
+      "CursoInput": {
+        "type": "object",
+        "required": ["titulo", "descricao", "categoria", "duracaoHoras"],
+        "properties": {
+          "titulo": { "type": "string", "example": "Introdução ao Node.js" },
+          "descricao": { "type": "string", "example": "Curso básico sobre Node.js para iniciantes" },
+          "categoria": { "type": "string", "example": "programacao" },
+          "duracaoHoras": { "type": "integer", "example": 20 }
+        }
+      },
+      "UserRegisterInput": {
+        "type": "object",
+        "required": ["nome", "email", "senha"],
+        "properties": {
+          "nome": { "type": "string", "example": "Maria Silva" },
+          "email": { "type": "string", "format": "email", "example": "maria@example.com" },
+          "senha": { "type": "string", "format": "password", "example": "senha123" }
+        }
+      },
+      "UserLoginInput": {
+        "type": "object",
+        "required": ["email", "senha"],
+        "properties": {
+          "email": { "type": "string", "format": "email", "example": "maria@example.com" },
+          "senha": { "type": "string", "format": "password", "example": "senha123" }
+        }
+      },
+      "UserEditInput": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string", "example": "Maria Atualizada" },
+          "avatar": { "type": "string", "format": "binary" }
+        }
+      },
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "nome": { "type": "string", "example": "Maria Silva" },
+          "email": { "type": "string", "format": "email", "example": "maria@example.com" },
+          "avatarUrl": { "type": "string", "example": "https://meusite.com/imagens/maria.jpg" }
+        }
+      }
+    }
+  }
+}

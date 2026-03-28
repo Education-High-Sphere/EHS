@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ongoingCourses</title>
+
+    <link rel="stylesheet" href="../styles/ongoingCourses.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <%- include('common/header'); %>
+
+    <h2 class="section-title">Continuar Estudando</h2>
+
+    <div class="course-grid">
+      <% if (cursosEmAndamento && cursosEmAndamento.length > 0) { %>
+      <% cursosEmAndamento.forEach(course => { %>
+      <div class="course-card">
+        <div class="course-info">
+          <div class="info-top">
+            <span class="course-category"><%= course.categoria %></span>
+            <h3 class="course-title"><%= course.nome %></h3>
+          </div>
+
+          <div class="info-img">
+            <img
+              src="<%= course.imagem ? course.imagem : '' %>"
+              alt="<%= course.nome ? course.nome : '' %>"
+            />
+          </div>
+
+          <div class="info-bottom">
+            <% if (course.matricula && course.matricula.progresso) { %>
+            <div class="progress-container">
+              <div class="progress-info">
+                <span class="progress-percent"
+                  ><%= Math.round(course.matricula.progresso) %>%
+                  concluido</span
+                >
+              </div>
+              <div class="progress-bar">
+                <div
+                  class="progress-fill"
+                  style="width: <%= Math.round(course.matricula.progresso) %>%;"  
+                ></div>
+              </div>
+            </div>
+            <% } %>
+          </div>
+        </div>
+        <button class="continue-button">Continuar Curso</button>
+      </div>
+      <% }); %>
+      <% } else { %>
+      <p>Nenhum curso em andamento.</p>
+      <% } %>
+    </div>
+
+    <h2 class="section-title">Cursos Concluidos</h2>
+
+    <div class="course-grid">
+      <% if (cursosConcluidos && cursosConcluidos.length > 0) { %>
+      <% cursosConcluidos.forEach(course => { %>
+      <div class="course-card">
+        <div class="course-info">
+          <div class="info-top">
+            <span class="course-category"><%= course.categoria ? course.categoria : '' %></span>
+            <h3 class="course-title"><%= course.nome ? course.nome : '' %></h3>
+          </div>
+
+          <div class="info-img">
+            <img
+              src="<%= course.imagem ? course.imagem : '' %>"
+              alt="<%= course.nome ? course.nome : '' %>"
+            />
+          </div>
+
+          <div class="info-bottom">
+            <% if (course.matricula && course.matricula.progresso) { %>
+            <div class="progress-container">
+              <div class="progress-info">
+                <span class="progress-percent"
+                  ><%= Math.round(course.matricula.progresso) %>%
+                  concluido</span
+                >
+              </div>
+              <div class="progress-bar">
+                <div
+                  class="progress-fill"
+                  style="
+                    width: <%= Math.round(course.matricula.progresso) %>%;"
+                ></div>
+              </div>
+            </div>
+            <% } %>
+          </div>
+        </div>
+        <button class="continue-button">Ver Certificado</button>
+      </div>
+      <% }); %>
+      <% } else { %>
+      <p>Nenhum curso concluido.</p>
+      <% } %>
+    </div>
+
+
+    <%-include ('common/footer')-%>
+  </body>
+</html>

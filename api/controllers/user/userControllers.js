@@ -49,7 +49,8 @@ export default {
         email: user.email,
         phone: user.phone,
         createdAt: user.createdAt || user.created_at,
-        job: user.job
+        job: user.job,
+        roles: user.roles
       };
 
       // Cria token JWT
@@ -57,7 +58,7 @@ export default {
 
       // Set cookie com token
       res.cookie('jwt', token, { httpOnly: true, sameSite: 'Lax', secure: false });
-      // Redireciona para /userScene
+
       res.redirect('/userScene');
 
     } catch (error) {
@@ -82,7 +83,8 @@ export default {
         email: user.email,
         phone: user.phone,
         createdAt: user.createdAt || user.created_at,
-        job: user.job
+        job: user.job,
+        roles: user.roles
       };
 
       const token = jwt.sign(
@@ -142,7 +144,8 @@ export default {
               email: updatedUser.email,
               phone: updatedUser.phone,
               createdAt: updatedUser.createdAt || updatedUser.created_at,
-              job: updatedUser.job
+              job: updatedUser.job,
+              roles: updatedUser.roles
             };
             const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
             res.cookie('jwt', newToken, { httpOnly: true, sameSite: 'Lax', secure: false });
@@ -154,4 +157,3 @@ export default {
         }
     }
 };
-

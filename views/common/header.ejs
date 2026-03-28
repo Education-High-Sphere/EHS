@@ -1,130 +1,233 @@
+<html lang="pt-br">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EHS Marketplace</title>
+  
   <style>
-    .top-header {
-      color: white;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      font-size: 12px;
-      display: flex;
-      width: 100vw;
-      justify-content: space-between;
-      align-items: center;
+    /* --- 1. Paleta de Cores e Estilos Globais --- */
+    :root {
+      --cor-fundo: #1b2232;
+      --cor-texto-principal: #f4f4f4;
+      --cor-acento-azul: #4a78a6;
+      --cor-borda-cinza: #d3d3d3;
+      --cor-item-lista: #2a344a; /* Tom mais claro que o fundo */
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* --- 2. Estrutura do Header --- */
+    .main-header {
+      background-color: var(--cor-fundo);
+      width: 100%;
+      padding: 1em 0;
       position: sticky;
       top: 0;
       z-index: 1000;
+      /* Sombra sutil moderna, usando o tom azul */
+      box-shadow: 0 4px 12px rgba(74, 120, 166, 0.1);
+      border-bottom: 1px solid var(--cor-item-lista);
     }
 
-    .login {
-      font-size: large;
-      font-weight: 600;
-      color: #0f1e38;
-      padding: 10px;
-      text-decoration: none;
-      transition: all 0.3s ease-in-out;
-      margin-right: 20px;
-    }
-    .login a:hover {
-      background-color: #0f1e38;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    .main-header {
-      background-color: #fff;
-      height: fit-content;
-      width: 100vw;
-      height: 70px;
+    .header-container {
+      width: 90%;
+      max-width: 1400px; /* Header mais largo */
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
+      gap: 1.5em;
     }
-    .nav-links a:hover {
-      text-decoration: none;
-      color: #4a78a6;
-    }
+
+    /* --- 3. Logo --- */
     .logo {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
-      background-color: #0f1e38;
-      border-radius: 0px 10px 0px 0px;
-      padding: 1px;
+      gap: 10px;
       cursor: pointer;
-    }
-    .logo div {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
     }
 
     .logo img {
-      height: 36px;
+      height: 40px; /* Um pouco maior */
+    }
+
+    .logo div {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .logo strong {
+      font-size: 1.2rem;
+      color: var(--cor-texto-principal);
+    }
+
+    .logo small {
+      font-size: 9px;
+      color: var(--cor-borda-cinza);
+    }
+
+    /* --- 4. Links de Navegação Modernos --- */
+    .nav-links {
+      display: flex;
+      gap: 2em; /* Mais espaço */
     }
 
     .nav-links a {
-      margin: 0 10px;
-      color: #000;
-      text-decoration: none;
+      color: var(--cor-texto-principal);
+      font-weight: 500;
+      position: relative;
+      padding-bottom: 5px;
+      transition: color 0.2s ease-in-out;
     }
 
+    /* Efeito de underline no hover */
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--cor-acento-azul);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--cor-acento-azul);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* --- 5. Barra de Pesquisa Moderna --- */
     .search-bar {
+      flex: 1; /* Faz a barra ocupar o espaço disponível */
+      max-width: 350px;
+    }
+
+    .search-bar form {
       display: flex;
+      align-items: center;
+      background-color: var(--cor-item-lista);
+      border-radius: 5px;
+      overflow: hidden;
     }
 
     .search-bar input {
-      padding: 5px;
-      border: 1px solid #ccc;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 10px 15px;
+      width: 100%;
+      color: var(--cor-texto-principal);
+      font-size: 0.9rem;
     }
-    .search-bar input:focus {
-      outline: 1px solid #0f1e38;
+
+    .search-bar input::placeholder {
+      color: var(--cor-borda-cinza);
     }
 
     .search-bar button {
-      background: #0f1e38;
-      color: white;
-      cursor: pointer;
+      background: transparent;
       border: none;
-      padding: 5px 10px;
+      color: var(--cor-borda-cinza);
+      cursor: pointer;
+      padding: 10px 15px;
+      font-size: 1rem;
+      transition: color 0.2s ease;
+    }
+
+    .search-bar button:hover {
+      color: var(--cor-acento-azul);
+    }
+    
+    /* --- 6. Ações do Header (Ícones e Login) --- */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5em;
     }
 
     .icons {
       display: flex;
       align-items: center;
-      justify-content: center;
-      margin-right: 20px;
+      gap: 1.2em;
     }
 
     .icons i {
-      font-size: 16px;
-      margin: 0 8px;
+      font-size: 1.2rem;
+      color: var(--cor-texto-principal);
       cursor: pointer;
-      color: #0f1e38;
+      transition: color 0.2s ease;
     }
 
-    .buttons .login {
-      margin-right: 10px;
-      color: #0f1e38;
-      text-decoration: none;
+    .icons i:hover {
+      color: var(--cor-acento-azul);
     }
 
-    .buttons .aprendizado {
-      background: #0f1e38;
-      color: white;
+    /* --- 7. Botões (Reutilizados do Dashboard) --- */
+    .btn {
+      padding: 0.6em 1.2em;
       border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: var(--cor-texto-principal);
+      white-space: nowrap; /* Impede que o texto quebre */
     }
-  </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="icon" href="../src/logo.png" type="image/x-icon">
-</head>
 
-<header class="top-header">
-  <div class="main-header">
-    <div class="logo-container">
+    .btn-primary {
+      background-color: var(--cor-acento-azul);
+    }
+    .btn-primary:hover {
+      background-color: #3a6896;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      border: 1px solid var(--cor-acento-azul);
+    }
+    .btn-secondary:hover {
+      background-color: var(--cor-acento-azul);
+    }
+
+  </style>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+  />
+  <link rel="icon" href="../src/logo.png" type="image/x-icon" />
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="header-container">
+
       <div class="logo" onclick="window.location.href = '/'">
         <img src="../src/logo.png" alt="Logo" />
         <div>
@@ -132,31 +235,60 @@
           <small>Educando Mentes do Futuro</small>
         </div>
       </div>
-    </div>
 
-    <nav class="nav-links">
-      <a href="/">Home</a>
-      <a href="#">Cursos</a>
-      <a href="#">Seja um Professor</a>
-      <a href="#">Comunidade</a>
-    </nav>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/courses">Cursos</a>
+        <a href="/beATeacher">Seja um Professor</a>
+        <a href="#">Comunidade</a>
+      </nav>
 
-    <div class="search-bar">
-      <input type="text" placeholder="Procure por um curso..." />
-      <button><i class="fas fa-search"></i></button>
-    </div>
+      <div class="search-bar">
+        <form action="/courses" method="GET">
+          <input type="text" name="search" placeholder="Pesquisar cursos..." />
+          <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+      </div>
 
-    <div class="icons">
-      <i class="fas fa-bell"></i>
-      <i class="fas fa-heart"></i>
-      <i class="fas fa-shopping-cart"></i>
+      <div class="header-actions">
+        <div class="icons">
+          <i class="fas fa-bell"></i>
+          <i class="fas fa-heart"></i>
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        
+        <div class="login">
+          <% if (user) { %>
+            <a href="/userScene" class="btn btn-secondary">Olá, <%= user.name %></a>
+          <% } else { %>
+            <a href="/register" class="btn btn-primary">Login / Cadastro</a>
+          <% } %>
+        </div>
+      </div>
+
     </div>
-    <div class="login">
-      <% if (user) { %>
-      <a href="/userScene">Olá, <%= user.name %></a>
-      <% } else { %>
-      <a href="/register">Login / Cadastro</a>
-      <% } %>
-    </div>
-  </div>
-</header>
+  </header>
+
+  <script>
+    // Seu script JS original está ótimo e não precisa de mudanças.
+    document.querySelector('.search-bar form').addEventListener('submit', function (e) {
+      try {
+        const searchInput = this.querySelector('input[name="search"]');
+        if (!searchInput) {
+          throw new Error('searchInput is null');
+        }
+        const query = searchInput.value.trim();
+        if (query) {
+          // Apenas redireciona, não precisa do e.preventDefault() se o action já é /courses
+          this.submit();
+        } else {
+          e.preventDefault(); // Impede o envio se a busca estiver vazia
+        }
+      } catch (error) {
+        console.error('Erro ao submeter formulário de pesquisa', error);
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,16 +1,23 @@
 import express from "express";
 import courseController from "../../controllers/cursos/cursoController.js";
+import multer from "multer";
+import {checkUserMiddleware} from '../../middlewares/authMiddleware.js';
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 const router = express.Router();
 
 // Rotas para cursos
-router.get("/", courseController.getAllCourses);       // Listar todos
-router.get("/:id", courseController.getCourseById);   // Listar por ID
-router.get("/view", courseController.renderCoursesPage);   // Renderizar página de cursos
 router.get("/category/:categoria", courseController.getCoursesByCategoria); // Listar por categoria
-router.post("/", courseController.createCourse);       // Criar novo
-router.put("/:id", courseController.updateCourse);     // Atualizar
-router.delete("/:id", courseController.deleteCourse);  // Deletar
- // Renderizar página de cursos
+      // Listar todos
+router.get("/:id", courseController.getCourseById);   // Listar por ID
+router.get("/", courseController.getAllCourses);
+
+
+router.post("/create",checkUserMiddleware, upload.single('imagem'),  courseController.createCourse);  // Criar  
+router.put('/:id/publish',checkUserMiddleware, courseController.togglePublish);  // Publicar ou despublicar
+router.put("/:id",checkUserMiddleware, upload.single('imagem'),  courseController.updateCourse); // Atualizar
+router.delete("/:id",checkUserMiddleware, courseController.deleteCourse);  // Deletar
 
 export default router;

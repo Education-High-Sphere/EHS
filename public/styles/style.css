@@ -8,7 +8,7 @@
 }
 body {
   font-family: "Poppins", sans-serif;
-  background: #f4f4f4;
+  background-color: #f4f4f4;
 }
 
 a{
@@ -31,15 +31,18 @@ a{
 }
 
 .hero-container {
+  margin-top: 50px;
   display: flex;
   width: 70%;
   height: 60vh;
-  background-color: #00101fb9;
-  border: 2px solid #0c121891;
+  background-color: #2a344ab3;
+  border: 2px solid #4a78a680;
   border-radius: 10px;
   justify-content: center;
   align-items:start;
   overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .container {
@@ -228,10 +231,11 @@ a{
   background-color: #7db1e58a;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease-in-out;
 }
 .docker:hover {
   transform: scale(1.05);
-  transition: transform 0.3s ease-in-out;
+  
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   cursor: pointer;
 }
