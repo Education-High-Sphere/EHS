@@ -1,75 +1,38 @@
-import supabase from "../../../.config/db.js";
+import { pool } from "../../../.config/db.js";
 
 export default {
   async findAll() {
-    const { data, error } = await supabase.from("cursos").select("*");
-    if (error) {
-      console.error("Erro ao buscar cursos:", error);
-      return [];
-    }
-    return data;
+    const { rows } = await pool.query("SELECT * FROM cursos");
+    return rows;
   },
 
   async search(searchTerm) {
-    const { data, error } = await supabase
-      .from("cursos")
-      .select("*")
-      .or(`nome.ilike.%${searchTerm}%, descricao.ilike.%${searchTerm}%`);
-    if (error) {
-      console.error("Erro ao buscar cursos:", error);
-      return [];
-    }
-    return data;
+    const { rows } = await pool.query(
+      "SELECT * FROM cursos WHERE nome ILIKE $1 OR descricao ILIKE $1",
+      [`%${searchTerm}%`]
+    );
+    return rows;
   },
 
   async findById(id) {
-    const { data, error } = await supabase
-      .from("cursos")
-      .select("*")
-      .eq("id", id)
-      .single();
-    if (error) {
-      console.error("Erro ao buscar curso:", error);
-      return null;
-    }
-    return data;
+    const { rows } = await pool.query("SELECT * FROM cursos WHERE id = $1", [id]);
+    return rows[0] || null;
   },
 
   async findByIds(ids) {
     if (!ids || ids.length === 0) return [];
-    const { data, error } = await supabase
-      .from("cursos")
-      .select("*")
-      .in("id", ids);
-    if (error) {
-      console.error("Erro ao buscar cursos:", error);
-      return [];
-    }
-    return data;
+    const { rows } = await pool.query("SELECT * FROM cursos WHERE id = ANY($1)", [ids]);
+    return rows;
   },
 
   async findByCategoria(categoria) {
-    const { data, error } = await supabase
-      .from("cursos")
-      .select("*")
-      .ilike("categoria", categoria);
-    if (error) {
-      console.error("Erro ao buscar cursos:", error);
-      return [];
-    }
-    return data;
+    const { rows } = await pool.query("SELECT * FROM cursos WHERE categoria ILIKE $1", [categoria]);
+    return rows;
   },
 
   async findByProfessorId(professorId) {
-    const { data, error } = await supabase
-      .from("cursos")
-      .select("*")
-      .eq("professor_id", professorId);
-    if (error) {
-      console.error("Erro ao buscar cursos:", error);
-      return [];
-    }
-    return data;
+    const { rows } = await pool.query("SELECT * FROM cursos WHERE professor_id = $1", [professorId]);
+    return rows;
   },
 
   async create(courseData) {
@@ -87,85 +50,40 @@ export default {
       avaliacao_media,
     } = courseData;
 
-    const { data: insertData, error: insertError } = await supabase
-      .from("cursos")
-      .insert([
-        {
-          nome,
-          descricao,
-          imagem,
-          categoria,
-          preco,
-          duracao,
-          nivel,
-          publicated,
-          professor_id,
-          alunos,
-          avaliacao_media,
-        },
-      ])
-      .select("id")
-      .single();
+    const query = `
+      INSERT INTO cursos (
+        nome, descricao, imagem, categoria, preco, duracao, nivel, 
+        publicated, professor_id, alunos, avaliacao_media
+      ) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) 
+      RETURNING *
+    `;
+    
+    const values = [
+      nome, descricao, imagem, categoria, preco, duracao, nivel, 
+      publicated, professor_id, alunos, avaliacao_media
+    ];
 
-    if (insertError || !insertData) {
-      console.error("Erro na etapa de INSERT:", insertError);
-      throw new Error("Falha ao inserir o curso no banco.");
-    }
-
-    const { data: selectData, error: selectError } = await supabase
-      .from("cursos")
-      .select("*")
-      .eq("id", insertData.id)
-      .single();
-
-    if (selectError) {
-      console.error("Erro na etapa de SELECT:", selectError);
-      throw new Error("Falha ao buscar o curso após a criação.");
-    }
-
-    return selectData;
+    const { rows } = await pool.query(query, values);
+    return rows[0];
   },
 
   async update(id, courseData) {
-    const { data, error } = await supabase
-      .from("cursos")
-      .update({ ...courseData })
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Erro ao atualizar curso:", error);
-      return null;
-    }
-    return data;
+    // Note: This logic assumes courseData has all fields or is already merged.
+    // To keep it simple and consistent with previous behavior:
+    const fields = Object.keys(courseData);
+    const setClause = fields.map((field, i) => `${field} = $${i + 1}`).join(', ');
+    const values = Object.values(courseData);
+    
+    const query = `UPDATE cursos SET ${setClause} WHERE id = $${fields.length + 1} RETURNING *`;
+    const { rows } = await pool.query(query, [...values, id]);
+    
+    return rows[0] || null;
   },
 
   async delete(id) {
-    const curso = await this.findById(id);
-
-    if (curso && curso.imagem) {
-      const imageName = curso.imagem.split("/").pop();
-      const imagePath = `cursos/${imageName}`;
-
-      const { error: storageError } = await supabase.storage
-        .from("assets")
-        .remove([imagePath]);
-      if (storageError) {
-        console.error("Erro ao deletar imagem do curso:", storageError);
-      }
-    }
-
-    const { data, error: deleteError } = await supabase
-      .from("cursos")
-      .delete()
-      .eq("id", id)
-      .single();
-
-    if (deleteError) {
-      console.error("Erro ao deletar curso:", deleteError);
-      return null;
-    }
-    return data;
+    // Supabase storage logic removed as per user instruction "dont use url"
+    const { rowCount } = await pool.query("DELETE FROM cursos WHERE id = $1", [id]);
+    return rowCount > 0;
   },
 };

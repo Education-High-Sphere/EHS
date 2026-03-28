@@ -1,62 +1,32 @@
-import supabase from "../../../.config/db.js";
+import { pool } from "../../../.config/db.js";
 
 export default {
     async findAll() {
-        const { data, error } = await supabase
-            .from("diferenciais")
-            .select("*")
-            .order("ordem", { ascending: true });
-        if (error) {
-            console.error("Erro ao buscar diferenciais:", error);
-            return [];
-        }
-        return data;
+        const { rows } = await pool.query('SELECT * FROM diferenciais');
+        return rows;
     },
     async findById(id) {
-        const { data, error } = await supabase
-            .from("diferenciais")
-            .select("*")
-            .eq("id", id)
-            .single();
-        if (error) {
-            console.error("Erro ao buscar diferencial:", error);
-            return null;
-        }
-        return data;
+        const { rows } = await pool.query('SELECT * FROM diferenciais WHERE id = $1', [id]);
+        return rows[0] || null;
     },
     async create(diferencial) {
-        const { data, error } = await supabase
-            .from("diferenciais")
-            .insert([diferencial])
-            .single();
-        if (error) {
-            console.error("Erro ao criar diferencial:", error);
-            return null;
-        }
-        return data;
+        const fields = Object.keys(diferencial);
+        const placeholders = fields.map((_, i) => `$${i + 1}`).join(', ');
+        const values = Object.values(diferencial);
+        const query = `INSERT INTO diferenciais (${fields.join(', ')}) VALUES (${placeholders}) RETURNING *`;
+        const { rows } = await pool.query(query, values);
+        return rows[0];
     },
     async update(id, updates) {
-        const { data, error } = await supabase
-            .from("diferenciais")
-            .update(updates)
-            .eq("id", id)
-            .single();
-        if (error) {
-            console.error("Erro ao atualizar diferencial:", error);
-            return null;
-        }
-        return data;
+        const fields = Object.keys(updates);
+        const setClause = fields.map((field, i) => `${field} = $${i + 1}`).join(', ');
+        const values = Object.values(updates);
+        const query = `UPDATE diferenciais SET ${setClause} WHERE id = $${fields.length + 1} RETURNING *`;
+        const { rows } = await pool.query(query, [...values, id]);
+        return rows[0] || null;
     },
     async delete(id) {
-        const { data, error } = await supabase
-            .from("diferenciais")
-            .delete()
-            .eq("id", id)
-            .single();
-        if (error) {
-            console.error("Erro ao deletar diferencial:", error);
-            return null;
-        }
-        return data;
-    },
-}
+        const { rowCount } = await pool.query('DELETE FROM diferenciais WHERE id = $1', [id]);
+        return rowCount > 0;
+    }
+};

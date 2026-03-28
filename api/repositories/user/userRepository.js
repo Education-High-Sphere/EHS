@@ -1,84 +1,43 @@
-import supabase from '../../../.config/db.js';
+import { pool } from '../../../.config/db.js';
 
 export async function findUserById(id) {
-  const { data, error } = await supabase.from('users').select('*').eq('id', id).single();
-  if (error) {
-    console.error('Erro ao buscar usuário:', error);
-    return null;
-  }
-  return data;
+  const { rows } = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+  return rows[0];
 }
 
 export async function findUserByEmail(email) {
-  const { data, error } = await supabase.from('users').select('*').eq('email', email).maybeSingle();
-  if (error) {
-    console.error('Erro ao buscar usuário:', error);
-    return null;
-  }
-  return data;
+  const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+  return rows[0];
 }
 
 export async function createUser(userData) {
   const { name, email, passwordHash, job, birth_date, phone } = userData;
-  console.log("TENTANDO INSERIR USUÁRIO:", email);
-
-  const { error: insertError } = await supabase
-    .from('users')
-    .insert({ name, email, password: passwordHash, job, birth_date, phone });
-
-  if (insertError) {
-    console.error('Erro no insert', insertError);
-    throw new Error(insertError.message);
-  }
-  
-  console.log("USUÁRIO INSERIDO COM SUCESSO:", email);
-
-  const { data: selectData, error: selectError } = await supabase
-    .from('users')
-    .select('*')
-    .eq('email', email)
-    .single();
-
-  if (selectError) {
-    console.error('Erro ao recuperar usuário inserido:', selectError);
-    throw new Error(selectError.message);
-  }
-
-  return selectData;
+  const { rows } = await pool.query(
+    'INSERT INTO users (name, email, password, job, birth_date, phone) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+    [name, email, passwordHash, job, birth_date, phone]
+  );
+  return rows[0];
 }
 
 export async function updateUser(id, userData) {
   const { name, email, passwordHash, job, birth_date, phone } = userData;
-  const { data, error } = await supabase
-    .from('users')
-    .update({ name, email, password: passwordHash, job, birth_date, phone })
-    .eq('id', id)
-    .select()
-    .single();
-
-  if (error) {
-    console.error('Erro ao atualizar usuário:', error);
-    return null;
-  }
-  return data;
+  // Note: We use COALESCE or similar if we want to merge, but here the service handles merging.
+  // Actually, I'll just update all provided fields.
+  const { rows } = await pool.query(
+    'UPDATE users SET name = $1, email = $2, password = $3, job = $4, birth_date = $5, phone = $6 WHERE id = $7 RETURNING *',
+    [name, email, passwordHash, job, birth_date, phone, id]
+  );
+  return rows[0];
 }
 
 export async function deleteUser(id) {
-  const { error } = await supabase.from('users').delete().eq('id', id);
-  if (error) {
-    console.error('Erro ao deletar usuário:', error);
-    return false;
-  }
-  return true;
+  const { rowCount } = await pool.query('DELETE FROM users WHERE id = $1', [id]);
+  return rowCount > 0;
 }
 
 export async function findAllUsers() {
-  const { data, error } = await supabase.from('users').select('*');
-  if (error) {
-    console.error('Erro ao buscar usuários:', error);
-    return [];
-  }
-  return data;
+  const { rows } = await pool.query('SELECT * FROM users');
+  return rows;
 }
 
 export default {

@@ -1,103 +1,53 @@
-import supabase from '../../../.config/db.js'; // importa o pool do db.js
+import { pool } from '../../../.config/db.js';
 
 export default {
     async findById(id) {
-        const{ data, error } = await supabase
-            .from('usuarios_cursos')
-            .select('*')
-            .eq('id', id)
-            .single();
-        if (error) {
-            console.error('Erro ao buscar matricula:', error);
-            return null;
-        }
-        return data;
+        const { rows } = await pool.query('SELECT * FROM usuarios_cursos WHERE id = $1', [id]);
+        return rows[0] || null;
     },
 
     async findAll() {
-        const { data, error } = await supabase.from('usuarios_cursos').select('*');
-        if (error) {
-            console.error('Erro ao buscar matriculas:', error);
-            return [];
-        }
-        return data;
+        const { rows } = await pool.query('SELECT * FROM usuarios_cursos');
+        return rows;
     },
 
     async findByUser(userId) {
-        const { data, error } = await supabase
-            .from('usuarios_cursos')
-            .select('*')
-            .eq('user_id', userId);
-        if (error) {
-            console.error('Erro ao buscar matriculas:', error);
-            return [];
-        }
-        return data;
+        const { rows } = await pool.query('SELECT * FROM usuarios_cursos WHERE user_id = $1', [userId]);
+        return rows;
     },
 
     async findByCourse(courseId) {
-        const { data, error } = await supabase
-            .from('usuarios_cursos')
-            .select('*')
-            .eq('curso_id', courseId);
-        if (error) {
-            console.error('Erro ao buscar matriculas:', error);
-            return [];
-        }
-        return data;
+        const { rows } = await pool.query('SELECT * FROM usuarios_cursos WHERE curso_id = $1', [courseId]);
+        return rows;
     },
 
     async findByUserAndCourse(userId, courseId) {
-        const { data, error } = await supabase
-            .from('usuarios_cursos')
-            .select('*')
-            .eq('user_id', userId)
-            .eq('curso_id', courseId)
-            .single();
-        if (error) {
-            console.error('Erro ao buscar matricula:', error);
-            return null;
-        }
-        return data;
+        const { rows } = await pool.query('SELECT * FROM usuarios_cursos WHERE user_id = $1 AND curso_id = $2', [userId, courseId]);
+        return rows[0] || null;
     },
 
     async createMatricula(matriculaData) {
         const { user_id, curso_id, data_inicio } = matriculaData;
-        const { data, error } = await supabase
-            .from('usuarios_cursos')
-            .insert([{ user_id, curso_id, data_inicio }])
-            .select()
-            .single();
-        if (error) {
-            console.error('Erro ao criar matricula:', error);
-            return null;
-        }
-        return this.findById(data.id); // retorna a matrícula completa
+        const { rows } = await pool.query(
+            'INSERT INTO usuarios_cursos (user_id, curso_id, data_inicio) VALUES ($1, $2, $3) RETURNING *',
+            [user_id, curso_id, data_inicio]
+        );
+        return rows[0];
     },
 
     async updateMatricula(id, data) {
-        const { data: updatedData, error } = await supabase
-            .from('usuarios_cursos')
-            .update(data)
-            .eq('id', id)
-            .select()
-            .single();
-        if (error) {
-            console.error('Erro ao atualizar matricula:', error);
-            return null;
-        }
-        return this.findById(updatedData.id); // retorna a matrícula completa
-},
+        const fields = Object.keys(data);
+        const setClause = fields.map((field, i) => `${field} = $${i + 1}`).join(', ');
+        const values = Object.values(data);
+        
+        const query = `UPDATE usuarios_cursos SET ${setClause} WHERE id = $${fields.length + 1} RETURNING *`;
+        const { rows } = await pool.query(query, [...values, id]);
+        
+        return rows[0] || null;
+    },
 
     async deleteMatricula(id) {
-        const { error } = await supabase
-            .from('usuarios_cursos')
-            .delete()
-            .eq('id', id);
-        if (error) {
-            console.error('Erro ao deletar matricula:', error);
-            return false;
-        }
-        return true;
+        const { rowCount } = await pool.query('DELETE FROM usuarios_cursos WHERE id = $1', [id]);
+        return rowCount > 0;
     }
 };
