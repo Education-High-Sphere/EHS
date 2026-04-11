@@ -3,142 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <link rel="stylesheet" href="../styles/beATeacher.css">
-    <title>Seja um Professor</title>
+    <title>Ensine Conosco - EHSYNC</title>
 </head>
 <body>
     <%- include('common/header') -%>
 
-    <div class="container">
-    <div class="profile-form-container">
-        <h2>Antes de se tornar um de nossos professores, precisaremos de algumas informações</h2>
-        
-        <form id="profile-form">
+    <!-- Hero Section -->
+    <header class="teacher-hero">
+        <div class="hero-content">
+            <h1>Compartilhe seu conhecimento. Inspire o futuro.</h1>
+            <p>Junte-se a uma comunidade exclusiva de especialistas. Transforme sua paixão em cursos incríveis e impacte a vida de milhares de alunos ao redor do mundo.</p>
+            <button class="cta-button" onclick="document.getElementById('application-section').scrollIntoView({behavior: 'smooth'})">
+                Quero me candidatar
+            </button>
+        </div>
+    </header>
 
-            <div class="form-group">
-                <label for="bio">Descrição (Bio)</label>
-                <textarea id="bio" name="bio" rows="5" placeholder="Fale um pouco sobre você, sua metodologia..."></textarea>
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+        <div class="benefits-container">
+            <div class="benefit-card">
+                <div class="icon-circle"><i class="fas fa-globe"></i></div>
+                <h3>Alcance Global</h3>
+                <p>Sua voz pode chegar a alunos em qualquer lugar do mundo. Construa sua marca pessoal em nossa plataforma.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="icon-circle"><i class="fas fa-wallet"></i></div>
+                <h3>Ótima Remuneração</h3>
+                <p>Crie uma nova fonte de renda passiva com seus cursos enquanto foca no que faz de melhor: Ensinar.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="icon-circle"><i class="fas fa-tools"></i></div>
+                <h3>Ferramentas Incluídas</h3>
+                <p>Gere certificados, acompanhe métricas de alunos e grave aulas sem dores de cabeça com nossa infraestrutura.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Form Section -->
+    <section class="application-section" id="application-section">
+        <div class="form-wrapper">
+            <div class="form-header">
+                <h2>Formulário de Aplicação</h2>
+                <p>Preencha os dados abaixo. Nossa curadoria analisará o seu perfil profissional e retornará em até 48 horas.</p>
             </div>
 
-            <div class="form-group">
-                <label for="experience-input">Experiências Profissionais</label>
-                <div class="input-group">
-                    <input type="text" id="experience-input" placeholder="Ex: Desenvolvedor Sênior na Google (2018-2022)">
-                    <button type="button" id="add-experience-btn" title="Adicionar experiência">+</button>
+            <form id="profile-form">
+                
+                <div class="input-row">
+                    <div class="form-group">
+                        <label for="specialty"><i class="fas fa-briefcase"></i> Área de Especialidade Principal</label>
+                        <input type="text" id="specialty" placeholder="Ex: Engenharia de Software" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="linkedin"><i class="fab fa-linkedin"></i> Perfil do LinkedIn</label>
+                        <input type="url" id="linkedin" placeholder="https://linkedin.com/in/seu-perfil" required>
+                    </div>
                 </div>
-                <ul id="experience-list" class="item-list"></ul>
-            </div>
 
-            <div class="form-group">
-                <label for="certificate-input">Certificações e Formações</label>
-                <div class="input-group">
-                    <input type="text" id="certificate-input" placeholder="Ex: Bacharel em Ciência da Computação - USP">
-                    <button type="button" id="add-certificate-btn" title="Adicionar certificação">+</button>
+                <div class="form-group">
+                    <label for="bio"><i class="fas fa-user-edit"></i> Resumo Profissional (Bio)</label>
+                    <textarea id="bio" name="bio" rows="4" placeholder="Conte-nos brevemente sobre sua jornada profissional, sua paixão por ensinar e o que você pretende lecionar..." required></textarea>
                 </div>
-                <ul id="certificate-list" class="item-list"></ul>
-            </div>
 
-            <button type="submit" class="submit-btn">Enviar Informações</button>
+                <div class="lists-container">
+                    <div class="form-group list-group">
+                        <label for="experience-input"><i class="fas fa-building"></i> Experiências Profissionais Relevantes</label>
+                        <div class="input-action-group">
+                            <input type="text" id="experience-input" placeholder="Ex: Tech Lead na Empresa (2018-2023)">
+                            <button type="button" class="add-btn" id="add-experience-btn" title="Adicionar experiência"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <ul id="experience-list" class="item-list"></ul>
+                    </div>
 
-        </form>
-    </div>
-    </div>
+                    <div class="form-group list-group">
+                        <label for="certificate-input"><i class="fas fa-graduation-cap"></i> Formações e Certificações</label>
+                        <div class="input-action-group">
+                            <input type="text" id="certificate-input" placeholder="Ex: Bacharel em Ciência da Computação - USP">
+                            <button type="button" class="add-btn" id="add-certificate-btn" title="Adicionar certificação"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <ul id="certificate-list" class="item-list"></ul>
+                    </div>
+                </div>
 
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Enviar Candidatura
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <%- include('common/footer') -%>
+
+    <!-- Form Logic -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- Função Reutilizável para Listas Dinâmicas ---
-            // Recebe os IDs do botão, do input e da lista (ul)
             function setupDynamicList(buttonId, inputId, listId) {
                 const addButton = document.getElementById(buttonId);
                 const inputField = document.getElementById(inputId);
                 const list = document.getElementById(listId);
 
-                // Adiciona o evento de clique ao botão "Adicionar"
-                addButton.addEventListener('click', () => {
-                    const text = inputField.value.trim(); // Pega o texto e remove espaços em branco
+                // Add on Click
+                addButton.addEventListener('click', () => addElement());
 
-                    if (text === "") {
-                        // Não faz nada se o campo estiver vazio
-                        return;
+                // Add on Enter key
+                inputField.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addElement();
                     }
+                });
 
-                    // 1. Cria o elemento <li>
+                function addElement() {
+                    const text = inputField.value.trim();
+                    if (text === "") return;
+
                     const li = document.createElement('li');
-
-                    // 2. Cria o <span> para o texto
+                    
                     const span = document.createElement('span');
                     span.textContent = text;
                     
-                    // 3. Cria o botão de deletar (adicionei como bônus, é essencial)
                     const deleteButton = document.createElement('button');
-                    deleteButton.textContent = '×'; // 'x' elegante
+                    deleteButton.innerHTML = '<i class="fas fa-times"></i>';
                     deleteButton.className = 'delete-btn';
-                    deleteButton.type = 'button'; // Previne envio do formulário
+                    deleteButton.type = 'button'; 
 
-                    // 4. Adiciona o evento de clique ao botão de deletar
                     deleteButton.addEventListener('click', () => {
-                        li.remove(); // Remove o <li> pai
+                        li.style.transform = 'scale(0.95)';
+                        li.style.opacity = '0';
+                        setTimeout(() => li.remove(), 200);
                     });
 
-                    // 5. Monta o <li>
                     li.appendChild(span);
                     li.appendChild(deleteButton);
-
-                    // 6. Adiciona o <li> à lista <ul>
                     list.appendChild(li);
 
-                    // 7. Limpa o campo de input e foca nele
                     inputField.value = '';
                     inputField.focus();
-                });
+                }
             }
 
-            // --- Inicializa as duas listas dinâmicas ---
             setupDynamicList('add-experience-btn', 'experience-input', 'experience-list');
             setupDynamicList('add-certificate-btn', 'certificate-input', 'certificate-list');
 
-
-            // --- Manipulação do Envio do Formulário (Submit) ---
             const form = document.getElementById('profile-form');
             form.addEventListener('submit', (event) => {
-                event.preventDefault(); // Impede o envio real do formulário
+                event.preventDefault(); 
 
-                // 1. Pega o valor da Bio
+                const specialty = document.getElementById('specialty').value;
+                const linkedin = document.getElementById('linkedin').value;
                 const bio = document.getElementById('bio').value;
-
-                // 2. Coleta os dados das listas dinâmicas
-                // A função auxiliar 'collectListData' pega o texto de cada <li>
                 const experiences = collectListData('experience-list');
                 const certificates = collectListData('certificate-list');
 
-                // 3. Monta o objeto de dados final
                 const formData = {
-                    bio: bio,
+                    specialty,
+                    linkedin,
+                    bio,
                     professionalExperiences: experiences,
                     certifications: certificates
                 };
 
-                // 4. Mostra o JSON no console (Aqui você enviaria para o seu backend)
-                console.log('Dados prontos para enviar ao backend:');
-                console.log(JSON.stringify(formData, null, 2));
+                // Simulate submitting and changing UI
+                const btn = document.querySelector('.submit-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
+                btn.disabled = true;
 
-                alert('Perfil salvo com sucesso! (Verifique o console para ver os dados em JSON)');
+                setTimeout(() => {
+                    console.log('Dados da Aplicação:', formData);
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i> Candidatura Enviada!';
+                    btn.style.backgroundColor = '#2ecc71';
+                    
+                    setTimeout(() => {
+                        alert('Seu perfil foi enviado com sucesso para a curadoria técnica da EHSYNC!');
+                        btn.innerHTML = originalText;
+                        btn.style.backgroundColor = '';
+                        btn.disabled = false;
+                        form.reset();
+                        document.getElementById('experience-list').innerHTML = '';
+                        document.getElementById('certificate-list').innerHTML = '';
+                    }, 1500);
+                }, 2000);
             });
 
-            // Função auxiliar para coletar dados das listas <ul>
             function collectListData(listId) {
                 const list = document.getElementById(listId);
                 const items = [];
-                // Pega todos os <span> dentro dos <li> da lista específica
-                list.querySelectorAll('li span').forEach(item => {
-                    items.push(item.textContent);
-                });
+                list.querySelectorAll('li span').forEach(item => items.push(item.textContent));
                 return items;
             }
-
         });
     </script>
-
 </body>
 </html>

@@ -7,6 +7,7 @@ const router = Router();
 router.get("/", viewController.getHomePage);
 router.get("/courses", viewController.getCoursesPage);
 router.get("/course/:id", viewController.getCourseDetailPage);
+router.get("/communities", viewController.getCommunitiesPage);
 router.get("/register", viewController.getRegisterPage);
 router.get("/logout", viewController.logout);
 

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link rel="stylesheet" href="../styles/communities.css">
+    <title>Comunidades - EHSYNC</title>
+</head>
+<body>
+    <%- include('common/header') -%>
+
+    <!-- Hero Section -->
+    <header class="communities-hero">
+        <div class="hero-content">
+            <h1>Conecte-se. Aprenda. Evolua.</h1>
+            <p>Faça parte de nossas comunidades e acelere seu crescimento ao lado de estudantes, mentores e profissionais apaixonados pelo que fazem.</p>
+        </div>
+    </header>
+
+    <main class="communities-wrapper">
+        <div class="communities-grid">
+            
+            <!-- Comunidade 1 -->
+            <article class="community-card">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80')">
+                    <span class="badge">Prática</span>
+                </div>
+                <div class="card-content">
+                    <div class="community-meta">
+                        <span><i class="fas fa-users"></i> 1.2k membros</span>
+                        <span><i class="fas fa-fire"></i> Alta atividade</span>
+                    </div>
+                    <h2>Clube de Desafios Práticos</h2>
+                    <p>Espaços interativos onde os alunos enfrentam desafios reais e dinâmicos. A cada semana, novas missões são lançadas para estimular a prática e criatividade.</p>
+                    <button class="join-btn">Entrar na Comunidade</button>
+                </div>
+            </article>
+
+            <!-- Comunidade 2 -->
+            <article class="community-card">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=800&q=80')">
+                    <span class="badge" style="background: #e67e22;">Networking</span>
+                </div>
+                <div class="card-content">
+                    <div class="community-meta">
+                        <span><i class="fas fa-users"></i> 840 membros</span>
+                        <span><i class="fas fa-comment-dots"></i> Mentoria VIP</span>
+                    </div>
+                    <h2>Clube de Carreira</h2>
+                    <p>Ambientes dedicados ao crescimento profissional, com trocas de experiências de mercado e sessões exclusivas de orientação de carreira.</p>
+                    <button class="join-btn">Entrar na Comunidade</button>
+                </div>
+            </article>
+
+            <!-- Comunidade 3 -->
+            <article class="community-card">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80')">
+                    <span class="badge" style="background: #9b59b6;">Estudos</span>
+                </div>
+                <div class="card-content">
+                    <div class="community-meta">
+                        <span><i class="fas fa-users"></i> 3.5k membros</span>
+                        <span><i class="fas fa-book"></i> Foco Diário</span>
+                    </div>
+                    <h2>Squad Learning</h2>
+                    <p>Comunidades formadas por grupos pequenos, conectando alunos com interesses em comum para manter a motivação e alcançar metas juntos de forma colaborativa.</p>
+                    <button class="join-btn">Entrar na Comunidade</button>
+                </div>
+            </article>
+
+            <!-- Comunidade 4 -->
+            <article class="community-card">
+                <div class="card-image" style="background-image: url('https://images.unsplash.com/photo-1542314831-c5a4d407e5d2?auto=format&fit=crop&w=800&q=80')">
+                    <span class="badge" style="background: #e74c3c;">Tech</span>
+                </div>
+                <div class="card-content">
+                    <div class="community-meta">
+                        <span><i class="fas fa-users"></i> 5.2k membros</span>
+                        <span><i class="fas fa-code"></i> Código & Bugs</span>
+                    </div>
+                    <h2>Dev Hub EHSYNC</h2>
+                    <p>O epicentro para programadores e amantes da tecnologia. Discuta frameworks, clean-code, compartilhe repositórios e tire dúvidas técnicas rapidamente.</p>
+                    <button class="join-btn">Entrar na Comunidade</button>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <%- include('common/footer') -%>
+</body>
+</html>

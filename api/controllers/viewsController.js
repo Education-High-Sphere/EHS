@@ -133,6 +133,8 @@ export const getRegisterPage = (req, res) =>
   res.render("register", { user: res.locals.user });
 export const getEditPage = (req, res) =>
   res.render("edit", { user: res.locals.user });
+export const getCommunitiesPage = (req, res) =>
+  res.render("communities", { user: res.locals.user });
 export const getBeATeacherPage = (req, res) => {
   if (!res.locals.user) {
     return res.redirect("/register");

@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary-color: #1b2232;
+  --secondary-color: #2a344a;
+  --accent-color: #4a78a6;
+  --bg-color: #f4f6f8;
+  --card-bg: #ffffff;
+  --text-dark: #333333;
+  --text-light: #777777;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+}
+
+/* Hero */
+.communities-hero {
+  background: linear-gradient(rgba(27, 34, 50, 0.85), rgba(42, 52, 74, 0.9)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80') center/cover;
+  padding: 100px 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: #e2e8f0;
+}
+
+/* Grid */
+.communities-wrapper {
+  max-width: 1200px;
+  margin: -50px auto 50px;
+  padding: 0 20px;
+  position: relative;
+  z-index: 10;
+}
+
+.communities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+.community-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.community-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--accent-color);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.card-content {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.community-meta {
+  display: flex;
+  gap: 15px;
+  color: var(--text-light);
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.community-meta i {
+  color: var(--accent-color);
+}
+
+.card-content h2 {
+  color: var(--primary-color);
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.card-content p {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 25px;
+  flex: 1;
+}
+
+.join-btn {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  width: 100%;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.join-btn:hover {
+  background: var(--accent-color);
+}
