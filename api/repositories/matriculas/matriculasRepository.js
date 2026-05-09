@@ -27,7 +27,10 @@ export default {
     },
 
     async createMatricula(matriculaData) {
-        const { user_id, curso_id, data_inicio } = matriculaData;
+        const user_id = matriculaData.user_id || matriculaData.userId;
+        const curso_id = matriculaData.curso_id || matriculaData.courseId;
+        const data_inicio = matriculaData.data_inicio || new Date();
+
         const { rows } = await pool.query(
             'INSERT INTO usuarios_cursos (user_id, curso_id, data_inicio) VALUES ($1, $2, $3) RETURNING *',
             [user_id, curso_id, data_inicio]

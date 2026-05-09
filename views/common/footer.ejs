@@ -8,7 +8,7 @@
       --cor-texto-principal: #f4f4f4;
       --cor-acento-azul: #4a78a6;
       --cor-borda-cinza: #d3d3d3;
-      --cor-item-lista: #2a344a; 
+      --cor-item-lista: #2a344a;
     }
 
     * {
@@ -23,7 +23,7 @@
       text-decoration: none;
       color: inherit;
     }
-    
+
     body {
       /* Garante que o footer grude no fim da página */
       display: flex;
@@ -39,9 +39,10 @@
     /* --- 1. Estrutura Principal do Footer --- */
     footer {
       /* Consistente com o header */
-      background-color: var(--cor-fundo); 
+      background-color: var(--cor-fundo);
       color: var(--cor-texto-principal);
-      padding: 3em 0 1.5em; /* Mais preenchimento */
+      padding: 3em 0 1.5em;
+      /* Mais preenchimento */
       margin-top: 2em;
     }
 
@@ -80,7 +81,7 @@
       height: 2px;
       background-color: var(--cor-acento-azul);
     }
-    
+
     .footer-column ul {
       list-style: none;
     }
@@ -92,20 +93,23 @@
     .footer-column p,
     .footer-column a {
       font-size: 0.95rem;
-      color: var(--cor-borda-cinza); /* Texto mais sutil */
+      color: var(--cor-borda-cinza);
+      /* Texto mais sutil */
       transition: color 0.2s ease;
     }
-    
+
     .footer-column a:hover {
-      color: var(--cor-acento-azul); /* Destaque no hover */
+      color: var(--cor-acento-azul);
+      /* Destaque no hover */
       text-decoration: underline;
     }
 
     .footer-column i {
-       /* Ícones de contato */
+      /* Ícones de contato */
       margin-right: 8px;
       color: var(--cor-acento-azul);
-      width: 20px; /* Alinha os ícones */
+      width: 20px;
+      /* Alinha os ícones */
     }
 
     /* --- 3. Coluna da Logo (Consistente com Header) --- */
@@ -115,16 +119,20 @@
       gap: 10px;
       margin-bottom: 1em;
     }
+
     .footer-logo img {
       height: 40px;
     }
+
     .footer-logo div {
       line-height: 1.2;
     }
+
     .footer-logo strong {
       font-size: 1.2rem;
       color: var(--cor-texto-principal);
     }
+
     .footer-logo small {
       font-size: 9px;
       color: var(--cor-borda-cinza);
@@ -150,19 +158,22 @@
       color: var(--cor-borda-cinza);
       transition: all 0.2s ease-in-out;
     }
-    
+
     .social-links a:hover {
       background-color: var(--cor-acento-azul);
       border-color: var(--cor-acento-azul);
       color: var(--cor-texto-principal);
-      transform: translateY(-3px); /* Efeito sutil de "levantar" */
+      transform: translateY(-3px);
+      /* Efeito sutil de "levantar" */
       text-decoration: none;
     }
-    .social-links a i{
+
+    .social-links a i {
       margin: 0 auto;
       transition: all 0.2s ease-in-out;
     }
-    .social-links a:hover i{
+
+    .social-links a:hover i {
       color: var(--cor-borda-cinza);
     }
 
@@ -170,31 +181,26 @@
     .footer-bottom {
       text-align: center;
       padding-top: 1.5em;
-      border-top: 1px solid var(--cor-item-lista); /* Linha divisória */
+      border-top: 1px solid var(--cor-item-lista);
+      /* Linha divisória */
       font-size: 0.9rem;
       color: var(--cor-borda-cinza);
     }
-
   </style>
 
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
 </head>
 
 <main>
-  </main>
+</main>
 
 
 <footer>
   <div class="footer-container">
     <div class="footer-content">
-      
+
       <div class="footer-column">
         <div class="footer-logo" onclick="window.location.href = '/'">
           <img src="../src/logo.png" alt="Logo" />

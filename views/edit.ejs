@@ -1,71 +1,115 @@
-<%- include('common/header') -%>
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-    <link rel="stylesheet" href="../styles/edit.css" />
-    <title>EHSYNC - Editar Perfil</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Perfil - EHS</title>
+  <link rel="stylesheet" href="/styles/edit.css" />
 </head>
+<body>
+  <%- include('common/header') -%>
 
-<div class="edit-container">
-  <h1>Editar Perfil</h1>
-  <form id="editUserForm" action="/users/edit" method="POST" enctype="multipart/form-data">
+  <main class="container section">
+    <div class="edit-profile-wrapper card">
+      <div class="card-body">
+        <h1 class="section-title" style="margin-bottom: 0.5em; text-align: left;">Editar Perfil</h1>
+        <p class="text-secondary" style="margin-bottom: var(--sp-8);">Atualize suas informações pessoais e foto de perfil.</p>
 
-    <input type="hidden" name="id" value="<%= user.id ? user.id : '' %>" />
-    
-    <div class="avatar-section">
-      <img id="avatarPreview" src="<%= user.avatar ? user.avatar : '../src/user.png' %>" alt="Avatar" />
-      <label class="avatar-label">
-        Alterar Foto
-        <input type="file" name="avatar" id="avatarInput" accept="image/*" />
-      </label>
+        <form id="editUserForm" action="/api/users/edit" method="POST" enctype="multipart/form-data" class="form-container">
+          <input type="hidden" name="id" value="<%= user.id ? user.id : '' %>" />
+          
+          <div class="avatar-upload-section">
+            <div class="avatar-preview-container">
+              <img id="avatarPreview" src="<%= user.avatar ? user.avatar : '/src/user.png' %>" alt="Avatar" />
+              <label class="avatar-edit-btn" for="avatarInput">
+                <i class="fas fa-camera"></i>
+              </label>
+            </div>
+            <input type="file" name="avatar" id="avatarInput" accept="image/*" class="hidden" />
+            <div class="avatar-instructions">
+              <strong>Foto de Perfil</strong>
+              <p class="text-xs text-secondary">Formatos aceitos: JPG, PNG, GIF. Tamanho máximo 2MB.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="name">Nome Completo</label>
+              <input type="text" id="name" name="name" value="<%= user.name %>" class="form-input" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" name="email" value="<%= user.email %>" class="form-input" required />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Telefone</label>
+              <input type="tel" id="phone" name="phone" value="<%= user.phone %>" class="form-input" placeholder="(00) 00000-0000" />
+            </div>
+
+            <div class="form-group">
+              <label for="birth_date">Data de Nascimento</label>
+              <input type="date" id="birth_date" name="birth_date" value="<%= user.birth_date ? user.birth_date.split('T')[0] : '' %>" class="form-input" />
+            </div>
+
+            <div class="form-group full-width">
+              <label for="job">Cargo/Profissão</label>
+              <input type="text" id="job" name="job" value="<%= user.job %>" class="form-input" placeholder="Ex: Desenvolvedor Front-end" />
+            </div>
+
+            <div class="form-group full-width" style="margin-top: var(--sp-4);">
+              <label for="password">Nova Senha</label>
+              <input type="password" id="password" name="password" class="form-input" placeholder="Deixe em branco para não alterar" />
+            </div>
+          </div>
+
+          <div class="form-actions flex gap-4" style="margin-top: var(--sp-8);">
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            <a href="/userScene" class="btn btn-secondary">Cancelar</a>
+          </div>
+        </form>
+      </div>
     </div>
+  </main>
 
-    <div class="form-group">
-      <label for="name">Nome</label>
-      <input type="text" id="name" name="name" value="<%= user.name %>" required />
-    </div>
+  <%- include('common/footer') -%>
 
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" value="<%= user.email %>" required />
-    </div>
+  <script>
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarPreview = document.getElementById('avatarPreview');
 
-    <div class="form-group">
-      <label for="phone">Telefone</label>
-      <input type="text" id="phone" name="phone" value="<%= user.phone %>" />
-    </div>
+    avatarInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        // Validação simples de tamanho (2MB)
+        if (file.size > 2 * 1024 * 1024) {
+          showToast('A imagem deve ter no máximo 2MB.', 'warning');
+          avatarInput.value = '';
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = () => {
+          avatarPreview.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 
-    <div class="form-group">
-      <label for="job">Cargo/Profissão</label>
-      <input type="text" id="job" name="job" value="<%= user.job %>" />
-    </div>
-
-    <div class="form-group">
-      <label for="password">Nova Senha</label>
-      <input type="password" id="password" name="password" placeholder="Deixe em branco para manter" />
-    </div>
-
-    <div class="form-group">
-      <button type="submit" class="save-btn">Salvar Alterações</button>
-      <a href="/userScene" class="cancel-btn">Cancelar</a>
-    </div>
-
-  </form>
-</div>
-
-<%- include('common/footer') -%>
-
-<script>
-  // Preview da imagem do avatar antes de enviar
-  const avatarInput = document.getElementById('avatarInput');
-  const avatarPreview = document.getElementById('avatarPreview');
-
-  avatarInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        avatarPreview.src = reader.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-</script>
+    // Se a página recarregar com erro/sucesso da action, pode tratar aqui
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const error = urlParams.get('error');
+      const success = urlParams.get('success');
+      
+      if (error && typeof showToast === 'function') {
+        showToast(decodeURIComponent(error), 'error');
+      }
+      if (success && typeof showToast === 'function') {
+        showToast(decodeURIComponent(success), 'success');
+      }
+    };
+  </script>
+</body>
+</html>

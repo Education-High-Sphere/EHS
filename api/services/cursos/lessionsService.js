@@ -20,7 +20,7 @@ export default {
     },
     async getLessionById(id) {
         try {
-            const lession = await lessionsRepository.findLessionById(id);
+            const lession = await lessionsRepository.findLessionsById(id);
             return lession;
         } catch (error) {
             throw new Error("Erro ao buscar lição: " + error.message);
@@ -39,7 +39,7 @@ export default {
     },
     async updateLession(id, updates) {
         try {
-            const existingLession = await lessionsRepository.findLessionById(id);
+            const existingLession = await lessionsRepository.findLessionsById(id);
             if (!existingLession) {
                 throw new Error("Lição não encontrada");
             }
@@ -51,7 +51,7 @@ export default {
     },
     async deleteLession(id) {
         try {
-            const existingLession = await lessionsRepository.findLessionById(id);
+            const existingLession = await lessionsRepository.findLessionsById(id);
             if (!existingLession) {
                 throw new Error("Lição não encontrada");
             }
@@ -60,4 +60,4 @@ export default {
             throw new Error("Erro ao deletar lição: " + error.message);
         }
     }
-    }
+};

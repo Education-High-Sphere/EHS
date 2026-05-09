@@ -53,7 +53,7 @@
             <% } %>
           </div>
         </div>
-        <button class="continue-button">Continuar Curso</button>
+        <button class="continue-button" onclick="window.location.href='/watch/<%= course.id %>'">Continuar Curso</button>
       </div>
       <% }); %>
       <% } else { %>
@@ -100,7 +100,7 @@
             <% } %>
           </div>
         </div>
-        <button class="continue-button">Ver Certificado</button>
+        <button class="continue-button" onclick="window.location.href='/certificate/<%= course.matricula ? course.matricula.id : "" %>'">Ver Certificado</button>
       </div>
       <% }); %>
       <% } else { %>

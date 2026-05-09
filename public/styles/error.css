@@ -1,0 +1,28 @@
+/* error.css - Estilos específicos para a página de erro */
+
+.error-container {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-container .empty-state i {
+    color: var(--cor-erro);
+    font-size: 4rem;
+    opacity: 0.8;
+}
+
+.error-container .empty-state h3 {
+    color: var(--cor-texto);
+    margin-top: 1rem;
+}
+
+.error-container .empty-state p {
+    font-size: var(--fs-base);
+    margin-top: 0.5rem;
+}
+
+.error-actions {
+    margin-top: 2rem;
+}

@@ -9,16 +9,16 @@
   <body>
     <%- include('common/header') -%>
 
-    <div class="dashboard-container">
+    <div class="dashboard-container container">
       <header class="dashboard-header">
         <div class="salutation">
-          <h1>Bem-vindo <%= user.name %></h1>
-          <p>Aqui você gerencia todos os seus cursos.</p>
+          <h1>Bem-vindo, <%= user.name %>! 👋</h1>
+          <p>Aqui você gerencia todos os seus cursos e acompanha seu desempenho.</p>
         </div>
         <div class="header-actions">
-          <a href="#" class="btn btn-secondary"
-            ><i class="fas fa-user-edit"></i> Editar Perfil</a
-          >
+          <a href="/edit" class="btn btn-secondary">
+            <i class="fas fa-user-edit"></i> Editar Perfil
+          </a>
           <button class="btn btn-primary" id="create-course-btn" onclick="redirectToCreateACourse()">
             <i class="fas fa-plus"></i> Criar Novo Curso
           </button>
@@ -57,51 +57,49 @@
           </div>
         </section>
 
-    <section class="course-list-section">
-  <h2>Meus Cursos</h2>
-  
-  <div id="course-list" class="course-list">
-    
-    <% if (courses && courses.length > 0) { %>
-      <% courses.forEach(course => { %>
-        
-        <div class="course-card" data-id="<%= course.id %>">
-          <div class="course-info">
-            <h3 class="course-title"><%= course.nome %></h3>
-            <p>
-              Alunos: <span class="course-students"><%= course.alunos || 0 %></span>
-              | Avaliação: <span class="course-rating"><%= (course.avaliacao_media && course.avaliacao_media > 0) ? course.avaliacao_media.toFixed(1) : 'N/A' %></span>
-            </p>
+        <section class="course-list-section">
+          <div class="section-title">
+            <h2><i class="fas fa-layer-group"></i> Meus Cursos</h2>
           </div>
-          <div class="course-actions">
-            <div class="publish-switch">
-              <span class="switch-label"><%= course.publicated ? 'Publicado' : 'Rascunho' %></span>
-              <label class="switch">
-                <input type="checkbox" class="publish-toggle" <%= course.publicated ? 'checked' : '' %> />
-                <span class="slider"></span>
-              </label>
-            </div>
-            <button class="btn btn-edit edit-btn" onclick="editCourse('<%= course.id %>')">
-              <i class="fas fa-pen"></i> Editar
-            </button>
-            <button class="btn btn-delete delete-btn" onclick="deleteCourse('<%= course.id %>')">
-              <i class="fas fa-trash"></i> Deletar
-            </button>
+          
+          <div id="course-list" class="course-list">
+            <% if (courses && courses.length > 0) { %>
+              <% courses.forEach(course => { %>
+                <div class="course-card" data-id="<%= course.id %>">
+                  <div class="course-info">
+                    <h3 class="course-title"><%= course.nome %></h3>
+                    <p>
+                      <i class="fas fa-users"></i> <%= course.alunos || 0 %> alunos 
+                      &nbsp;|&nbsp; 
+                      <i class="fas fa-star" style="color: var(--cor-aviso)"></i> <%= (course.avaliacao_media && course.avaliacao_media > 0) ? course.avaliacao_media.toFixed(1) : 'Sem avaliações' %>
+                    </p>
+                  </div>
+                  <div class="course-actions">
+                    <div class="publish-switch">
+                      <span class="switch-label"><%= course.publicated ? 'Publicado' : 'Rascunho' %></span>
+                      <label class="switch">
+                        <input type="checkbox" class="publish-toggle" <%= course.publicated ? 'checked' : '' %> />
+                        <span class="slider"></span>
+                      </label>
+                    </div>
+                    <button class="btn btn-edit" onclick="editCourse('<%= course.id %>')">
+                      <i class="fas fa-pen"></i> Editar
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteCourse('<%= course.id %>')">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              <% }); %>
+            <% } else { %>
+              <div id="empty-state" class="empty-state">
+                <i class="fas fa-drafting-compass"></i>
+                <h3>Você ainda não tem cursos</h3>
+                <p>Clique em "Criar Novo Curso" para começar a compartilhar seu conhecimento.</p>
+              </div>
+            <% } %>
           </div>
-        </div>
-        
-      <% }); %>
-    <% } else { %>
-      
-      <div id="empty-state" class="empty-state" style="display: block;">
-        <i class="fas fa-drafting-compass"></i>
-        <h3>Você ainda não tem cursos</h3>
-        <p>Clique em "Criar Novo Curso" para começar a ensinar.</p>
-      </div>
-      
-      <% } %>
-  </div>
-</section>
+        </section>
 
     <%- include('common/footer') -%>
 

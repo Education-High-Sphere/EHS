@@ -1,24 +1,25 @@
 @import url('href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: "Poppins", sans-serif;
   background-color: #f4f4f4;
 }
 
-a{
+a {
   text-decoration: none;
   color: inherit;
 }
 
 
 .hero {
-  background-image:url('../src/backgrounds/182428240217.jpg');
+  background-image: url('../src/backgrounds/182428240217.jpg');
   background-size: cover;
   background-position: center;
   color: white;
@@ -39,7 +40,7 @@ a{
   border: 2px solid #4a78a680;
   border-radius: 10px;
   justify-content: center;
-  align-items:start;
+  align-items: start;
   overflow: hidden;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -57,9 +58,11 @@ a{
   justify-content: space-between;
   align-items: start;
 }
+
 .container h1 {
   font-size: 34px;
 }
+
 .hero ul {
   list-style: none;
   text-align: left;
@@ -67,6 +70,7 @@ a{
   font-size: 12px;
   font-weight: 200;
 }
+
 .hero-img {
   width: 500px;
   height: 100%;
@@ -80,7 +84,7 @@ a{
   transform: translateY(60px);
 }
 
-.hero h3{
+.hero h3 {
   font-size: 18px;
   font-weight: 200;
   color: #e4e4e4;
@@ -98,7 +102,7 @@ a{
 }
 
 .buttons button:hover {
-  transform: scale(1.05); 
+  transform: scale(1.05);
 }
 
 .categories {
@@ -126,18 +130,25 @@ a{
   font-size: 12px;
   color: #d3d3d3;
 }
+
 .category-buttons a:hover {
   color: #4a78a6;
 }
+
 .cards-area {
-  background-color: #1b2232;
+  background-color: #436d97;
   border-radius: 10px;
   width: 75vw;
   height: 80vh;
   overflow: auto;
   flex-wrap: nowrap;
   padding: 25px;
-  
+
+}
+
+.cards-area h1 {
+  color: white;
+  margin: 20px;
 }
 
 .cards {
@@ -157,12 +168,14 @@ a{
   border-radius: 10px 0 10px 0;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
+
 .card:hover {
   transform: scale(1.05);
   transition: transform 0.3s ease-in-out;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   cursor: pointer;
 }
+
 .card .img {
   background-size: cover;
   background-position: center;
@@ -204,6 +217,7 @@ a{
   justify-content: space-evenly;
   margin: 20px;
 }
+
 .big-container {
   display: flex;
   flex-direction: column;
@@ -212,12 +226,14 @@ a{
   width: 50%;
   height: 70%;
 }
+
 .small-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
 .docker {
   margin: 20px;
   padding: 10px 15px;
@@ -233,9 +249,10 @@ a{
   flex-direction: column;
   transition: all 0.3s ease-in-out;
 }
+
 .docker:hover {
   transform: scale(1.05);
-  
+
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   cursor: pointer;
 }

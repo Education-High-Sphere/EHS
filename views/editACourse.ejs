@@ -11,10 +11,10 @@
 <body>
 
     <div class="form-container">
-        <h2>Editar Curso</h2> 
+        <h2>Editar Curso: <%= course.nome %></h2> 
         
+        <!-- Formulário de Metadados -->
         <form id="edit-course-form" enctype="multipart/form-data" data-course-id="<%= course.id %>">
-
             <div class="form-group full-width">
                 <label for="nome">Título do Curso</label>
                 <input type="text" id="nome" name="nome" placeholder="Ex: Python para Análise de Dados" value="<%= course.nome %>" required>
@@ -26,7 +26,6 @@
             </div>
 
             <div class="form-grid">
-
                 <div class="form-group">
                     <label for="categoria">Categoria</label>
                     <select id="categoria" name="categoria" required>
@@ -83,10 +82,303 @@
                 </div>
             </div>
 
-            <button type="submit" class="submit-btn">Salvar Alterações</button>
-
+            <button type="submit" class="submit-btn">Salvar Alterações Gerais</button>
         </form>
+
+        <hr style="margin: 40px 0; border: 0; border-top: 1px solid #ddd;">
+
+        <!-- Seção de Conteúdo do Curso (Módulos e Aulas) -->
+        <div class="content-management">
+            <h3>Conteúdo do Curso</h3>
+            <p>Gerencie os módulos e as aulas do seu curso.</p>
+
+            <div id="modules-container">
+                <% content.forEach((module, mIdx) => { %>
+                    <div class="module-item" data-id="<%= module.id %>">
+                        <div class="module-header" onclick="toggleModule(this)">
+                            <div class="module-title">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Módulo <%= mIdx + 1 %>: <%= module.titulo %></span>
+                            </div>
+                            <div class="module-actions">
+                                <button class="icon-btn" onclick="editModule('<%= module.id %>', '<%= module.titulo %>')"><i class="fas fa-edit"></i></button>
+                                <button class="icon-btn delete" onclick="deleteModule('<%= module.id %>')"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="module-content hidden">
+                            <ul class="lessons-list">
+                                <% if (module.lessons && module.lessons.length > 0) { %>
+                                    <% module.lessons.sort((a,b) => a.ordem - b.ordem).forEach((lesson, lIdx) => { %>
+                                        <li class="lesson-item" data-id="<%= lesson.id %>">
+                                            <div class="lesson-info">
+                                                <i class="fas fa-play-circle"></i>
+                                                <span><%= lIdx + 1 %>. <%= lesson.titulo %></span>
+                                            </div>
+                                            <div class="lesson-actions">
+                                                <button class="icon-btn" onclick="editLesson('<%= lesson.id %>', '<%= module.id %>')"><i class="fas fa-edit"></i></button>
+                                                <button class="icon-btn delete" onclick="deleteLesson('<%= lesson.id %>')"><i class="fas fa-trash"></i></button>
+                                            </div>
+                                        </li>
+                                    <% }) %>
+                                <% } else { %>
+                                    <li class="empty-lessons">Nenhuma aula neste módulo.</li>
+                                <% } %>
+                            </ul>
+                            <button class="add-lesson-btn" onclick="openAddLessonModal('<%= module.id %>')">
+                                <i class="fas fa-plus"></i> Adicionar Aula
+                            </button>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+
+            <button class="add-module-btn" onclick="openAddModuleModal()">
+                <i class="fas fa-folder-plus"></i> Adicionar Novo Módulo
+            </button>
+        </div>
     </div>
+
+    <!-- Modais -->
+    <div id="modal-overlay" class="modal-overlay hidden" onclick="closeModals()"></div>
+
+    <!-- Modal Módulo -->
+    <div id="module-modal" class="modal hidden">
+        <h4 id="module-modal-title">Adicionar Módulo</h4>
+        <input type="text" id="module-input-title" placeholder="Título do Módulo">
+        <div class="modal-buttons">
+            <button class="btn-cancel" onclick="closeModals()">Cancelar</button>
+            <button class="btn-save" id="btn-save-module">Salvar</button>
+        </div>
+    </div>
+
+    <!-- Modal Aula -->
+    <div id="lesson-modal" class="modal hidden">
+        <h4 id="lesson-modal-title">Adicionar Aula</h4>
+        <input type="text" id="lesson-input-title" placeholder="Título da Aula">
+        <textarea id="lesson-input-desc" placeholder="Descrição da aula"></textarea>
+        <input type="text" id="lesson-input-url" placeholder="URL do Vídeo (YouTube/Vimeo)">
+        <div class="file-input-group">
+            <label>Ou faça upload do vídeo:</label>
+            <input type="file" id="lesson-input-file" accept="video/*">
+        </div>
+        <div class="modal-buttons">
+            <button class="btn-cancel" onclick="closeModals()">Cancelar</button>
+            <button class="btn-save" id="btn-save-lesson">Salvar</button>
+        </div>
+    </div>
+
+    <style>
+        /* Estilos básicos para o gerenciamento de conteúdo */
+        .content-management { margin-top: 20px; }
+        .module-item { border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; background: #fff; overflow: hidden; }
+        .module-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #f8f9fa; }
+        .module-header:hover { background: #e9ecef; }
+        .module-title { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+        .module-header.active i.fa-chevron-right { transform: rotate(90deg); }
+        .module-content { padding: 15px; border-top: 1px solid #eee; }
+        .lessons-list { list-style: none; margin-bottom: 10px; }
+        .lesson-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px dotted #ccc; }
+        .lesson-item:last-child { border-bottom: none; }
+        .icon-btn { background: none; border: none; cursor: pointer; color: #666; padding: 5px; }
+        .icon-btn:hover { color: var(--cor-acento); }
+        .icon-btn.delete:hover { color: #e74c3c; }
+        .add-lesson-btn, .add-module-btn { width: 100%; padding: 10px; border: 2px dashed #ccc; border-radius: 8px; background: none; cursor: pointer; color: #666; font-weight: 600; transition: 0.3s; }
+        .add-lesson-btn:hover, .add-module-btn:hover { border-color: var(--cor-acento); color: var(--cor-acento); background: rgba(74, 120, 166, 0.05); }
+        .add-module-btn { margin-top: 15px; border-color: var(--cor-acento); color: var(--cor-acento); }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 25px; border-radius: 12px; z-index: 1001; width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .modal input, .modal textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; }
+        .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; }
+        .btn-cancel { padding: 8px 16px; border-radius: 6px; background: #eee; border: none; cursor: pointer; }
+        .btn-save { padding: 8px 16px; border-radius: 6px; background: var(--cor-acento); color: #fff; border: none; cursor: pointer; }
+        .hidden { display: none !important; }
+        .file-input-group { margin-bottom: 15px; font-size: 14px; }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropArea = document.getElementById('file-drop-area');
+            const fileInput = document.getElementById('imagem');
+            const imagePreview = document.getElementById('image-preview');
+            const form = document.getElementById('edit-course-form'); 
+            const courseId = form.dataset.courseId; 
+
+            // Preview de Imagem
+            function showPreview(file) {
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            fileInput.addEventListener('change', (e) => {
+                if (fileInput.files.length > 0) showPreview(fileInput.files[0]);
+            });
+
+            // Drag & Drop
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(ev => dropArea.addEventListener(ev, e => { e.preventDefault(); e.stopPropagation(); }));
+            ['dragenter', 'dragover'].forEach(ev => dropArea.addEventListener(ev, () => dropArea.classList.add('dragover')));
+            ['dragleave', 'drop'].forEach(ev => dropArea.addEventListener(ev, () => dropArea.classList.remove('dragover')));
+            dropArea.addEventListener('drop', (e) => {
+                if (e.dataTransfer.files.length > 0) {
+                    fileInput.files = e.dataTransfer.files;
+                    showPreview(fileInput.files[0]);
+                }
+            });
+
+            // Switch Label
+            const publishToggle = document.getElementById('publicated-toggle');
+            const switchLabel = document.querySelector('.publish-switch .switch-label');
+            publishToggle.addEventListener('change', (e) => switchLabel.textContent = e.target.checked ? 'Publicado' : 'Rascunho');
+            
+            // Envio do Formulário Principal
+            form.addEventListener('submit', (e) => {
+                e.preventDefault(); 
+                const formData = new FormData(form);
+                fetch(`/api/cursos/${courseId}`, { method: 'PUT', body: formData })
+                .then(res => res.json())
+                .then(data => {
+                    alert('Curso atualizado com sucesso!');
+                    window.location.reload();
+                })
+                .catch(err => alert('Erro ao atualizar curso.'));
+            });
+        });
+
+        // --- Lógica de Módulos e Aulas ---
+        function toggleModule(header) {
+            header.classList.toggle('active');
+            header.nextElementSibling.classList.toggle('hidden');
+        }
+
+        const overlay = document.getElementById('modal-overlay');
+        const modModal = document.getElementById('module-modal');
+        const lessonModal = document.getElementById('lesson-modal');
+        let currentModuleId = null;
+        let currentLessonId = null;
+
+        function closeModals() {
+            overlay.classList.add('hidden');
+            modModal.classList.add('hidden');
+            lessonModal.classList.add('hidden');
+            currentModuleId = null;
+            currentLessonId = null;
+        }
+
+        // Módulos
+        function openAddModuleModal() {
+            document.getElementById('module-modal-title').textContent = "Adicionar Módulo";
+            document.getElementById('module-input-title').value = "";
+            overlay.classList.remove('hidden');
+            modModal.classList.remove('hidden');
+        }
+
+        function editModule(id, titulo) {
+            currentModuleId = id;
+            document.getElementById('module-modal-title').textContent = "Editar Módulo";
+            document.getElementById('module-input-title').value = titulo;
+            overlay.classList.remove('hidden');
+            modModal.classList.remove('hidden');
+        }
+
+        document.getElementById('btn-save-module').onclick = async () => {
+            const titulo = document.getElementById('module-input-title').value;
+            const courseId = document.getElementById('edit-course-form').dataset.courseId;
+            
+            if (!titulo) return alert('Título obrigatório');
+
+            const url = currentModuleId ? `/api/content/modules/${currentModuleId}` : `/api/content/${courseId}/modules`;
+            const method = currentModuleId ? 'PUT' : 'POST';
+
+            try {
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ titulo })
+                });
+                if (res.ok) window.location.reload();
+                else alert('Erro ao salvar módulo');
+            } catch (err) { console.error(err); }
+        };
+
+        async function deleteModule(id) {
+            if (!confirm('Tem certeza que deseja excluir este módulo e todas as suas aulas?')) return;
+            try {
+                const res = await fetch(`/api/content/modules/${id}`, { method: 'DELETE' });
+                if (res.ok) window.location.reload();
+            } catch (err) { console.error(err); }
+        }
+
+        // Aulas
+        function openAddLessonModal(moduleId) {
+            currentModuleId = moduleId;
+            document.getElementById('lesson-modal-title').textContent = "Adicionar Aula";
+            document.getElementById('lesson-input-title').value = "";
+            document.getElementById('lesson-input-desc').value = "";
+            document.getElementById('lesson-input-url').value = "";
+            document.getElementById('lesson-input-file').value = "";
+            overlay.classList.remove('hidden');
+            lessonModal.classList.remove('hidden');
+        }
+
+        async function editLesson(lessonId, moduleId) {
+            currentLessonId = lessonId;
+            currentModuleId = moduleId;
+            // Buscar dados da aula
+            try {
+                const res = await fetch(`/api/cursos/lessons/${lessonId}`); // TODO: Create this endpoint or find existing
+                const lesson = await res.json();
+                document.getElementById('lesson-modal-title').textContent = "Editar Aula";
+                document.getElementById('lesson-input-title').value = lesson.titulo;
+                document.getElementById('lesson-input-desc').value = lesson.descricao || "";
+                document.getElementById('lesson-input-url').value = lesson.url_recurso || "";
+                overlay.classList.remove('hidden');
+                lessonModal.classList.remove('hidden');
+            } catch (err) { 
+                // Fallback se o endpoint não existir: apenas abre o modal vazio para edição parcial
+                document.getElementById('lesson-modal-title').textContent = "Editar Aula";
+                overlay.classList.remove('hidden');
+                lessonModal.classList.remove('hidden');
+            }
+        }
+
+        document.getElementById('btn-save-lesson').onclick = async () => {
+            const titulo = document.getElementById('lesson-input-title').value;
+            const descricao = document.getElementById('lesson-input-desc').value;
+            const video_url = document.getElementById('lesson-input-url').value;
+            const file = document.getElementById('lesson-input-file').files[0];
+
+            if (!titulo) return alert('Título obrigatório');
+
+            const formData = new FormData();
+            formData.append('titulo', titulo);
+            formData.append('descricao', descricao);
+            formData.append('video_url', video_url);
+            if (file) formData.append('video', file);
+
+            const url = currentLessonId ? `/api/content/lessons/${currentLessonId}` : `/api/content/modules/${currentModuleId}/lessons`;
+            const method = currentLessonId ? 'PUT' : 'POST';
+
+            try {
+                const res = await fetch(url, { method, body: formData });
+                if (res.ok) window.location.reload();
+                else alert('Erro ao salvar aula');
+            } catch (err) { console.error(err); }
+        };
+
+        async function deleteLesson(id) {
+            if (!confirm('Tem certeza que deseja excluir esta aula?')) return;
+            try {
+                const res = await fetch(`/api/content/lessons/${id}`, { method: 'DELETE' });
+                if (res.ok) window.location.reload();
+            } catch (err) { console.error(err); }
+        }
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {

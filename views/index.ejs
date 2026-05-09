@@ -186,11 +186,21 @@
         'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=600&q=80'
       ];
       const phIndex = course.nome ? course.nome.length % placeholders.length : 0;
-      const finalImg = placeholders[phIndex];
+      const placeholderImg = placeholders[phIndex];
+      const finalImg = course.imagem || placeholderImg;
 
       const imgDiv = document.createElement("div");
       imgDiv.className = "img";
       imgDiv.style.backgroundImage = `url('${finalImg}')`;
+
+      // Validação de imagem funcional
+      if (course.imagem) {
+        const testImg = new Image();
+        testImg.src = course.imagem;
+        testImg.onerror = () => {
+          imgDiv.style.backgroundImage = `url('${placeholderImg}')`;
+        };
+      }
 
       const title = document.createElement("h3");
       title.textContent = course.nome;

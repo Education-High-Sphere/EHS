@@ -29,16 +29,6 @@
 
         <div class="input-box">
           <input
-            name="birth_date"
-            placeholder="Data de nascimento"
-            type="date"
-            id="birthdate"
-            required
-          />
-        </div>
-
-        <div class="input-box">
-          <input
             name="email"
             placeholder="Endereço de e-mail"
             type="email"
@@ -49,34 +39,7 @@
           />
         </div>
 
-        <div class="input-box">
-          <input
-            name="email_confirm"
-            placeholder="Confirme seu e-mail"
-            type="email"
-            required
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-            oninvalid="setCustomValidity('Por favor, insira um endereço de e-mail válido.')"
-            oninput="setCustomValidity('')"
-          />
-
-        </div>
-
-        
-
-        <div class="input-box">
-          <input name="job" placeholder="Cargo" type="text" required />
-        </div>
-
-        <div class="input-box">
-          <input
-            name="phone"
-            placeholder="Telefone"
-            type="tel"
-            oninput="if (this.value) this.value = this.value.replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d{5})(\d)/g, '$1-$2').replace(/(-\d{4})\d+?$/, '$1')"
-            required
-          />
-        </div>
+        <!-- Campos opcionais removidos para simplificar o cadastro (birth_date, email_confirm, job, phone) -->
 
 
         <div class="input-box">
@@ -208,23 +171,7 @@
         return true;
       }
 
-      function verifyEmail() {
-        var emailInput = document.getElementById("email");
-        var confirmar_emailInput = document.getElementById("email_confirm");
-        if (!emailInput || !confirmar_emailInput) {
-          console.error("Falha ao acessar campos de formulário");
-          return false;
-        }
-
-        var email = emailInput.value;
-        var confirmar_email = confirmar_emailInput.value;
-        if (email !== confirmar_email) {
-          alert("Os e-mails não coincidem, por favor, tente novamente.");
-          return false;
-        }
-
-        return true;
-      }
+      // A verificação de e-mail foi removida (o campo email_confirm foi retirado)
 
       function togglePassword() {
         var passwordInput = document.getElementById("senha");
@@ -267,6 +214,24 @@
           icon.className = "bx bx-hide";
         }
       }
+
+      // Lidar com erros retornados pela URL (ex: falha no login)
+      window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        const tab = urlParams.get('tab');
+        
+        if (error) {
+          // Pequeno timeout para garantir que a página renderizou antes do alert
+          setTimeout(() => {
+            alert(error);
+          }, 100);
+        }
+        
+        if (tab === 'login') {
+          showLogin();
+        }
+      };
     </script>
   </body>
 </html>

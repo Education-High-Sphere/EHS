@@ -27,11 +27,17 @@ export default {
     },
     async createContent(content) {
         try {
-            if (!content.titulo || !content.descricao || !content.curso_id) {
-                throw new Error("Título, descrição e curso_id são obrigatórios");
+            if (!content.titulo || !content.curso_id) {
+                throw new Error("Título e curso_id são obrigatórios");
             }
-            const newContent = await cursoContentRepository.create(content);
-    }
+            // Garante que descricao exista mesmo que vazia
+            const finalContent = {
+                ...content,
+                descricao: content.descricao || ""
+            };
+            const newContent = await cursoContentRepository.create(finalContent);
+            return newContent;
+        }
         catch (error) {
             throw new Error("Erro ao criar conteudo do curso: " + error.message);
         }

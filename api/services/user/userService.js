@@ -52,6 +52,8 @@ export default {
       phone: data.phone || existing.phone,
       job: data.job || existing.job,
       birth_date: data.birth_date || existing.birth_date,
+      avatar: data.avatar || existing.avatar,
+      roles: data.roles || existing.roles,
       passwordHash
     };
 

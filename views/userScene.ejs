@@ -53,14 +53,14 @@
           <div class="stat-box">
             <i class="fas fa-trophy highlight-icon"></i>
             <div class="stat-info">
-              <strong>34</strong>
+              <strong><%= stats.concluidos %></strong>
               <span>Cursos Concluídos</span>
             </div>
           </div>
           <div class="stat-box">
             <i class="fas fa-star highlight-icon-sec"></i>
             <div class="stat-info">
-              <strong>12</strong>
+              <strong><%= stats.avaliacoes %></strong>
               <span>Avaliações</span>
             </div>
           </div>
@@ -70,14 +70,14 @@
       <!-- MAIN CONTENT -->
       <main class="dashboard-content">
         
-        <!-- NEW IMPLEMENTATION: DASHBOARD OVERVIEW -->
+        <!-- DASHBOARD OVERVIEW -->
         <section class="overview-section">
           <div class="overview-card">
             <div class="icon-wrapper blue">
               <i class="fas fa-book-open"></i>
             </div>
             <div class="overview-data">
-              <h3>4</h3>
+              <h3><%= stats.emAndamento %></h3>
               <p>Cursos em andamento</p>
             </div>
           </div>
@@ -86,7 +86,7 @@
               <i class="fas fa-check-circle"></i>
             </div>
             <div class="overview-data">
-              <h3>34</h3>
+              <h3><%= stats.concluidos %></h3>
               <p>Cursos finalizados</p>
             </div>
           </div>
@@ -95,7 +95,7 @@
               <i class="fas fa-clock"></i>
             </div>
             <div class="overview-data">
-              <h3>120h</h3>
+              <h3><%= stats.horasEstudo %>h</h3>
               <p>Horas de estudo</p>
             </div>
           </div>
@@ -114,132 +114,83 @@
           </div>
           
           <div class="courses-grid">
-            <!-- Curso 1 -->
-            <div class="course-card">
-              <div class="course-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')"></div>
-              <div class="course-info">
-                <h3>Desenvolvimento Web Avançado</h3>
-                <span class="instructor">Prof. João Silva</span>
-                
-                <div class="course-rating">
-                  <div class="stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                  </div>
-                  <span class="rating-value">4.5</span>
-                </div>
+            <% if (cursosEmAndamento.length > 0) { %>
+              <% cursosEmAndamento.forEach(course => { %>
+                <div class="course-card">
+                  <div class="course-thumbnail" style="background-image: url('<%= course.imagem || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60' %>')"></div>
+                  <div class="course-info">
+                    <h3><%= course.nome %></h3>
+                    <span class="instructor">Prof. <%= course.professorName %></span>
+                    
+                    <div class="course-rating">
+                      <div class="stars">
+                        <% const rating = course.avaliacao_media || 0; %>
+                        <% for(let i=1; i<=5; i++) { %>
+                          <i class="<%= i <= rating ? 'fas' : (i - 0.5 <= rating ? 'fas fa-star-half-alt' : 'far') %> fa-star"></i>
+                        <% } %>
+                      </div>
+                      <span class="rating-value"><%= rating.toFixed(1) %></span>
+                    </div>
 
-                <div class="progress-wrapper">
-                  <div class="progress-labels">
-                    <span>Progresso</span>
-                    <span>60%</span>
-                  </div>
-                  <div class="progress-container">
-                    <div class="progress-bar" style="width: 60%"></div>
-                  </div>
-                  <small>12 de 20 aulas concluídas</small>
-                </div>
+                    <div class="progress-wrapper">
+                      <div class="progress-labels">
+                        <span>Progresso</span>
+                        <span><%= Math.round(course.progress) %>%</span>
+                      </div>
+                      <div class="progress-container">
+                        <div class="progress-bar" style="width: <%= course.progress %>%"></div>
+                      </div>
+                      <small><%= course.numCompleted %> de <%= course.totalLessons %> aulas concluídas</small>
+                    </div>
 
-                <button class="continue-btn">Retomar Curso <i class="fas fa-play-circle"></i></button>
+                    <button class="continue-btn" onclick="window.location.href='/watch/<%= course.id %>'">
+                      Retomar Curso <i class="fas fa-play-circle"></i>
+                    </button>
+                  </div>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <div class="empty-state">
+                <i class="fas fa-book-reader"></i>
+                <h3>Nenhum curso em andamento</h3>
+                <p>Explore nosso catálogo e comece a aprender hoje mesmo!</p>
+                <a href="/courses" class="edit-btn" style="width: auto; margin-top: 20px; padding: 10px 30px;">Explorar Cursos</a>
               </div>
-            </div>
-
-            <!-- Curso 2 -->
-            <div class="course-card">
-              <div class="course-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')"></div>
-              <div class="course-info">
-                <h3>Banco de Dados Relacionais</h3>
-                <span class="instructor">Profª. Maria de Souza</span>
-                
-                <div class="course-rating">
-                  <div class="stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
-                  </div>
-                  <span class="rating-value">3.5</span>
-                </div>
-
-                <div class="progress-wrapper">
-                  <div class="progress-labels">
-                    <span>Progresso</span>
-                    <span>90%</span>
-                  </div>
-                  <div class="progress-container">
-                    <div class="progress-bar" style="width: 90%"></div>
-                  </div>
-                  <small>16 de 18 aulas concluídas</small>
-                </div>
-
-                <button class="continue-btn">Retomar Curso <i class="fas fa-play-circle"></i></button>
-              </div>
-            </div>
-
-            <!-- Curso 3 -->
-            <div class="course-card">
-              <div class="course-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')"></div>
-              <div class="course-info">
-                <h3>Cybersecurity Fundamentals</h3>
-                <span class="instructor">Prof. Ademário Silva</span>
-                
-                <div class="course-rating">
-                  <div class="stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                  </div>
-                  <span class="rating-value">5.0</span>
-                </div>
-
-                <div class="progress-wrapper">
-                  <div class="progress-labels">
-                    <span>Progresso</span>
-                    <span>40%</span>
-                  </div>
-                  <div class="progress-container">
-                    <div class="progress-bar" style="width: 40%"></div>
-                  </div>
-                  <small>4 de 10 aulas concluídas</small>
-                </div>
-
-                <button class="continue-btn">Retomar Curso <i class="fas fa-play-circle"></i></button>
-              </div>
-            </div>
-            
-            <!-- Curso 4 -->
-            <div class="course-card">
-              <div class="course-thumbnail" style="background-image: url('https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60')"></div>
-              <div class="course-info">
-                <h3>UX/UI Design Principles</h3>
-                <span class="instructor">Profª. Manuela Santos</span>
-                
-                <div class="course-rating">
-                  <div class="stars">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
-                  </div>
-                  <span class="rating-value">3.0</span>
-                </div>
-
-                <div class="progress-wrapper">
-                  <div class="progress-labels">
-                    <span>Progresso</span>
-                    <span>65%</span>
-                  </div>
-                  <div class="progress-container">
-                    <div class="progress-bar" style="width: 65%"></div>
-                  </div>
-                  <small>8 de 12 aulas concluídas</small>
-                </div>
-
-                <button class="continue-btn">Retomar Curso <i class="fas fa-play-circle"></i></button>
-              </div>
-            </div>
-
+            <% } %>
           </div>
         </section>
 
-        <!-- CERTIFICATES LIST (New implementation) -->
+        <!-- CERTIFICATES LIST -->
         <section class="certificates-list hidden" id="certificates-tab">
-          <div class="empty-state">
-            <i class="fas fa-certificate"></i>
-            <h3>Você ainda não possui certificados</h3>
-            <p>Conclua cursos para garantir seus certificados e alavancar sua carreira.</p>
-          </div>
+          <% if (cursosConcluidos.length > 0) { %>
+            <div class="courses-grid">
+              <% cursosConcluidos.forEach(course => { %>
+                <div class="course-card">
+                  <div class="course-thumbnail" style="background-image: url('<%= course.imagem || 'https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60' %>')"></div>
+                  <div class="course-info">
+                    <h3><%= course.nome %></h3>
+                    <span class="instructor">Concluído em <%= new Date().toLocaleDateString() %></span>
+                    
+                    <div class="progress-wrapper">
+                      <div class="badge-success" style="padding: 5px 10px; border-radius: 4px; display: inline-block; font-size: 12px; margin-bottom: 15px;">
+                        <i class="fas fa-check-circle"></i> Concluído
+                      </div>
+                    </div>
+
+                    <button class="continue-btn" onclick="window.location.href='/api/certificates/<%= course.matriculaId %>'">
+                      Ver Certificado <i class="fas fa-certificate"></i>
+                    </button>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="empty-state">
+              <i class="fas fa-certificate"></i>
+              <h3>Você ainda não possui certificados</h3>
+              <p>Conclua cursos para garantir seus certificados e alavancar sua carreira.</p>
+            </div>
+          <% } %>
         </section>
 
       </main>

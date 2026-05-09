@@ -1,7 +1,8 @@
 import express from "express";
 import courseController from "../../controllers/cursos/cursoController.js";
+import avaliacaoController from "../../controllers/cursos/avaliacaoController.js";
 import multer from "multer";
-import {checkUserMiddleware} from '../../middlewares/authMiddleware.js';
+import {checkUserMiddleware, authenticateToken} from '../../middlewares/authMiddleware.js';
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -19,5 +20,9 @@ router.post("/create",checkUserMiddleware, upload.single('imagem'),  courseContr
 router.put('/:id/publish',checkUserMiddleware, courseController.togglePublish);  // Publicar ou despublicar
 router.put("/:id",checkUserMiddleware, upload.single('imagem'),  courseController.updateCourse); // Atualizar
 router.delete("/:id",checkUserMiddleware, courseController.deleteCourse);  // Deletar
+
+// Avaliações
+router.get("/:courseId/reviews", avaliacaoController.getReviews);
+router.post("/:courseId/reviews", authenticateToken, avaliacaoController.addReview);
 
 export default router;

@@ -1,37 +1,21 @@
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EHS Marketplace</title>
+  <meta name="description" content="EHS - Education High Sphere. Cursos profissionalizantes online para sua carreira.">
+  <title>EHS - Education High Sphere</title>
   
+  <!-- Design System Global -->
+  <link rel="stylesheet" href="/styles/global.css" />
+  
+  <!-- Fontes e Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
+  <link rel="icon" href="/src/logo.png" type="image/x-icon" />
+
   <style>
-    /* --- 1. Paleta de Cores e Estilos Globais --- */
-    :root {
-      --cor-fundo: #1b2232;
-      --cor-texto-principal: #f4f4f4;
-      --cor-acento-azul: #4a78a6;
-      --cor-borda-cinza: #d3d3d3;
-      --cor-item-lista: #2a344a; /* Tom mais claro que o fundo */
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
-    }
-
-    body {
-      min-height: 100vh;
-      width: 100%;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    /* --- 2. Estrutura do Header --- */
+    /* --- Header Styles --- */
     .main-header {
       background-color: var(--cor-fundo);
       width: 100%;
@@ -39,14 +23,13 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      /* Sombra sutil moderna, usando o tom azul */
       box-shadow: 0 4px 12px rgba(74, 120, 166, 0.1);
-      border-bottom: 1px solid var(--cor-item-lista);
+      border-bottom: 1px solid var(--cor-superficie);
     }
 
     .header-container {
       width: 90%;
-      max-width: 1400px; /* Header mais largo */
+      max-width: var(--max-width);
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -54,17 +37,16 @@
       gap: 1.5em;
     }
 
-    /* --- 3. Logo --- */
+    /* Logo */
     .logo {
       display: flex;
       align-items: center;
       gap: 10px;
       cursor: pointer;
+      flex-shrink: 0;
     }
 
-    .logo img {
-      height: 40px; /* Um pouco maior */
-    }
+    .logo img { height: 40px; }
 
     .logo div {
       display: flex;
@@ -74,29 +56,29 @@
 
     .logo strong {
       font-size: 1.2rem;
-      color: var(--cor-texto-principal);
+      color: var(--cor-texto);
     }
 
     .logo small {
       font-size: 9px;
-      color: var(--cor-borda-cinza);
+      color: var(--cor-texto-secundario);
     }
 
-    /* --- 4. Links de Navegação Modernos --- */
+    /* Navigation */
     .nav-links {
       display: flex;
-      gap: 2em; /* Mais espaço */
+      gap: 2em;
     }
 
     .nav-links a {
-      color: var(--cor-texto-principal);
+      color: var(--cor-texto);
       font-weight: 500;
       position: relative;
       padding-bottom: 5px;
-      transition: color 0.2s ease-in-out;
+      transition: color var(--transition-fast);
+      font-size: var(--fs-sm);
     }
 
-    /* Efeito de underline no hover */
     .nav-links a::after {
       content: '';
       position: absolute;
@@ -104,29 +86,24 @@
       left: 0;
       width: 0;
       height: 2px;
-      background-color: var(--cor-acento-azul);
+      background-color: var(--cor-acento);
       transition: width 0.3s ease;
     }
 
-    .nav-links a:hover {
-      color: var(--cor-acento-azul);
-    }
+    .nav-links a:hover { color: var(--cor-acento); }
+    .nav-links a:hover::after { width: 100%; }
 
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    /* --- 5. Barra de Pesquisa Moderna --- */
+    /* Search */
     .search-bar {
-      flex: 1; /* Faz a barra ocupar o espaço disponível */
+      flex: 1;
       max-width: 350px;
     }
 
     .search-bar form {
       display: flex;
       align-items: center;
-      background-color: var(--cor-item-lista);
-      border-radius: 5px;
+      background-color: var(--cor-superficie);
+      border-radius: var(--radius-md);
       overflow: hidden;
     }
 
@@ -136,29 +113,25 @@
       outline: none;
       padding: 10px 15px;
       width: 100%;
-      color: var(--cor-texto-principal);
-      font-size: 0.9rem;
+      color: var(--cor-texto);
+      font-size: var(--fs-sm);
     }
 
-    .search-bar input::placeholder {
-      color: var(--cor-borda-cinza);
-    }
+    .search-bar input::placeholder { color: var(--cor-texto-secundario); }
 
     .search-bar button {
       background: transparent;
       border: none;
-      color: var(--cor-borda-cinza);
+      color: var(--cor-texto-secundario);
       cursor: pointer;
       padding: 10px 15px;
       font-size: 1rem;
-      transition: color 0.2s ease;
+      transition: color var(--transition-fast);
     }
 
-    .search-bar button:hover {
-      color: var(--cor-acento-azul);
-    }
+    .search-bar button:hover { color: var(--cor-acento); }
     
-    /* --- 6. Ações do Header (Ícones e Login) --- */
+    /* Actions */
     .header-actions {
       display: flex;
       align-items: center;
@@ -173,55 +146,68 @@
 
     .icons i {
       font-size: 1.2rem;
-      color: var(--cor-texto-principal);
+      color: var(--cor-texto);
       cursor: pointer;
-      transition: color 0.2s ease;
+      transition: color var(--transition-fast);
     }
 
-    .icons i:hover {
-      color: var(--cor-acento-azul);
-    }
+    .icons i:hover { color: var(--cor-acento); }
 
-    /* --- 7. Botões (Reutilizados do Dashboard) --- */
-    .btn {
-      padding: 0.6em 1.2em;
+    /* Mobile Menu Toggle */
+    .menu-toggle {
+      display: none;
+      background: none;
       border: none;
-      border-radius: 5px;
-      font-size: 0.9rem;
-      font-weight: 600;
+      color: var(--cor-texto);
+      font-size: 1.5rem;
       cursor: pointer;
-      transition: all 0.2s ease;
-      text-decoration: none;
-      color: var(--cor-texto-principal);
-      white-space: nowrap; /* Impede que o texto quebre */
+      padding: var(--sp-2);
     }
 
-    .btn-primary {
-      background-color: var(--cor-acento-azul);
-    }
-    .btn-primary:hover {
-      background-color: #3a6896;
-      transform: translateY(-2px);
-    }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links,
+      .search-bar,
+      .icons {
+        display: none;
+      }
 
-    .btn-secondary {
-      background-color: transparent;
-      border: 1px solid var(--cor-acento-azul);
-    }
-    .btn-secondary:hover {
-      background-color: var(--cor-acento-azul);
-    }
+      .menu-toggle {
+        display: block;
+      }
 
+      .header-container {
+        gap: 1em;
+      }
+
+      /* Mobile nav overlay */
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--cor-fundo);
+        padding: var(--sp-8) var(--sp-6);
+        gap: var(--sp-6);
+        z-index: 999;
+        animation: slideDown 0.2s ease;
+      }
+
+      .nav-links.mobile-open a {
+        font-size: var(--fs-lg);
+        padding: var(--sp-3) 0;
+        border-bottom: 1px solid var(--cor-superficie);
+      }
+
+      @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    }
   </style>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-  />
-  <link rel="icon" href="../src/logo.png" type="image/x-icon" />
 </head>
 <body>
 
@@ -229,14 +215,14 @@
     <div class="header-container">
 
       <div class="logo" onclick="window.location.href = '/'">
-        <img src="../src/logo.png" alt="Logo" />
+        <img src="/src/logo.png" alt="EHS Logo" />
         <div>
           <strong>EHS</strong>
           <small>Educando Mentes do Futuro</small>
         </div>
       </div>
 
-      <nav class="nav-links">
+      <nav class="nav-links" id="nav-links">
         <a href="/">Home</a>
         <a href="/courses">Cursos</a>
         <a href="/beATeacher">Seja um Professor</a>
@@ -253,42 +239,54 @@
       <div class="header-actions">
         <div class="icons">
           <i class="fas fa-bell"></i>
-          <i class="fas fa-heart"></i>
-          <i class="fas fa-shopping-cart"></i>
         </div>
         
         <div class="login">
           <% if (user) { %>
-            <a href="/userScene" class="btn btn-secondary">Olá, <%= user.name %></a>
+            <a href="/userScene" class="btn btn-secondary">Olá, <%= user.name.split(' ')[0] %></a>
           <% } else { %>
             <a href="/register" class="btn btn-primary">Login / Cadastro</a>
           <% } %>
         </div>
+
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
 
     </div>
   </header>
 
   <script>
-    // Seu script JS original está ótimo e não precisa de mudanças.
-    document.querySelector('.search-bar form').addEventListener('submit', function (e) {
-      try {
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    if (menuToggle && navLinks) {
+      menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('mobile-open');
+        const icon = menuToggle.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+      });
+    }
+
+    // Search form
+    const searchForm = document.querySelector('.search-bar form');
+    if (searchForm) {
+      searchForm.addEventListener('submit', function (e) {
         const searchInput = this.querySelector('input[name="search"]');
-        if (!searchInput) {
-          throw new Error('searchInput is null');
+        if (!searchInput || !searchInput.value.trim()) {
+          e.preventDefault();
         }
-        const query = searchInput.value.trim();
-        if (query) {
-          // Apenas redireciona, não precisa do e.preventDefault() se o action já é /courses
-          this.submit();
-        } else {
-          e.preventDefault(); // Impede o envio se a busca estiver vazia
-        }
-      } catch (error) {
-        console.error('Erro ao submeter formulário de pesquisa', error);
-        e.preventDefault();
-      }
-    });
+      });
+    }
+
+    // Global toast function
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3200);
+    }
   </script>
-</body>
-</html>

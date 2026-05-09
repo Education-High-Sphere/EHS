@@ -48,6 +48,15 @@ export default {
     }
   },
 
+  async getCoursesByIds(ids) {
+    try {
+      const courses = await cursoRepository.findByIds(ids);
+      return courses;
+    } catch (error) {
+      throw new Error("Erro ao buscar cursos: " + error.message);
+    }
+  },
+
   async createCourse(courseData, file, professorId) {
     try {
       if (!courseData.nome || !courseData.descricao) {

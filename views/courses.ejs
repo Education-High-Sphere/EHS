@@ -85,8 +85,9 @@
         const _finalImg = _placeholders[_phIndex];
       %>
       <img
-        src="<%= _finalImg %>"
+        src="<%= course.imagem || _finalImg %>"
         alt="<%= course.nome %>"
+        onerror="this.onerror=null;this.src='<%= _finalImg %>';"
       />
       
       <% 

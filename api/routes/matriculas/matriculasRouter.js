@@ -2,16 +2,17 @@ import express from "express";
 import matriculasController from "../../controllers/matriculas/matriculasController.js";
 import matriculasService from "../../services/matriculas/matriculasService.js";
 import cursoRepository from "../../repositories/cursos/cursoRepository.js";
+import { authenticateToken } from "../../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", matriculasController.createMatricula); // Rota para criar uma nova matrícula
-router.get("/", matriculasController.getAllMatriculas); // Rota para obter todas as matrículas
-router.get("/:matriculaId", matriculasController.getMatriculaById); // Rota para obter uma matrícula por ID
-router.get("/user/:userId", matriculasController.getMatriculasByUser); // Rota para obter matrículas por usuário
-router.get("/course/:courseId", matriculasController.getMatriculasByCourse); // Rota para obter matrículas por curso
-router.patch("/:matriculaId", matriculasController.updateMatricula); // Rota para atualizar uma matrícula
-router.delete("/:matriculaId", matriculasController.deleteMatricula); // Rota para deletar uma matrícula
+router.post("/", authenticateToken, matriculasController.createMatricula); // Rota para criar uma nova matrícula
+router.get("/", authenticateToken, matriculasController.getAllMatriculas); // Rota para obter todas as matrículas
+router.get("/:matriculaId", authenticateToken, matriculasController.getMatriculaById); // Rota para obter uma matrícula por ID
+router.get("/user/:userId", authenticateToken, matriculasController.getMatriculasByUser); // Rota para obter matrículas por usuário
+router.get("/course/:courseId", authenticateToken, matriculasController.getMatriculasByCourse); // Rota para obter matrículas por curso
+router.patch("/:matriculaId", authenticateToken, matriculasController.updateMatricula); // Rota para atualizar uma matrícula
+router.delete("/:matriculaId", authenticateToken, matriculasController.deleteMatricula); // Rota para deletar uma matrícula
 
 router.get("/user/:userId/courses", async (req, res) => {
   try {

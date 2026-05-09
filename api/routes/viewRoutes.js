@@ -19,6 +19,12 @@ router.get("/beATeacher", checkUserMiddleware,viewController.getBeATeacherPage);
 router.get("/teacherScene", checkUserMiddleware,viewController.getTeacherScenePage);
 router.get("/createACourse", checkUserMiddleware,viewController.getCreateACoursePage);
 router.get("/editACourse/:id", checkUserMiddleware,viewController.getEditACoursePage);
+router.get("/watch/:courseId", checkUserMiddleware, viewController.getWatchCoursePage);
+router.get("/watch/:courseId/:lessonId", checkUserMiddleware, viewController.getWatchCoursePage);
+router.get("/certificate/:matriculaId", checkUserMiddleware, (req, res) => {
+    res.redirect(`/api/certificates/${req.params.matriculaId}`);
+});
+
 
 
 export default router;

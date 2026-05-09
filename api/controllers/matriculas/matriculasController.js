@@ -3,10 +3,17 @@ import matriculasService from '../../services/matriculas/matriculasService.js';
 export default {
     async createMatricula(req, res) {
         try {
-            const matriculaData = req.body;
-            const newMatricula = await matriculasService.createMatricula(matriculaData);
+            const { courseId } = req.body;
+            const userId = res.locals.user ? res.locals.user.id : null;
+
+            if (!userId) {
+                return res.status(401).json({ error: "Você precisa estar logado para se inscrever." });
+            }
+
+            const newMatricula = await matriculasService.createMatricula({ userId, courseId });
             res.status(201).json(newMatricula);
         } catch (error) {
+            console.error("Erro ao criar matrícula:", error.message);
             res.status(400).json({ error: error.message });
         }
     },

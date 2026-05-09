@@ -14,18 +14,18 @@ export async function createUser(userData) {
   const { name, email, passwordHash, job, birth_date, phone } = userData;
   const { rows } = await pool.query(
     'INSERT INTO users (name, email, password, job, birth_date, phone) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-    [name, email, passwordHash, job, birth_date, phone]
+    [name, email, passwordHash, job || null, birth_date || null, phone || null]
   );
   return rows[0];
 }
 
 export async function updateUser(id, userData) {
-  const { name, email, passwordHash, job, birth_date, phone } = userData;
+  const { name, email, passwordHash, job, birth_date, phone, avatar, roles } = userData;
   // Note: We use COALESCE or similar if we want to merge, but here the service handles merging.
   // Actually, I'll just update all provided fields.
   const { rows } = await pool.query(
-    'UPDATE users SET name = $1, email = $2, password = $3, job = $4, birth_date = $5, phone = $6 WHERE id = $7 RETURNING *',
-    [name, email, passwordHash, job, birth_date, phone, id]
+    'UPDATE users SET name = $1, email = $2, password = $3, job = $4, birth_date = $5, phone = $6, avatar = $7, roles = $8 WHERE id = $9 RETURNING *',
+    [name, email, passwordHash, job, birth_date, phone, avatar, roles, id]
   );
   return rows[0];
 }

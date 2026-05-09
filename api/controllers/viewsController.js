@@ -1,5 +1,5 @@
 import courseService from "../services/cursos/cursoService.js";
-import matriculasController from "./matriculas/matriculasController.js";
+import matriculasService from "../services/matriculas/matriculasService.js";
 import courseController from "./cursos/cursoController.js";
 import courseContentService from "../services/cursos/cursoContentService.js";
 import lessionsService from "../services/cursos/lessionsService.js";
@@ -9,6 +9,9 @@ import professorService from "../services/professor/professorService.js";
 import experienciaProfessorService from "../services/professor/experienciaProfessorService.js";
 import certificacoesProfessorService from "../services/professor/certificacoesProfessorService.js";
 import userService from "../services/user/userService.js";
+import progressService from "../services/progress/progressService.js";
+import avaliacaoService from "../services/cursos/avaliacaoService.js";
+
 
 // Página Inicial
 export const getHomePage = async (req, res) => {
@@ -92,11 +95,23 @@ export const getCourseDetailPage = async (req, res) => {
     professor.nome = professorInfo.name;
     professor.cargo = professorInfo.cargo;
 
+    let isEnrolled = false;
+    if (res.locals.user) {
+      const matriculas = await matriculasService.getMatriculasByUser(
+        res.locals.user.id
+      );
+      isEnrolled = matriculas.some((m) => String(m.curso_id) === String(id));
+    }
+
+    const reviews = await avaliacaoService.getReviewsByCourse(id);
+
     res.render("course", {
       user: res.locals.user || null,
       course: course,
       content: populatedContent,
       professor: professor,
+      isEnrolled: isEnrolled,
+      reviews: reviews,
     });
   } catch (error) {
     console.error("Erro ao carregar página do curso:", error.message);
@@ -110,12 +125,39 @@ export const getOngoingCoursesPage = async (req, res) => {
 
   try {
     const userId = res.locals.user.id;
-    const data = await matriculasController.getMatriculasByUser(userId); // Chamada direta!
+    const matriculas = await matriculasService.getMatriculasByUser(userId);
+
+    if (!matriculas || matriculas.length === 0) {
+      return res.render("ongoingCourses", {
+        user: res.locals.user,
+        cursosConcluidos: [],
+        cursosEmAndamento: [],
+        matriculas: [],
+      });
+    }
+
+    const cursosIds = matriculas.map((m) => m.curso_id);
+    const cursos = await courseService.getCoursesByIds(cursosIds);
+
+    const cursosConcluidos = cursos
+      .filter((c) => matriculas.some((m) => m.curso_id === c.id && m.concluido))
+      .map((c) => ({
+        ...c,
+        matricula: matriculas.find((m) => m.curso_id === c.id && m.concluido),
+      }));
+
+    const cursosEmAndamento = cursos
+      .filter((c) => matriculas.some((m) => m.curso_id === c.id && !m.concluido))
+      .map((c) => ({
+        ...c,
+        matricula: matriculas.find((m) => m.curso_id === c.id && !m.concluido),
+      }));
+
     res.render("ongoingCourses", {
       user: res.locals.user,
-      cursosConcluidos: data.cursosConcluidos,
-      cursosEmAndamento: data.cursosEmAndamento,
-      matriculas: data.matriculas,
+      cursosConcluidos,
+      cursosEmAndamento,
+      matriculas,
     });
   } catch (error) {
     console.error(
@@ -152,11 +194,87 @@ export const getBeATeacherPage = (req, res) => {
 };
 
 export const getUserScenePage = async (req, res) => {
-  if (!res.locals.user) return res.redirect("/register"); // Se não há user, não há cena de usuário
+  if (!res.locals.user) return res.redirect("/register");
 
-  console.log("Rendering userScene for user ID:", res.locals.user.id);
-  const user = await userService.getProfile(res.locals.user.id); // Chamada direta!
-  res.render("userScene", { user: user });
+  try {
+    const userId = res.locals.user.id;
+    const user = await userService.getProfile(userId);
+    const matriculas = await matriculasService.getMatriculasByUser(userId);
+
+    if (!matriculas || matriculas.length === 0) {
+      return res.render("userScene", {
+        user,
+        cursosEmAndamento: [],
+        cursosConcluidos: [],
+        stats: {
+          concluidos: 0,
+          emAndamento: 0,
+          horasEstudo: 0,
+          avaliacoes: 0
+        }
+      });
+    }
+
+    const cursosIds = matriculas.map((m) => m.curso_id);
+    const courses = await courseService.getCoursesByIds(cursosIds);
+
+    // Enriquecer cursos com dados do professor e progresso
+    const populatedCourses = await Promise.all(
+      courses.map(async (course) => {
+        const matricula = matriculas.find((m) => String(m.curso_id) === String(course.id));
+        const professor = await professorService.getProfessorById(course.professor_id);
+        const professorUser = await userService.getProfile(professor.user_id);
+        
+        // Buscar total de aulas para mostrar "X de Y aulas concluídas"
+        const content = await courseContentService.getContentByCourseId(course.id);
+        let totalLessons = 0;
+        for (const module of content) {
+          const lessons = await lessionsService.getLessionsByContentId(module.id);
+          totalLessons += lessons.length;
+        }
+
+        const completedLessons = await progressService.getCourseProgress(userId, course.id);
+        const numCompleted = completedLessons.length;
+
+        return {
+          ...course,
+          professorName: professorUser.name,
+          progress: matricula.progresso || 0,
+          isConcluido: matricula.concluido || false,
+          numCompleted,
+          totalLessons,
+          matriculaId: matricula.id
+        };
+      })
+    );
+
+    const cursosEmAndamento = populatedCourses.filter((c) => !c.isConcluido);
+    const cursosConcluidos = populatedCourses.filter((c) => c.isConcluido);
+
+    // Calcular stats
+    const totalHoras = populatedCourses.reduce((acc, c) => {
+      // Aqui poderíamos somar a duração das aulas concluídas se tivéssemos essa info fácil
+      // Por enquanto vamos simular ou usar um valor padrão por aula
+      return acc + (c.numCompleted * 15); // Ex: 15 min por aula
+    }, 0);
+
+    const stats = {
+      concluidos: cursosConcluidos.length,
+      emAndamento: cursosEmAndamento.length,
+      horasEstudo: Math.round(totalHoras / 60),
+      avaliacoes: 0 // TODO: Buscar avaliações reais na Fase 10
+    };
+
+    res.render("userScene", {
+      user,
+      cursosEmAndamento,
+      cursosConcluidos,
+      stats
+    });
+  } catch (error) {
+    console.error("Erro ao carregar dashboard do aluno:", error);
+    res.status(500).render("error", { message: "Erro ao carregar seu dashboard." });
+  }
 };
 
 export const getTeacherScenePage = async (req, res) => {
@@ -164,16 +282,20 @@ export const getTeacherScenePage = async (req, res) => {
 
   console.log("Rendering teacherScene for user ID:", res.locals.user.id);
   const user = await userService.getProfile(res.locals.user.id); // Chamada direta!
-  const professorInfo = await professorService.getProfessorByUserId(
-    res.locals.user.id
-  );
-  const courses = await courseService.getCoursesByProfessorId(professorInfo.id);
+  try {
+    const professorInfo = await professorService.getProfessorByUserId(res.locals.user.id);
+    const courses = await courseService.getCoursesByProfessorId(professorInfo.id);
 
-  res.render("teacherScene", {
-    user: user,
-    professor: professorInfo,
-    courses: courses,
-  });
+    res.render("teacherScene", {
+      user: user,
+      professor: professorInfo,
+      courses: courses,
+    });
+  } catch (error) {
+    console.error("Erro ao carregar teacherScene:", error.message);
+    // Se o usuário tem a role mas não tem o registro de professor, redireciona para criar
+    res.redirect("/beATeacher");
+  }
 };
 
 export const getCreateACoursePage = async (req, res) => {
@@ -188,12 +310,32 @@ export const getCreateACoursePage = async (req, res) => {
 
 export const getEditACoursePage = async (req, res) => {
   if (!res.locals.user) return res.redirect("/register");
-  const course = await courseService.getCourseById(req.params.id);
+  
+  try {
+    const courseId = req.params.id;
+    const course = await courseService.getCourseById(courseId);
 
-  if (res.locals.user.roles.includes("teacher")) {
-    res.render("editACourse", { user: res.locals.user, course: course });
-  } else {
-    res.redirect("/beATeacher");
+    if (!res.locals.user.roles.includes("teacher")) {
+      return res.redirect("/beATeacher");
+    }
+
+    // Carregar módulos e aulas
+    const content = await courseContentService.getContentByCourseId(courseId);
+    const populatedContent = await Promise.all(
+      content.map(async (module) => {
+        const lessons = await lessionsService.getLessionsByContentId(module.id);
+        return { ...module, lessons };
+      })
+    );
+
+    res.render("editACourse", { 
+      user: res.locals.user, 
+      course: course,
+      content: populatedContent
+    });
+  } catch (error) {
+    console.error("Erro ao carregar página de edição de curso:", error);
+    res.status(500).render("error", { message: "Erro ao carregar o curso." });
   }
 };
 
@@ -201,3 +343,73 @@ export const logout = (req, res) => {
   res.clearCookie("jwt");
   res.redirect("/");
 };
+
+export const getWatchCoursePage = async (req, res) => {
+  if (!res.locals.user) return res.redirect("/register");
+
+  try {
+    const { courseId, lessonId } = req.params;
+    const userId = res.locals.user.id;
+
+    // Verificar matrícula
+    const matriculas = await matriculasService.getMatriculasByUser(userId);
+    const matricula = matriculas.find((m) => String(m.curso_id) === String(courseId));
+
+    if (!matricula) {
+      return res
+        .status(403)
+        .render("error", { message: "Você não está matriculado neste curso." });
+    }
+
+    // Carregar dados do curso
+    const course = await courseService.getCourseById(courseId);
+    if (!course) {
+      return res.status(404).render("error", { message: "Curso não encontrado." });
+    }
+
+    // Carregar conteúdo (módulos e aulas)
+    const courseContentList = await courseContentService.getContentByCourseId(courseId);
+    
+    // Ordenar módulos por ordem
+    courseContentList.sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+
+    const populatedContent = await Promise.all(
+      courseContentList.map(async (contentItem) => {
+        const lessions = await lessionsService.getLessionsByContentId(contentItem.id);
+        // Ordenar aulas por ordem dentro do módulo
+        const sortedLessions = (lessions || []).sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+        return { ...contentItem, lessions: sortedLessions };
+      })
+    );
+
+    // Carregar progresso
+    const completedLessons = await progressService.getCourseProgress(userId, courseId);
+
+    // Encontrar a aula atual
+    let currentLesson = null;
+    const allLessons = populatedContent.flatMap((module) => module.lessions || []);
+
+    if (lessonId) {
+      currentLesson = allLessons.find((l) => String(l.id) === String(lessonId));
+    } else {
+      // Se não especificou aula, pega a primeira não concluída ou a primeira do curso
+      currentLesson =
+        allLessons.find((l) => !completedLessons.includes(l.id)) ||
+        allLessons[0] || null;
+    }
+
+    res.render("watchCourse", {
+      user: res.locals.user,
+      course,
+      content: populatedContent,
+      completedLessons,
+      currentLesson,
+      progress: matricula.progresso || 0,
+      hasRated: await avaliacaoService.getUserRating(userId, courseId),
+    });
+  } catch (error) {
+    console.error("Erro ao carregar página de aula:", error);
+    res.status(500).render("error", { message: "Erro ao carregar a aula: " + error.message });
+  }
+};
+
