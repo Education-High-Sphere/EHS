@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="../css/boxicons.min.css" rel="stylesheet" />
     <link rel="icon" href="../src/logo.png" type="image/x-icon" />
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <link rel="stylesheet" href="../styles/register.css" />
     <title>EHS Cadastro</title>
   </head>
@@ -21,21 +20,11 @@
 
       <form
         class="form-container"
-        action="/users/register"
+        action="/api/users/register"
         method="POST"
       >
         <div class="input-box">
           <input name="name" placeholder="Nome" type="text" required />
-        </div>
-
-        <div class="input-box">
-          <input
-            name="birth_date"
-            placeholder="Data de nascimento"
-            type="date"
-            id="birthdate"
-            required
-          />
         </div>
 
         <div class="input-box">
@@ -50,34 +39,7 @@
           />
         </div>
 
-        <div class="input-box">
-          <input
-            name="email_confirm"
-            placeholder="Confirme seu e-mail"
-            type="email"
-            required
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-            oninvalid="setCustomValidity('Por favor, insira um endereço de e-mail válido.')"
-            oninput="setCustomValidity('')"
-          />
-
-        </div>
-
-        
-
-        <div class="input-box">
-          <input name="job" placeholder="Cargo" type="text" required />
-        </div>
-
-        <div class="input-box">
-          <input
-            name="phone"
-            placeholder="Telefone"
-            type="tel"
-            oninput="if (this.value) this.value = this.value.replace(/^(\d{2})(\d)/g, '($1) $2').replace(/(\d{5})(\d)/g, '$1-$2').replace(/(-\d{4})\d+?$/, '$1')"
-            required
-          />
-        </div>
+        <!-- Campos opcionais removidos para simplificar o cadastro (birth_date, email_confirm, job, phone) -->
 
 
         <div class="input-box">
@@ -110,23 +72,19 @@
           Já possui uma conta? <a href="#" onclick="showLogin()">Login</a>
         </p>
 
-        <div
-          id="g_id_onload"
-          data-client_id="YOUR_CLIENT_ID"
-          data-callback="handleCredentialResponse"
-        ></div>
-        <div class="g_id_signin" data-type="standard"></div>
 
         <div class="termos-aceite">
           <label class="custom-checkbox">
             <input name="termos_aceitos" type="checkbox" value="sim" required />
             <span class="checkmark"></span>
             Li e aceito os
-            <a href="#"
+            <a href="https://docs.google.com/document/d/18FU5_gQSPcEtJKLUI8QV5AylzMUeDWx4/edit?usp=drive_link&ouid=103953523816036755309&rtpof=true&sd=true" target="_blank"
               >Termos de uso do EHS, Aviso de privacidade, Termos LGPD.</a
             >
           </label>
         </div>
+
+        <div class="g-recaptcha" data-sitekey="<%= RECAPTCHA_SITE_KEY %>"></div>
 
         <button type="submit">Cadastre-se</button>
       </form>
@@ -137,7 +95,7 @@
 
       <form
         class="form-container"
-        action="/users/login"
+        action="api/users/login"
         method="POST"
       >
         <div class="input-box">
@@ -146,14 +104,14 @@
 
         <div class="input-box">
           <input
-            id="senha"
+            id="senha_login"
             name="password"
             placeholder="Senha"
             type="password"
             required
           />
-          <a href="#" onclick="togglePassword()"
-            ><i class="bx bx-hide" id="togglePassword"></i
+          <a href="#" onclick="toggleLoginPassword()"
+            ><i class="bx bx-hide" id="toggleLoginPasswordIcon"></i
           ></a>
         </div>
 
@@ -173,12 +131,18 @@
           <a href="#" onclick="showRegister()">Cadastre-se</a>
         </p>
 
-        <div
-          id="g_id_onload"
-          data-client_id="YOUR_CLIENT_ID"
-          data-callback="handleCredentialResponse"
-        ></div>
-        <div class="g_id_signin" data-type="standard"></div>
+        <div class="termos-aceite">
+            <label class="custom-checkbox">
+              <input name="termos_aceitos_login" type="checkbox" value="sim" required />
+              <span class="checkmark"></span>
+              Li e aceito os
+              <a href="https://docs.google.com/document/d/18FU5_gQSPcEtJKLUI8QV5AylzMUeDWx4/edit?usp=drive_link&ouid=103953523816036755309&rtpof=true&sd=true" target="_blank"
+                >Termos de uso do EHS, Aviso de privacidade, Termos LGPD.</a
+              >
+            </label>
+        </div>
+
+        <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
 
         <button type="submit">Entrar</button>
       </form>
@@ -207,66 +171,67 @@
         return true;
       }
 
-      function verifyEmail() {
-        var emailInput = document.getElementById("email");
-        var confirmar_emailInput = document.getElementById("email_confirm");
-        if (!emailInput || !confirmar_emailInput) {
-          console.error("Falha ao acessar campos de formulário");
-          return false;
-        }
-
-        var email = emailInput.value;
-        var confirmar_email = confirmar_emailInput.value;
-        if (email !== confirmar_email) {
-          alert("Os e-mails não coincidem, por favor, tente novamente.");
-          return false;
-        }
-
-        return true;
-      }
+      // A verificação de e-mail foi removida (o campo email_confirm foi retirado)
 
       function togglePassword() {
         var passwordInput = document.getElementById("senha");
+        var icon = document.getElementById("togglePassword");
         if (passwordInput.type === "password") {
           passwordInput.type = "text";
-          document.getElementById("togglePassword").style.color = "#4A78A6";
+          icon.style.color = "#4A78A6";
+          icon.className = "bx bx-show";
         } else {
-          document.getElementById("senha").type = "password";
-          document.getElementById("togglePassword").style.color = "gray";
+          passwordInput.type = "password";
+          icon.style.color = "gray";
+          icon.className = "bx bx-hide";
+        }
+      }
+
+      function toggleLoginPassword() {
+        var passwordInput = document.getElementById("senha_login");
+        var icon = document.getElementById("toggleLoginPasswordIcon");
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          icon.style.color = "#4A78A6";
+          icon.className = "bx bx-show";
+        } else {
+          passwordInput.type = "password";
+          icon.style.color = "gray";
+          icon.className = "bx bx-hide";
         }
       }
 
       function toggleConfirmPassword() {
         var passwordInput = document.getElementById("confirmar_senha");
+        var icon = document.getElementById("toggleConfirmPassword");
         if (passwordInput.type === "password") {
           passwordInput.type = "text";
-          document.getElementById("toggleConfirmPassword").style.color =
-            "#4A78A6";
+          icon.style.color = "#4A78A6";
+          icon.className = "bx bx-show";
         } else {
           passwordInput.type = "password";
-          document.getElementById("toggleConfirmPassword").style.color = "gray";
+          icon.style.color = "gray";
+          icon.className = "bx bx-hide";
         }
       }
-      function handleCredentialResponse(response) {
-    // Decodificar o token JWT
-    const decodedToken = jwt_decode(response.credential);
-    console.log("ID Token decodificado:", decodedToken);
 
-    // Enviar para o backend
-    fetch('/api/auth/googleAuth', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ idToken: response.credential })
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log("Resposta do backend:", data);
-        // aqui você pode redirecionar ou salvar dados extras
-    })
-    .catch(err => console.error(err));
-}
+      // Lidar com erros retornados pela URL (ex: falha no login)
+      window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        const tab = urlParams.get('tab');
+        
+        if (error) {
+          // Pequeno timeout para garantir que a página renderizou antes do alert
+          setTimeout(() => {
+            alert(error);
+          }, 100);
+        }
+        
+        if (tab === 'login') {
+          showLogin();
+        }
+      };
     </script>
   </body>
 </html>

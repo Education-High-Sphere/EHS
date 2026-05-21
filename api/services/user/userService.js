@@ -44,8 +44,20 @@ export default {
       if (emailTaken) throw new Error('Email já registrado');
     }
     const passwordHash = data.password ? await bcrypt.hash(data.password, 10) : existing.password;
+    
+    // Mescla dados existentes com novos dados para evitar sobrescrever com undefined
+    const updatedData = {
+      name: data.name || existing.name,
+      email: data.email || existing.email,
+      phone: data.phone || existing.phone,
+      job: data.job || existing.job,
+      birth_date: data.birth_date || existing.birth_date,
+      avatar: data.avatar || existing.avatar,
+      roles: data.roles || existing.roles,
+      passwordHash
+    };
 
-    await userRepository.update(id, { ...data, passwordHash });
+    await userRepository.update(id, updatedData);
 
     const updatedUser = await userRepository.findById(id);
     return updatedUser;

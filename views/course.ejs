@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/course.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <title><%= course.nome %> | EHS</title>
+</head>
+<body>
+    <%- include('common/header'); %>
+
+    <% 
+      const _placeholders = [
+        'https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=1200&q=80',
+        'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80',
+        'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80',
+        'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=1200&q=80'
+      ];
+      const _phIndex = course.nome ? course.nome.length % _placeholders.length : 0;
+      const _placeholderImg = _placeholders[_phIndex];
+      const _finalImg = course.imagem || _placeholderImg;
+    %>
+
+    <!-- Hero Section -->
+    <section class="course-hero" id="course-hero" style="background-image: url('<%= _finalImg %>');">
+        <div class="container">
+            <div class="hero-content">
+                <span class="course-category"><%= course.categoria %></span>
+                <h1 class="course-title"><%= course.nome %></h1>
+                <p class="course-description"><%= course.descricao %></p>
+                
+                <div class="course-meta-inline">
+                    <div class="meta-item">
+                        <i class="fa-solid fa-star"></i>
+                        <span><%= parseFloat(course.avaliacao_media || 0).toFixed(1) %> (<%= reviews ? reviews.length : 0 %> avaliações)</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fa-solid fa-user-group"></i>
+                        <span><%= course.alunos || '1.2k' %> alunos matriculados</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fa-solid fa-clock"></i>
+                        <span><%= course.duracao %> de conteúdo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="course-main-grid">
+            <!-- Left Column: Content -->
+            <div class="course-body">
+                <section class="content-section">
+                    <h2 class="section-title">O que você vai aprender</h2>
+                    <div class="benefits-grid">
+                        <div class="benefit-card">
+                            <div class="benefit-icon"><i class="fa-solid fa-rocket"></i></div>
+                            <div>
+                                <h4>Metodologias Ágeis</h4>
+                                <p>Domine Scrum, Kanban e Lean na prática.</p>
+                            </div>
+                        </div>
+                        <div class="benefit-card">
+                            <div class="benefit-icon"><i class="fa-solid fa-chart-line"></i></div>
+                            <div>
+                                <h4>Gestão de Alta Performance</h4>
+                                <p>Lidere equipes com foco em resultados reais.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="section-title">Grade Curricular</h2>
+                    <div class="curriculum">
+                        <% if (content && content.length > 0) { %>
+                            <% content.forEach(function(module, index) { %>
+                                <div class="module">
+                                    <div class="module-header">
+                                        <div class="module-title-wrap">
+                                            <h3>Módulo <%= index + 1 %>: <%= module.titulo %></h3>
+                                            <span class="module-meta"><%= module.lessions ? module.lessions.length : 0 %> aulas</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </div>
+                                    <ul class="lesson-list">
+                                        <% if (module.lessions && module.lessions.length > 0) { %>
+                                            <% module.lessions.forEach(function(lession) { %>
+                                                <li class="lesson-item">
+                                                    <i class="fa-solid fa-play-circle"></i>
+                                                    <%= lession.titulo %>
+                                                </li>
+                                            <% }); %>
+                                        <% } else { %>
+                                            <li class="lesson-item">Nenhuma aula disponível ainda.</li>
+                                        <% } %>
+                                    </ul>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <p>Conteúdo em fase de produção.</p>
+                        <% } %>
+                    </div>
+
+                    <!-- Tutor Section -->
+                    <div class="tutor-premium">
+                        <div class="tutor-header">
+                            <div class="tutor-img-wrap">
+                                <img src="/src/professor/professor.png" alt="<%= professor.nome %>" onerror="this.src='https://ui-avatars.com/api/?name=<%= professor.nome %>&background=0052cc&color=fff'" />
+                                <div class="tutor-badge"><i class="fa-solid fa-check"></i></div>
+                            </div>
+                            <div class="tutor-info-main">
+                                <h3 class="tutor-name"><%= professor.nome %></h3>
+                                <p class="tutor-role"><%= professor.cargo %></p>
+                                <div class="tutor-stats">
+                                    <div class="stat-item">
+                                        <strong><%= professor.total_alunos %></strong> Alunos
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong><%= professor.total_cursos %></strong> Cursos
+                                    </div>
+                                    <div class="stat-item">
+                                        <strong><%= professor.avaliacao_media %> <i class="fa-solid fa-star" style="color: var(--accent)"></i></strong> Avaliação
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tutor-bio">
+                            <p><%= professor.sobre %></p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column: Enrollment Card -->
+            <aside class="course-sidebar">
+                <div class="enroll-card">
+                    <div class="price-tag">
+                        R$<%= course.preco %> <small>/ total</small>
+                    </div>
+
+                    <% if (isEnrolled) { %>
+                        <a href="/watch/<%= course.id %>" class="cta-button">Continuar Assistindo</a>
+                    <% } else { %>
+                        <button id="enroll-btn" class="cta-button">Inscrever-se Agora</button>
+                    <% } %>
+
+                    <p style="font-size: 0.85rem; text-align: center; color: var(--slate-600); margin-bottom: 20px;">
+                        Garantia de 30 dias ou seu dinheiro de volta.
+                    </p>
+
+                    <ul class="card-features">
+                        <li><i class="fa-solid fa-infinity"></i> Acesso vitalício</li>
+                        <li><i class="fa-solid fa-certificate"></i> Certificado de conclusão</li>
+                        <li><i class="fa-solid fa-mobile-screen"></i> Assista no celular ou PC</li>
+                        <li><i class="fa-solid fa-comments"></i> Comunidade exclusiva</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer Depoimentos (Optional/Cleaned) -->
+    <section class="ehs-wrapper">
+        <div class="ehs-heading">
+            <h2>O que nossos alunos dizem</h2>
+        </div>
+        <div class="testimonials">
+            <% if (reviews && reviews.length > 0) { %>
+                <% reviews.forEach(review => { %>
+                    <div class="testimonial-card">
+                        <div class="stars">
+                            <% for(let i = 1; i <= 5; i++) { %>
+                                <i class="<%= i <= review.nota ? 'fa-solid' : 'fa-regular' %> fa-star"></i>
+                            <% } %>
+                        </div>
+                        <p class="testimonial-quote">"<%= review.comentario %>"</p>
+                        <div class="testimonial-author"><%= review.user_name %></div>
+                        <div class="testimonial-role"><%= new Date(review.created_at).toLocaleDateString('pt-BR') %></div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="empty-state">
+                    <p>Este curso ainda não possui avaliações. Seja o primeiro a avaliar!</p>
+                </div>
+            <% } %>
+        </div>
+    </section>
+
+    <%- include('common/footer'); %>
+
+    <script>
+        // Fallback para imagem funcional no Hero
+        const heroSection = document.getElementById('course-hero');
+        const mainImg = "<%= course.imagem %>";
+        const placeholderImg = "<%= _placeholderImg %>";
+
+        if (mainImg) {
+            const img = new Image();
+            img.src = mainImg;
+            img.onerror = function() {
+                heroSection.style.backgroundImage = `url('${placeholderImg}')`;
+            };
+        }
+
+        // Lógica de Inscrição
+        const enrollBtn = document.getElementById('enroll-btn');
+        if (enrollBtn) {
+            enrollBtn.addEventListener('click', async () => {
+                <% if (!user) { %>
+                    window.location.href = '/register';
+                    return;
+                <% } %>
+
+                enrollBtn.disabled = true;
+                enrollBtn.innerText = 'Processando...';
+
+                try {
+                    const response = await fetch('/api/matriculas', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ courseId: '<%= course.id %>' })
+                    });
+
+                    if (response.ok) {
+                        window.location.href = '/watch/<%= course.id %>';
+                    } else {
+                        const data = await response.json();
+                        alert(data.error || 'Erro ao realizar inscrição.');
+                        enrollBtn.disabled = false;
+                        enrollBtn.innerText = 'Inscrever-se Agora';
+                    }
+                } catch (error) {
+                    console.error('Erro na inscrição:', error);
+                    alert('Erro de conexão ao realizar inscrição.');
+                    enrollBtn.disabled = false;
+                    enrollBtn.innerText = 'Inscrever-se Agora';
+                }
+            });
+        }
+
+        // Simple Accordion Toggle
+        document.querySelectorAll('.module-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const module = header.parentElement;
+                module.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+/* ---
+  1. PALETA DE CORES E ESTILOS GERAIS
+--- */
+:root {
+  --cor-fundo: #1b2232;
+  --cor-texto-principal: #f4f4f4;
+  --cor-acento-azul: #4a78a6;
+  --cor-borda-cinza: #d3d3d3;
+  --cor-item-lista: #2a344a; /* Fundo do Card e Filtros */
+  --cor-estrela-avaliacao: #f5a623; /* Amarelo/Ouro */
+  --cor-verde-gratuito: #2ecc71;
+}
+
+body {
+  font-family: "Poppins", Arial, sans-serif;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto-principal);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---
+  2. FILTROS (ESTILO ESCURO)
+--- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5em;
+  background-color: var(--cor-item-lista);
+  padding: 1.5em;
+  border-radius: 8px;
+  margin: 2em auto;
+  width: 95%;
+  max-width: 1400px;
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-group span:first-child {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--cor-texto-principal);
+}
+
+.filter-group select {
+  padding: 8px 12px;
+  border: 1px solid var(--cor-acento-azul);
+  border-radius: 5px;
+  font-size: 0.9rem;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto-principal);
+  cursor: pointer;
+}
+
+.filter-group select option {
+  font-size: 14px;
+  background-color: var(--cor-item-lista);
+  color: var(--cor-texto-principal);
+}
+
+#applyFilters {
+  padding: 10px 20px;
+  background-color: var(--cor-acento-azul);
+  color: var(--cor-texto-principal);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+#applyFilters:hover {
+  background-color: #3a6896;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 1.5em;
+  font-size: 2rem;
+  color: var(--cor-texto-principal);
+}
+
+.courses-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2em;
+  width: 90%;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.course-card {
+  background-color: var(--cor-item-lista);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  
+  margin: 0;
+  
+  display: flex; 
+  flex-direction: column;
+  width: 380px;
+  height: 500px; 
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(74, 120, 166, 0.2);
+}
+
+/* 4.1. Imagem (Topo) */
+.course-image-container {
+  position: relative;
+  width: 100%; /* Ocupa 100% da largura do card (400px) */
+  /* Altura da imagem (400px * 9/16 = 225px) */
+  height: 225px; 
+  flex-shrink: 0; /* Impede que a imagem encolha */
+  overflow: hidden;
+}
+
+.course-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.course-card:hover .course-image-container img {
+  transform: scale(1.05);
+}
+
+.course-category-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cor-texto-principal);
+  background-color: var(--cor-acento-azul);
+  border-radius: 5px;
+  z-index: 2;
+}
+
+.course-hover-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  padding: 0.8em 1.5em;
+  background-color: var(--cor-acento-azul);
+  color: var(--cor-texto-principal);
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.course-image-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(27, 34, 50, 0.6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.course-card:hover .course-image-container::after {
+  opacity: 1;
+}
+.course-card:hover .course-hover-button {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+.course-content-container {
+  padding: 1.2em;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; 
+  min-height: 0; 
+}
+
+.course-title {
+  font-size: 1.3rem; 
+  font-weight: 600;
+  color: var(--cor-texto-principal);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.6rem; 
+}
+
+.course-professor {
+  font-size: 0.9rem;
+  color: var(--cor-borda-cinza);
+  margin-top: 0.3em;
+  margin-bottom: 0.8em;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.course-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.8em;
+}
+.course-rating .fa-star {
+  color: var(--cor-estrela-avaliacao);
+}
+.course-rating .rating-score {
+  color: var(--cor-texto-principal);
+}
+.course-rating .rating-count {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--cor-borda-cinza);
+}
+
+.course-metadata {
+  display: flex;
+  gap: 1em;
+  font-size: 0.85rem;
+  color: var(--cor-borda-cinza);
+}
+.course-metadata i {
+  margin-right: 4px;
+  color: var(--cor-acento-azul);
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.course-price {
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: 1px solid var(--cor-fundo);
+}
+.course-price h3 {
+  font-size: 1.5rem; 
+  font-weight: 700;
+  color: var(--cor-texto-principal);
+}
+.course-price .free {
+  color: var(--cor-verde-gratuito);
+}
+.course-price .old-price {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--cor-borda-cinza);
+  text-decoration: line-through;
+  margin-left: 0.5em;
+}
+
+.footer {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+.footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}

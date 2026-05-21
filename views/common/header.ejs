@@ -1,162 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EHS - Education High Sphere. Cursos profissionalizantes online para sua carreira.">
+  <title>EHS - Education High Sphere</title>
+  
+  <!-- Design System Global -->
+  <link rel="stylesheet" href="/styles/global.css" />
+  
+  <!-- Fontes e Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" />
+  <link rel="icon" href="/src/logo.png" type="image/x-icon" />
+
   <style>
-    .top-header {
-      color: white;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      font-size: 12px;
-      display: flex;
-      width: 100vw;
-      justify-content: space-between;
-      align-items: center;
+    /* --- Header Styles --- */
+    .main-header {
+      background-color: var(--cor-fundo);
+      width: 100%;
+      padding: 1em 0;
       position: sticky;
       top: 0;
       z-index: 1000;
+      box-shadow: 0 4px 12px rgba(74, 120, 166, 0.1);
+      border-bottom: 1px solid var(--cor-superficie);
     }
 
-    .login {
-      font-size: large;
-      font-weight: 600;
-      color: #0f1e38;
-      padding: 10px;
-      text-decoration: none;
-      transition: all 0.3s ease-in-out;
-      margin-right: 20px;
-    }
-    .login a:hover {
-      background-color: #0f1e38;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    .main-header {
-      background-color: #fff;
-      height: fit-content;
-      width: 100vw;
-      height: 70px;
+    .header-container {
+      width: 90%;
+      max-width: var(--max-width);
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
+      gap: 1.5em;
     }
-    .nav-links a:hover {
-      text-decoration: none;
-      color: #4a78a6;
-    }
+
+    /* Logo */
     .logo {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
-      background-color: #0f1e38;
-      border-radius: 0px 10px 0px 0px;
-      padding: 1px;
+      gap: 10px;
       cursor: pointer;
+      flex-shrink: 0;
     }
+
+    .logo img { height: 40px; }
+
     .logo div {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      line-height: 1.2;
     }
 
-    .logo img {
-      height: 36px;
+    .logo strong {
+      font-size: 1.2rem;
+      color: var(--cor-texto);
+    }
+
+    .logo small {
+      font-size: 9px;
+      color: var(--cor-texto-secundario);
+    }
+
+    /* Navigation */
+    .nav-links {
+      display: flex;
+      gap: 2em;
     }
 
     .nav-links a {
-      margin: 0 10px;
-      color: #000;
-      text-decoration: none;
+      color: var(--cor-texto);
+      font-weight: 500;
+      position: relative;
+      padding-bottom: 5px;
+      transition: color var(--transition-fast);
+      font-size: var(--fs-sm);
     }
 
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--cor-acento);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover { color: var(--cor-acento); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* Search */
     .search-bar {
+      flex: 1;
+      max-width: 350px;
+    }
+
+    .search-bar form {
       display: flex;
+      align-items: center;
+      background-color: var(--cor-superficie);
+      border-radius: var(--radius-md);
+      overflow: hidden;
     }
 
     .search-bar input {
-      padding: 5px;
-      border: 1px solid #ccc;
-    }
-    .search-bar input:focus {
-      outline: 1px solid #0f1e38;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 10px 15px;
+      width: 100%;
+      color: var(--cor-texto);
+      font-size: var(--fs-sm);
     }
 
+    .search-bar input::placeholder { color: var(--cor-texto-secundario); }
+
     .search-bar button {
-      background: #0f1e38;
-      color: white;
-      cursor: pointer;
+      background: transparent;
       border: none;
-      padding: 5px 10px;
+      color: var(--cor-texto-secundario);
+      cursor: pointer;
+      padding: 10px 15px;
+      font-size: 1rem;
+      transition: color var(--transition-fast);
+    }
+
+    .search-bar button:hover { color: var(--cor-acento); }
+    
+    /* Actions */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5em;
     }
 
     .icons {
       display: flex;
       align-items: center;
-      justify-content: center;
-      margin-right: 20px;
+      gap: 1.2em;
     }
 
     .icons i {
-      font-size: 16px;
-      margin: 0 8px;
+      font-size: 1.2rem;
+      color: var(--cor-texto);
       cursor: pointer;
-      color: #0f1e38;
+      transition: color var(--transition-fast);
     }
 
-    .buttons .login {
-      margin-right: 10px;
-      color: #0f1e38;
-      text-decoration: none;
-    }
+    .icons i:hover { color: var(--cor-acento); }
 
-    .buttons .aprendizado {
-      background: #0f1e38;
-      color: white;
+    /* Mobile Menu Toggle */
+    .menu-toggle {
+      display: none;
+      background: none;
       border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
+      color: var(--cor-texto);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: var(--sp-2);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links,
+      .search-bar,
+      .icons {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .header-container {
+        gap: 1em;
+      }
+
+      /* Mobile nav overlay */
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--cor-fundo);
+        padding: var(--sp-8) var(--sp-6);
+        gap: var(--sp-6);
+        z-index: 999;
+        animation: slideDown 0.2s ease;
+      }
+
+      .nav-links.mobile-open a {
+        font-size: var(--fs-lg);
+        padding: var(--sp-3) 0;
+        border-bottom: 1px solid var(--cor-superficie);
+      }
+
+      @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
     }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="icon" href="../src/logo.png" type="image/x-icon">
 </head>
+<body>
 
-<header class="top-header">
-  <div class="main-header">
-    <div class="logo-container">
+  <header class="main-header">
+    <div class="header-container">
+
       <div class="logo" onclick="window.location.href = '/'">
-        <img src="../src/logo.png" alt="Logo" />
+        <img src="/src/logo.png" alt="EHS Logo" />
         <div>
           <strong>EHS</strong>
           <small>Educando Mentes do Futuro</small>
         </div>
       </div>
-    </div>
 
-    <nav class="nav-links">
-      <a href="/">Home</a>
-      <a href="#">Cursos</a>
-      <a href="#">Seja um Professor</a>
-      <a href="#">Comunidade</a>
-    </nav>
+      <nav class="nav-links" id="nav-links">
+        <a href="/">Home</a>
+        <a href="/courses">Cursos</a>
+        <a href="/beATeacher">Seja um Professor</a>
+        <a href="/communities">Comunidade</a>
+      </nav>
 
-    <div class="search-bar">
-      <input type="text" placeholder="Procure por um curso..." />
-      <button><i class="fas fa-search"></i></button>
-    </div>
+      <div class="search-bar">
+        <form action="/courses" method="GET">
+          <input type="text" name="search" placeholder="Pesquisar cursos..." />
+          <button type="submit"><i class="fas fa-search"></i></button>
+        </form>
+      </div>
 
-    <div class="icons">
-      <i class="fas fa-bell"></i>
-      <i class="fas fa-heart"></i>
-      <i class="fas fa-shopping-cart"></i>
+      <div class="header-actions">
+        <div class="icons">
+          <i class="fas fa-bell"></i>
+        </div>
+        
+        <div class="login">
+          <% if (user) { %>
+            <a href="/userScene" class="btn btn-secondary">Olá, <%= user.name.split(' ')[0] %></a>
+          <% } else { %>
+            <a href="/register" class="btn btn-primary">Login / Cadastro</a>
+          <% } %>
+        </div>
+
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
     </div>
-    <div class="login">
-      <% if (user) { %>
-      <a href="/userScene">Olá, <%= user.name %></a>
-      <% } else { %>
-      <a href="/register">Login / Cadastro</a>
-      <% } %>
-    </div>
-  </div>
-</header>
+  </header>
+
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    if (menuToggle && navLinks) {
+      menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('mobile-open');
+        const icon = menuToggle.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+      });
+    }
+
+    // Search form
+    const searchForm = document.querySelector('.search-bar form');
+    if (searchForm) {
+      searchForm.addEventListener('submit', function (e) {
+        const searchInput = this.querySelector('input[name="search"]');
+        if (!searchInput || !searchInput.value.trim()) {
+          e.preventDefault();
+        }
+      });
+    }
+
+    // Global toast function
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3200);
+    }
+  </script>

@@ -1,0 +1,346 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary-color: #1b2232;
+  --secondary-color: #2a344a;
+  --accent-color: #4a78a6;
+  --accent-gradient: linear-gradient(135deg, #40577e, #818bc7);
+  --bg-color: #f4f6f8;
+  --card-bg: #ffffff;
+  --text-dark: #333333;
+  --text-light: #777777;
+  --border-color: #eaedf2;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  min-height: 100vh;
+}
+
+/* --- HERO SECTION --- */
+.teacher-hero {
+  background-image: linear-gradient(rgba(27, 34, 50, 0.8), rgba(42, 52, 74, 0.85)), url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  height: 60vh;
+  min-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+  color: white;
+}
+
+.hero-content {
+  max-width: 800px;
+  animation: slideUp 0.8s ease-out;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: #e2e8f0;
+  margin-bottom: 30px;
+}
+
+.cta-button {
+  background: var(--accent-gradient);
+  color: white;
+  border: none;
+  padding: 15px 35px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- BENEFITS SECTION --- */
+.benefits-section {
+  padding: 80px 20px;
+  background-color: var(--card-bg);
+}
+
+.benefits-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+}
+
+.benefit-card {
+  text-align: center;
+  padding: 30px;
+  border-radius: 16px;
+  transition: transform 0.3s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-10px);
+}
+
+.icon-circle {
+  width: 80px;
+  height: 80px;
+  background: rgba(74, 120, 166, 0.1);
+  color: var(--accent-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 20px;
+}
+
+.benefit-card h3 {
+  color: var(--primary-color);
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+}
+
+.benefit-card p {
+  color: var(--text-light);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* --- APPLICATION FORM --- */
+.application-section {
+  padding: 80px 20px;
+  background-color: var(--bg-color);
+}
+
+.form-wrapper {
+  max-width: 850px;
+  margin: 0 auto;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 50px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.form-header h2 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.form-header p {
+  color: var(--text-light);
+}
+
+.input-row {
+  display: flex;
+  gap: 20px;
+}
+
+.input-row .form-group {
+  flex: 1;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: var(--primary-color);
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.form-group label i {
+  color: var(--accent-color);
+}
+
+input[type="text"],
+input[type="url"],
+textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #adb5bd;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(74, 120, 166, 0.1);
+  background-color: #fff;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Dynamic Lists */
+.lists-container {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.list-group {
+  flex: 1;
+}
+
+.input-action-group {
+  display: flex;
+  position: relative;
+}
+
+.input-action-group input {
+  padding-right: 50px; 
+}
+
+.add-btn {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  bottom: 6px;
+  width: 36px;
+  border: none;
+  background: var(--accent-gradient);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.add-btn:hover {
+  transform: scale(1.05);
+}
+
+.item-list {
+  list-style: none;
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-color);
+  padding: 10px 15px;
+  border-radius: 8px;
+  border-left: 4px solid var(--accent-color);
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn:hover {
+  background: rgba(231, 76, 60, 0.1);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: all 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.submit-btn:hover {
+  background: var(--secondary-color);
+  box-shadow: 0 5px 15px rgba(27, 34, 50, 0.2);
+}
+
+.submit-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+  
+  .form-wrapper {
+    padding: 30px 20px;
+  }
+  
+  .input-row, .lists-container {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .lists-container {
+    gap: 10px;
+  }
+}

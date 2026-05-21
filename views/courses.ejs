@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nossos Cursos</title>
+
+    <link rel="stylesheet" href="../styles/courses.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <%- include('common/header'); %>
+
+    <nav class="filters">
+      <span class="filter-group">
+        <span>Filtrar por</span>
+        <select id="categoryFilter" class="category-filter">
+          <% if (categories && categories.length > 0) { %>
+            <option value="">Qualquer categoria</option>
+            <% for (const category of categories) { %>
+              <option value="<%= category %>"><%= category %></option>
+            <% } %>
+          <% } %>
+        </select>
+
+        <select id="levelFilter" class="level-filter">
+          <option value="">Todos os níveis</option>
+          <option value="Básico">Básico</option>
+          <option value="Intermediário">Intermediário</option>
+          <option value="Avançado">Avançado</option>
+        </select>
+
+        <select id="durationFilter" class="duration-filter">
+          <option value="">Qualquer duração</option>
+          <option value="curto">Curto (menos de 2 horas)</option>
+          <option value="medio">Médio (2 a 10 horas)</option>
+          <option value="longo">Longo (mais de 10 horas)</option>
+        </select>
+
+        <select id="priceFilter" class="price-filter">
+          <option value="">Qualquer preco</option>
+          <option value="gratuito">Gratuito</option>
+          <option value="pago">Pago</option>
+        </select>
+
+        <select class="order-filter" id="orderFilter">
+          <option value="recentes">Mais recentes</option>
+          <option value="antigos">Mais antigos</option>
+        </select>
+      </span>
+
+      <button id="applyFilters">Aplicar Filtros</button>
+    </nav>
+
+    <h2 class="section-title">Nossos Cursos</h2>
+    
+
+    <div class="courses-grid">
+
+    <% courses.forEach(course => { if (course.publicated) { %>
+
+  <div
+    class="course-card"
+    data-category="<%= course.categoria %>"
+    data-level="<%= course.nivel %>"
+    data-duration="<%- getDurationKey(course.duracao) %>"
+    data-price="<%= parseFloat(course.preco) === 0 ? 'gratuito' : 'pago' %>"
+    data-created-at="<%= course.data_criacao %>"
+  >
+    <div class="course-image-container">
+      <% 
+        const _placeholders = [
+          'https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=600&q=80',
+          'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80',
+          'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80',
+          'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&q=80',
+          'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&q=80',
+          'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=600&q=80'
+        ];
+        const _phIndex = course.nome ? course.nome.length % _placeholders.length : 0;
+        const _finalImg = _placeholders[_phIndex];
+      %>
+      <img
+        src="<%= course.imagem || _finalImg %>"
+        alt="<%= course.nome %>"
+        onerror="this.onerror=null;this.src='<%= _finalImg %>';"
+      />
+      
+      <% 
+        const categories = {
+          'tecnologia': '#4a78a6', 'marketing': '#e67e73', 'empreendedorismo': '#8b9467',
+          'softskills': '#4299e1', 'design': '#ff9900', 'linguas': '#6495ed',
+          'ciencia de dados': '#9bc9e6', 'financas e investimentos': '#ffcc00',
+          'saude e bem-estar': '#8bc34a', 'educacao e ensino': '#607d8b',
+          'programacao': '#f28a8c', 'fotografia e video': '#9d81ba',
+          'musica e artes': '#a68a64', 'culinaria': '#f4a261',
+          'direito e legislacao': '#52796f', 'gestao de projetos': '#7e9a9a',
+          'negócios & finanças': '#f5a623', 
+        };
+        const backgroundColor = categories[course.categoria.toLowerCase()] || '#01a3a3'; 
+      %>
+      <span class="course-category-tag" style="background-color: <%= backgroundColor %>">
+        <%= course.categoria %>
+      </span>
+
+      <a href="/course/<%= course.id %>" class="course-hover-button">Ver Detalhes</a>
+    </div>
+
+    <div class="course-content-container">
+      <h3 class="course-title"><%= course.nome %></h3>
+      
+      <p class="course-professor">Por <%= course.professor_nome || 'Professor EHS' %></p>
+      
+      <div class="course-rating">
+        <i class="fas fa-star"></i>
+        <span class="rating-score"><%= (course.avaliacao_media && course.avaliacao_media > 0) ? course.avaliacao_media.toFixed(1) : 'Novo' %></span>
+        <span class="rating-count">(<%= course.alunos || 0 %>)</span>
+      </div>
+      
+      <div class="course-metadata">
+        <span><i class="fas fa-layer-group"></i> <%= course.nivel %></span>
+        <span><i class="fas fa-clock"></i> <%= course.duracao %></span>
+      </div>
+      
+      <div class="spacer"></div> 
+      
+      <div class="course-price">
+        <% if (parseFloat(course.preco) === 0) { %>
+          <h3 class="free">Gratuito</h3>
+        <% } else { %>
+          <h3 class="current-price">R$ <%= parseFloat(course.preco).toFixed(2) %></h3>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+<% } }); %>
+
+<% 
+  function getDurationKey(duracaoStr) {
+    const duracaoHoras = parseInt(duracaoStr) || 0;
+    if (duracaoHoras < 2) return 'curto';
+    if (duracaoHoras <= 10) return 'medio';
+    return 'longo';
+  } 
+%>
+</div>
+
+    <%-include ('common/footer')-%>
+
+    <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              // Seleciona todos os filtros e os cartões de curso
+              const filters = document.querySelectorAll(".filters select");
+              const coursesGrid = document.querySelector(".course-grid");
+              const allCourses = Array.from(
+                document.querySelectorAll(".course-card")
+              );
+
+              // Função para aplicar os filtros
+              const applyFilters = () => {
+                const categoryFilter =
+                  document.getElementById("categoryFilter").value;
+                const levelFilter = document.getElementById("levelFilter").value;
+                const durationFilter =
+                  document.getElementById("durationFilter").value;
+                const priceFilter = document.getElementById("priceFilter").value;
+                const orderFilter = document.getElementById("orderFilter").value;
+
+                // Crie um array para os cursos que serão exibidos
+                let filteredCourses = [...allCourses];
+
+                // Lógica para filtrar por Categoria
+                if (categoryFilter) {
+                    const filterText = categoryFilter.toLowerCase();
+
+                    filteredCourses = filteredCourses.filter((courseCard) => {
+                    const category = courseCard.dataset.category.toLowerCase();
+        
+                    return category === filterText;
+                  });
+                }
+
+                // Lógica para filtrar por Nível (adicionar no seu HTML se não tiver)
+                if (levelFilter) {
+                  filteredCourses = filteredCourses.filter((courseCard) => {
+                    const level = courseCard.dataset.level; // Converte o valor do `data-level` para minúsculas
+                    return level === levelFilter;
+                  });
+                }
+
+                if (durationFilter) {
+                  filteredCourses = filteredCourses.filter((courseCard) => {
+                    const duration = courseCard.dataset.duration.toLowerCase();
+                    return duration === durationFilter;
+                  });
+                }
+
+                if (priceFilter) {
+                  filteredCourses = filteredCourses.filter((courseCard) => {
+                    const price = courseCard.dataset.price.toLowerCase();
+                    return price === priceFilter;
+                
+                  });
+                }
+
+                // Lógica para ordenação
+                if (orderFilter === 'recentes') {
+                filteredCourses.sort((a, b) => {
+                  // Acessa o atributo de data diretamente do elemento principal
+                  const dateA = new Date(a.dataset.createdAt);
+                  const dateB = new Date(b.dataset.createdAt);
+                  return dateB - dateA; // Ordena do mais novo para o mais antigo
+                });
+                } else if (orderFilter === 'antigos') {
+                  filteredCourses.sort((a, b) => {
+                    // Acessa o atributo de data diretamente do elemento principal
+                    const dateA = new Date(a.dataset.createdAt);
+                    const dateB = new Date(b.dataset.createdAt);
+                    return dateA - dateB;
+                  });
+                }
+
+                // Limpa a grade de cursos
+                coursesGrid.innerHTML = "";
+
+                // Adiciona os cursos filtrados/ordenados de volta à tela
+                if (filteredCourses.length > 0) {
+                  filteredCourses.forEach((course) => {
+                    coursesGrid.appendChild(course);
+                  });
+                } else {
+                  coursesGrid.innerHTML =
+                    "<p>Nenhum curso encontrado com os filtros selecionados.</p>";
+                }
+              };
+
+              // Adiciona o evento de clique ao botão
+              const applyFiltersButton = document.getElementById("applyFilters");
+              applyFiltersButton.addEventListener("click", applyFilters);
+            });
+    </script>
+  </body>
+</html>
+

@@ -1,0 +1,21 @@
+<%- include('common/header') -%>
+    <link rel="stylesheet" href="/styles/error.css" />
+    <title>Ops! Ocorreu um erro - EHS</title>
+
+<main class="error-container container section">
+    <div class="empty-state">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h3>Ops! Algo deu errado.</h3>
+        <p><%= typeof message !== 'undefined' ? message : 'Ocorreu um erro inesperado ao processar sua requisição.' %></p>
+        <div class="error-actions flex gap-4" style="margin-top: 2rem;">
+            <button onclick="window.history.back()" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-home"></i> Ir para Home
+            </a>
+        </div>
+    </div>
+</main>
+
+<%- include('common/footer') -%>

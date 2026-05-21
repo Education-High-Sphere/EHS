@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/global.css">
+    <title>Ensine Conosco - EHS</title>
+    <style>
+        .teacher-hero {
+            background: linear-gradient(135deg, var(--cor-fundo), var(--cor-fundo-alt));
+            padding: var(--sp-16) 0;
+            text-align: center;
+            border-bottom: 1px solid var(--cor-borda);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 var(--sp-4);
+        }
+
+        .hero-content h1 {
+            font-size: var(--fs-4xl);
+            margin-bottom: var(--sp-4);
+            background: linear-gradient(to right, #fff, var(--cor-acento));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content p {
+            font-size: var(--fs-lg);
+            color: var(--cor-texto-secundario);
+            margin-bottom: var(--sp-8);
+        }
+
+        .benefits-section {
+            padding: var(--sp-16) 0;
+            background-color: var(--cor-fundo);
+        }
+
+        .benefits-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--sp-8);
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--sp-4);
+        }
+
+        .benefit-card {
+            background: var(--cor-superficie);
+            padding: var(--sp-8);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            border: 1px solid var(--cor-borda);
+            transition: transform var(--transition-base);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--cor-acento);
+        }
+
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            background: var(--cor-acento-light);
+            color: var(--cor-acento);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto var(--sp-4);
+        }
+
+        .application-section {
+            padding: var(--sp-16) 0;
+            background-color: var(--cor-fundo-alt);
+        }
+
+        .form-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--cor-superficie);
+            padding: var(--sp-10);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--cor-borda);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: var(--sp-10);
+        }
+
+        .form-header h2 {
+            font-size: var(--fs-3xl);
+            margin-bottom: var(--sp-2);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--sp-6);
+            margin-bottom: var(--sp-6);
+        }
+
+        .lists-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--sp-6);
+            margin-bottom: var(--sp-8);
+        }
+
+        .input-action-group {
+            display: flex;
+            gap: var(--sp-2);
+        }
+
+        .add-btn {
+            background: var(--cor-acento);
+            color: white;
+            border-radius: var(--radius-md);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .item-list {
+            margin-top: var(--sp-4);
+            display: flex;
+            flex-direction: column;
+            gap: var(--sp-2);
+        }
+
+        .item-list li {
+            background: var(--cor-fundo);
+            padding: var(--sp-2) var(--sp-4);
+            border-radius: var(--radius-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--fs-sm);
+            border: 1px solid var(--cor-borda);
+            animation: slideInUp 0.3s ease;
+        }
+
+        .delete-btn {
+            color: var(--cor-erro);
+            background: transparent;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .input-row, .lists-container {
+                grid-template-columns: 1fr;
+            }
+            .form-wrapper {
+                padding: var(--sp-6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <%- include('common/header') -%>
+
+    <header class="teacher-hero">
+        <div class="hero-content">
+            <h1>Compartilhe seu conhecimento. Inspire o futuro.</h1>
+            <p>Junte-se a uma comunidade exclusiva de especialistas. Transforme sua paixão em cursos incríveis e impacte a vida de milhares de alunos ao redor do mundo.</p>
+            <button class="btn btn-primary btn-lg" onclick="document.getElementById('application-section').scrollIntoView({behavior: 'smooth'})">
+                Quero me candidatar
+            </button>
+        </div>
+    </header>
+
+    <section class="benefits-section">
+        <div class="benefits-container">
+            <div class="benefit-card">
+                <div class="icon-circle"><i class="fas fa-globe"></i></div>
+                <h3>Alcance Global</h3>
+                <p class="text-secondary">Sua voz pode chegar a alunos em qualquer lugar do mundo. Construa sua marca pessoal em nossa plataforma.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="icon-circle"><i class="fas fa-wallet"></i></div>
+                <h3>Ótima Remuneração</h3>
+                <p class="text-secondary">Crie uma nova fonte de renda passiva com seus cursos enquanto foca no que faz de melhor: Ensinar.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="icon-circle"><i class="fas fa-tools"></i></div>
+                <h3>Ferramentas Incluídas</h3>
+                <p class="text-secondary">Gere certificados, acompanhe métricas de alunos e grave aulas sem dores de cabeça com nossa infraestrutura.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="application-section" id="application-section">
+        <div class="form-wrapper">
+            <div class="form-header">
+                <h2>Formulário de Aplicação</h2>
+                <p class="text-secondary">Preencha os dados abaixo. Nossa aprovação agora é <strong>automática</strong> para que você comece a ensinar hoje mesmo!</p>
+            </div>
+
+            <form id="profile-form" class="form-dark">
+                <div class="input-row">
+                    <div class="form-group">
+                        <label for="specialty">Área de Especialidade Principal</label>
+                        <input type="text" id="specialty" placeholder="Ex: Engenharia de Software" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="linkedin">Perfil do LinkedIn</label>
+                        <input type="url" id="linkedin" placeholder="https://linkedin.com/in/seu-perfil" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Resumo Profissional (Bio)</label>
+                    <textarea id="bio" name="bio" rows="4" placeholder="Conte-nos brevemente sobre sua jornada profissional..." required></textarea>
+                </div>
+
+                <div class="lists-container">
+                    <div class="form-group">
+                        <label for="experience-input">Experiências Profissionais</label>
+                        <div class="input-action-group">
+                            <input type="text" id="experience-input" placeholder="Ex: Tech Lead na Empresa">
+                            <button type="button" class="add-btn" id="add-experience-btn"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <ul id="experience-list" class="item-list"></ul>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="certificate-input">Formações e Certificações</label>
+                        <div class="input-action-group">
+                            <input type="text" id="certificate-input" placeholder="Ex: Bacharel em Ciência da Computação">
+                            <button type="button" class="add-btn" id="add-certificate-btn"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <ul id="certificate-list" class="item-list"></ul>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg submit-btn">
+                    <i class="fas fa-paper-plane"></i> Enviar Candidatura
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <%- include('common/footer') -%>
+
+    <!-- Form Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            function setupDynamicList(buttonId, inputId, listId) {
+                const addButton = document.getElementById(buttonId);
+                const inputField = document.getElementById(inputId);
+                const list = document.getElementById(listId);
+
+                // Add on Click
+                addButton.addEventListener('click', () => addElement());
+
+                // Add on Enter key
+                inputField.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addElement();
+                    }
+                });
+
+                function addElement() {
+                    const text = inputField.value.trim();
+                    if (text === "") return;
+
+                    const li = document.createElement('li');
+                    
+                    const span = document.createElement('span');
+                    span.textContent = text;
+                    
+                    const deleteButton = document.createElement('button');
+                    deleteButton.innerHTML = '<i class="fas fa-times"></i>';
+                    deleteButton.className = 'delete-btn';
+                    deleteButton.type = 'button'; 
+
+                    deleteButton.addEventListener('click', () => {
+                        li.style.transform = 'scale(0.95)';
+                        li.style.opacity = '0';
+                        setTimeout(() => li.remove(), 200);
+                    });
+
+                    li.appendChild(span);
+                    li.appendChild(deleteButton);
+                    list.appendChild(li);
+
+                    inputField.value = '';
+                    inputField.focus();
+                }
+            }
+
+            setupDynamicList('add-experience-btn', 'experience-input', 'experience-list');
+            setupDynamicList('add-certificate-btn', 'certificate-input', 'certificate-list');
+
+            const form = document.getElementById('profile-form');
+            form.addEventListener('submit', (event) => {
+                event.preventDefault(); 
+
+                const specialty = document.getElementById('specialty').value;
+                const linkedin = document.getElementById('linkedin').value;
+                const bio = document.getElementById('bio').value;
+                const experiences = collectListData('experience-list');
+                const certificates = collectListData('certificate-list');
+
+                const formData = {
+                    specialty,
+                    linkedin,
+                    bio,
+                    professionalExperiences: experiences,
+                    certifications: certificates
+                };
+
+                // Form data to be sent
+                const payload = {
+                    userId: '<%= user.id %>',
+                    specialty,
+                    linkedin,
+                    bio,
+                    professionalExperiences: experiences,
+                    certifications: certificates
+                };
+
+                const btn = document.querySelector('.submit-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
+                btn.disabled = true;
+
+                fetch('/api/professors/apply', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => response.json().then(data => ({ status: response.status, body: data })))
+                .then(({ status, body }) => {
+                    if (status !== 200) {
+                        throw new Error(body.error || 'Erro desconhecido');
+                    }
+                    btn.innerHTML = '<i class="fas fa-check-circle"></i> Candidatura Aprovada!';
+                    btn.style.backgroundColor = '#2ecc71';
+                    
+                    setTimeout(() => {
+                        window.location.href = '/teacherScene';
+                    }, 1500);
+                })
+                .catch(error => {
+                    alert('Erro ao enviar candidatura: ' + error.message);
+                    btn.innerHTML = originalText;
+                    btn.style.backgroundColor = '';
+                    btn.disabled = false;
+                });
+            });
+
+            function collectListData(listId) {
+                const list = document.getElementById(listId);
+                const items = [];
+                list.querySelectorAll('li span').forEach(item => items.push(item.textContent));
+                return items;
+            }
+        });
+    </script>
+</body>
+</html>

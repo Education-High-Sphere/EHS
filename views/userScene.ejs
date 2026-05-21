@@ -3,182 +3,225 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
     <link rel="stylesheet" href="../styles/userScene.css" />
-    <title>EHSYNC</title>
+    <title>Dashboard do Usuário - EHSYNC</title>
   </head>
   <body>
     <%-include ('common/header')-%>
-    <h1 class="title">Seja bem-vindo <%= user.name %></h1>
-    <button class="logout-button" id="logout">Logout</button>
 
-    <div class="body-content">
-      <div class="user-info">
-        <span class="user-picture">
-          <img
-            src="<%= user.avatar ? user.avatar : '../src/user.png' %>"
-            alt="User"
-          />
-        </span>
-        <div class="user-title">
-          <span class="user-name"><%= user.name %></span>
-          <span class="user-email"><%= user.job %></span>
-        </div>
-        <div class="user-actions">
-          <button class="action-button" onclick="window.location.href='/edit'">
-            Editar perfil <i class="fas fa-edit"></i>
-          </button>
-        </div>
-        <div class="user-data">
-          <p>
-            <strong><i class="fas fa-user"></i> Email:</strong> <%= user.email
-            %>
-          </p>
-          <p>
-            <strong><i class="fas fa-phone"></i> Telefone:</strong> <%=
-            user.phone %>
-          </p>
-          <p>
-            <strong><i class="fas fa-calendar"></i> Membro desde:</strong> <%=
-            new Date(user.createdAt).toLocaleDateString('pt-BR') %>
-          </p>
-        </div>
-        <div class="user-trophies">
-          <span class="user-trophy">
-            <i class="fa fa-trophy" style="color: blue;"></i>
-            <p>34 cursos concluidos</p>
-          </span>
+    <div class="dashboard-header">
+      <div class="header-content">
+        <h1>Bem-vindo(a) de volta, <%= user.name.split(' ')[0] %>! 👋</h1>
+        <p>Acompanhe seu progresso e retome seus cursos de onde parou.</p>
+      </div>
+      <button class="logout-button" id="logout"><i class="fas fa-sign-out-alt"></i> Sair</button>
+    </div>
 
-          <span class="user-trophy">
-            <i class="fa fa-trophy" style="color: blueviolet;"></i>
-            <p>12 avaliações positivas</p>
-          </span>
+    <div class="dashboard-container">
+      <!-- SIDEBAR PROFILE -->
+      <aside class="profile-card">
+        <div class="profile-header">
+          <div class="user-avatar-wrapper">
+            <img src="<%= user.avatar ? user.avatar : '../src/user.png' %>" alt="Foto de perfil" class="user-avatar" />
+          </div>
+          <h2 class="user-name"><%= user.name %></h2>
+          <span class="user-job"><%= user.job || 'Estudante' %></span>
+          <button class="edit-btn" onclick="window.location.href='/edit'">Editar Perfil <i class="fas fa-edit"></i></button>
         </div>
+
+        <div class="profile-details">
+          <% if (user.email) { %>
+          <div class="detail-item">
+            <i class="fas fa-envelope"></i>
+            <span><%= user.email %></span>
+          </div>
+          <% } %>
+          <% if (user.phone) { %>
+          <div class="detail-item">
+            <i class="fas fa-phone"></i>
+            <span><%= user.phone %></span>
+          </div>
+          <% } %>
+          <div class="detail-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Membro desde <%= new Date(user.created_at).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }) %></span>
+          </div>
+        </div>
+
+        <div class="profile-stats">
+          <div class="stat-box">
+            <i class="fas fa-trophy highlight-icon"></i>
+            <div class="stat-info">
+              <strong><%= stats.concluidos %></strong>
+              <span>Cursos Concluídos</span>
+            </div>
+          </div>
+          <div class="stat-box">
+            <i class="fas fa-star highlight-icon-sec"></i>
+            <div class="stat-info">
+              <strong><%= stats.avaliacoes %></strong>
+              <span>Avaliações</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="dashboard-content">
         
-      </div>
-
-      <div class="user-courses">
-        <h2><i class="fas fa-book"></i> Seus cursos</h2>
-        <div class="courses-list">
-          <div class="course-card">
-            <div class="course-info">
-              <h3>Desenvolvimento Web</h3>
-              <small>Professor: João Silva</small>
-
-              <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half-alt"></i>
-                <span>4.5</span>
-              </div>
-
-              <div class="progress-container">
-                <div class="progress-bar" style="width: 60%"></div>
-              </div>
-              <div class="progress-info">
-                <p>12 de 20 aulas concluídas</p>
-                <button class="continue-btn">Continue</button>
-              </div>
+        <!-- DASHBOARD OVERVIEW -->
+        <section class="overview-section">
+          <div class="overview-card">
+            <div class="icon-wrapper blue">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <div class="overview-data">
+              <h3><%= stats.emAndamento %></h3>
+              <p>Cursos em andamento</p>
             </div>
           </div>
-
-          <div class="course-card">
-            <div class="course-info">
-              <h3>Introdução a Banco de dados</h3>
-              <small>Professor: Maria de Souza</small>
-
-              <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-half-alt"></i>
-                <span>3.5</span>
-              </div>
-              <div class="progress-container">
-                <div class="progress-bar" style="width: 90%"></div>
-              </div>
-              <div class="progress-info">
-                <p>16 de 18 aulas concluídas</p>
-                <button class="continue-btn">Continue</button>
-              </div>
+          <div class="overview-card">
+            <div class="icon-wrapper green">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="overview-data">
+              <h3><%= stats.concluidos %></h3>
+              <p>Cursos finalizados</p>
             </div>
           </div>
-
-          <div class="course-card">
-            <div class="course-info">
-              <h3>Cybersecurity</h3>
-              <small>Professor: Ademário Silva</small>
-
-              <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <span>5</span>
-              </div>
-
-              <div class="progress-container">
-                <div class="progress-bar" style="width: 40%"></div>
-              </div>
-
-              <div class="progress-info">
-                <p>4 de 10 aulas concluídas</p>
-                <button class="continue-btn">Continue</button>
-              </div>
+          <div class="overview-card">
+            <div class="icon-wrapper purple">
+              <i class="fas fa-clock"></i>
             </div>
+            <div class="overview-data">
+              <h3><%= stats.horasEstudo %>h</h3>
+              <p>Horas de estudo</p>
             </div>
-            <div class="course-card">
-            <div class="course-info">
-              <h3>Ux/Ui Design</h3>
-              <small>Professor: Manuela Santos</small>
-
-              <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <span>3</span>
-              </div>
-
-              <div class="progress-container">
-                <div class="progress-bar" style="width: 65%"></div>
-              </div>
-
-              <div class="progress-info">
-                <p>8 de 12 aulas concluídas</p>
-                <button class="continue-btn">Continue</button>
-              </div>
-              </div>
           </div>
-        </div>
-      </div>
+        </section>
+
+        <!-- TABS NAV -->
+        <nav class="dashboard-tabs">
+          <button class="tab-btn active" data-tab="courses-tab">Meus Cursos</button>
+          <button class="tab-btn" data-tab="certificates-tab">Certificados</button>
+        </nav>
+
+        <!-- COURSES LIST -->
+        <section class="courses-list" id="courses-tab">
+          <div class="section-title">
+            <h2><i class="fas fa-graduation-cap"></i> Continue aprendendo</h2>
+          </div>
+          
+          <div class="courses-grid">
+            <% if (cursosEmAndamento.length > 0) { %>
+              <% cursosEmAndamento.forEach(course => { %>
+                <div class="course-card">
+                  <div class="course-thumbnail" style="background-image: url('<%= course.imagem || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60' %>')"></div>
+                  <div class="course-info">
+                    <h3><%= course.nome %></h3>
+                    <span class="instructor">Prof. <%= course.professorName %></span>
+                    
+                    <div class="course-rating">
+                      <div class="stars">
+                        <% const rating = course.avaliacao_media || 0; %>
+                        <% for(let i=1; i<=5; i++) { %>
+                          <i class="<%= i <= rating ? 'fas' : (i - 0.5 <= rating ? 'fas fa-star-half-alt' : 'far') %> fa-star"></i>
+                        <% } %>
+                      </div>
+                      <span class="rating-value"><%= rating.toFixed(1) %></span>
+                    </div>
+
+                    <div class="progress-wrapper">
+                      <div class="progress-labels">
+                        <span>Progresso</span>
+                        <span><%= Math.round(course.progress) %>%</span>
+                      </div>
+                      <div class="progress-container">
+                        <div class="progress-bar" style="width: <%= course.progress %>%"></div>
+                      </div>
+                      <small><%= course.numCompleted %> de <%= course.totalLessons %> aulas concluídas</small>
+                    </div>
+
+                    <button class="continue-btn" onclick="window.location.href='/watch/<%= course.id %>'">
+                      Retomar Curso <i class="fas fa-play-circle"></i>
+                    </button>
+                  </div>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <div class="empty-state">
+                <i class="fas fa-book-reader"></i>
+                <h3>Nenhum curso em andamento</h3>
+                <p>Explore nosso catálogo e comece a aprender hoje mesmo!</p>
+                <a href="/courses" class="edit-btn" style="width: auto; margin-top: 20px; padding: 10px 30px;">Explorar Cursos</a>
+              </div>
+            <% } %>
+          </div>
+        </section>
+
+        <!-- CERTIFICATES LIST -->
+        <section class="certificates-list hidden" id="certificates-tab">
+          <% if (cursosConcluidos.length > 0) { %>
+            <div class="courses-grid">
+              <% cursosConcluidos.forEach(course => { %>
+                <div class="course-card">
+                  <div class="course-thumbnail" style="background-image: url('<%= course.imagem || 'https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60' %>')"></div>
+                  <div class="course-info">
+                    <h3><%= course.nome %></h3>
+                    <span class="instructor">Concluído em <%= new Date().toLocaleDateString() %></span>
+                    
+                    <div class="progress-wrapper">
+                      <div class="badge-success" style="padding: 5px 10px; border-radius: 4px; display: inline-block; font-size: 12px; margin-bottom: 15px;">
+                        <i class="fas fa-check-circle"></i> Concluído
+                      </div>
+                    </div>
+
+                    <button class="continue-btn" onclick="window.location.href='/api/certificates/<%= course.matriculaId %>'">
+                      Ver Certificado <i class="fas fa-certificate"></i>
+                    </button>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="empty-state">
+              <i class="fas fa-certificate"></i>
+              <h3>Você ainda não possui certificados</h3>
+              <p>Conclua cursos para garantir seus certificados e alavancar sua carreira.</p>
+            </div>
+          <% } %>
+        </section>
+
+      </main>
     </div>
 
     <%-include ('common/footer')-%>
 
     <script>
+      // Logout logic
       const logoutButton = document.getElementById("logout");
-      logoutButton.addEventListener("click", function () {
-        window.location.href = "/logout";
-      });
+      if(logoutButton) {
+        logoutButton.addEventListener("click", function () {
+          window.location.href = "/logout";
+        });
+      }
 
-      const perfilButton = document.getElementById("perfil");
-      const userData = document.querySelector(".user-data");
-      const cursosList = document.querySelector(".user-courses");
-      perfilButton.addEventListener("click", function () {
-        userData.style.display = "flex";
-        cursosList.style.display = "none";
-      });
+      // Tabs logic
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabs = [document.getElementById('courses-tab'), document.getElementById('certificates-tab')];
 
-      const cursosButton = document.getElementById("cursos");
-      cursosButton.addEventListener("click", function () {
-        cursosList.style.display = "flex";
-        userData.style.display = "none";
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active from all
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabs.forEach(t => t.classList.add('hidden'));
+
+          // Add active to current
+          btn.classList.add('active');
+          const target = document.getElementById(btn.getAttribute('data-tab'));
+          if(target) target.classList.remove('hidden');
+        });
       });
     </script>
   </body>

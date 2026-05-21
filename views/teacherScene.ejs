@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles/teacherScene.css" />
+    <title>Área do Professor</title>
+  </head>
+  <body>
+    <%- include('common/header') -%>
+
+    <div class="dashboard-container container">
+      <header class="dashboard-header">
+        <div class="salutation">
+          <h1>Bem-vindo, <%= user.name %>! 👋</h1>
+          <p>Aqui você gerencia todos os seus cursos e acompanha seu desempenho.</p>
+        </div>
+        <div class="header-actions">
+          <a href="/edit" class="btn btn-secondary">
+            <i class="fas fa-user-edit"></i> Editar Perfil
+          </a>
+          <button class="btn btn-primary" id="create-course-btn" onclick="redirectToCreateACourse()">
+            <i class="fas fa-plus"></i> Criar Novo Curso
+          </button>
+        </div>
+      </header>
+
+      <main class="dashboard-content">
+        <section class="stats-cards">
+          <div class="stat-card">
+            <div class="icon"><i class="fas fa-book"></i></div>
+            <div class="stat-info">
+              <h3 id="stat-courses">
+                <%= courses.filter(c => c.publicated).length || 0 %>
+              </h3>
+              <p>Cursos Publicados</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="icon"><i class="fas fa-users"></i></div>
+            <div class="stat-info">
+              <h3 id="stat-students"><%= professor.total_alunos || 0 %></h3>
+              <p>Total de Alunos</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="icon"><i class="fas fa-star"></i></div>
+            <div class="stat-info">
+              <h3 id="stat-rating">
+                <%= (professor.avaliacao_media && professor.avaliacao_media > 0) ?
+                professor.avaliacao_media.toFixed(1) : 'N/A' %>
+              </h3>
+              <p>Avaliação Média</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="course-list-section">
+          <div class="section-title">
+            <h2><i class="fas fa-layer-group"></i> Meus Cursos</h2>
+          </div>
+          
+          <div id="course-list" class="course-list">
+            <% if (courses && courses.length > 0) { %>
+              <% courses.forEach(course => { %>
+                <div class="course-card" data-id="<%= course.id %>">
+                  <div class="course-info">
+                    <h3 class="course-title"><%= course.nome %></h3>
+                    <p>
+                      <i class="fas fa-users"></i> <%= course.alunos || 0 %> alunos 
+                      &nbsp;|&nbsp; 
+                      <i class="fas fa-star" style="color: var(--cor-aviso)"></i> <%= (course.avaliacao_media && course.avaliacao_media > 0) ? course.avaliacao_media.toFixed(1) : 'Sem avaliações' %>
+                    </p>
+                  </div>
+                  <div class="course-actions">
+                    <div class="publish-switch">
+                      <span class="switch-label"><%= course.publicated ? 'Publicado' : 'Rascunho' %></span>
+                      <label class="switch">
+                        <input type="checkbox" class="publish-toggle" <%= course.publicated ? 'checked' : '' %> />
+                        <span class="slider"></span>
+                      </label>
+                    </div>
+                    <button class="btn btn-edit" onclick="editCourse('<%= course.id %>')">
+                      <i class="fas fa-pen"></i> Editar
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteCourse('<%= course.id %>')">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              <% }); %>
+            <% } else { %>
+              <div id="empty-state" class="empty-state">
+                <i class="fas fa-drafting-compass"></i>
+                <h3>Você ainda não tem cursos</h3>
+                <p>Clique em "Criar Novo Curso" para começar a compartilhar seu conhecimento.</p>
+              </div>
+            <% } %>
+          </div>
+        </section>
+
+    <%- include('common/footer') -%>
+
+    <script>
+
+
+            function editCourse(courseId) {
+              window.location.href = `/editACourse/${courseId}`;
+            }
+            function redirectToCreateACourse() {
+              window.location.href = "/createACourse";
+            }
+
+            function deleteCourse(courseId) {
+              const courseName = document.querySelector(`.course-card[data-id="${courseId}"] .course-title`).textContent;
+              alert('Tem certeza que deseja deletar o curso ' + courseName + '? ');
+              try{
+                
+                fetch(`/api/cursos/${courseId}`, {
+                  method: 'DELETE',
+                  headers: {
+                    'Content-Type': 'application/json'
+
+                  }
+                })
+                .then(response => {
+                  if (response.ok) {
+                    alert('Curso deletado com sucesso');
+                    location.reload();
+                  } else {
+                    alert('Erro ao deletar curso');
+                  }
+                })
+                .catch(error => {
+                  console.error('Erro ao deletar curso:', error);
+                });
+              } catch (error) {
+                console.error('Erro ao deletar curso:', error);
+              }
+              
+              
+            }
+
+            function toggleCoursePublish(courseId) {
+              fetch(`/api/cursos/${courseId}/publish`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              })
+              .then(response => {
+                if (response.ok) {
+                  location.reload();
+                } else {
+                  alert('Erro ao atualizar o curso');
+                }
+              })
+              .catch(error => {
+                console.error('Erro ao atualizar o curso:', error);
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              const publishToggles = document.querySelectorAll('.publish-toggle');
+              publishToggles.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                  const courseId = this.closest('.course-card').getAttribute('data-id');
+                  toggleCoursePublish(courseId);
+                });
+              });
+            })
+
+    </script>
+  </body>
+</html>
