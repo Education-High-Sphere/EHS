@@ -5,8 +5,8 @@ import professorService from "../../services/professor/professorService.js";
 export default {
   async getAllCourses(req, res) {
     try {
-      const courses = await cursoService.getAllCourses();
-      res.json(courses);
+      const result = await cursoService.getAllCourses();
+      res.json(result.courses);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -67,20 +67,29 @@ export default {
       res.status(404).json({ error: error.message });
     }
   },
-  async listOrSearchCourses(searchQuery) {
+  async listOrSearchCourses(searchQuery, page = 1) {
     let coursesData;
     let categoria = null;
+    let total = 0;
+    const limit = 9;
+    const offset = (page - 1) * limit;
 
     if (!searchQuery || searchQuery.trim() === "") {
-      coursesData = await cursoService.getAllCourses();
+      const result = await cursoService.getAllCourses(limit, offset);
+      coursesData = result.courses;
+      total = result.total;
       categoria = "Todos os Cursos";
     } else {
       const searchResults = await searchCourses(searchQuery);
-      coursesData = searchResults.map((result) => result.item);
-      categoria = searchResults.categoria;
+      // Paginando na memória para a busca via fuse.js
+      total = searchResults.length;
+      coursesData = searchResults.map((result) => result.item).slice(offset, offset + limit);
+      categoria = searchResults.categoria || "Resultados da Busca";
     }
 
-    return { coursesData, categoria, searchQuery: searchQuery || "" };
+    const totalPages = Math.ceil(total / limit);
+
+    return { coursesData, categoria, searchQuery: searchQuery || "", currentPage: parseInt(page), totalPages };
   },
 
   async togglePublish(req, res) {

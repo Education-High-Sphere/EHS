@@ -16,10 +16,10 @@ import avaliacaoService from "../services/cursos/avaliacaoService.js";
 // Página Inicial
 export const getHomePage = async (req, res) => {
   try {
-    const courses = await courseService.getAllCourses();
+    const result = await courseService.getAllCourses();
     res.render("index", {
       user: res.locals.user || null,
-      courses: courses,
+      courses: result.courses,
       categoria: "tecnologia",
     });
   } catch (error) {
@@ -33,9 +33,15 @@ export const getHomePage = async (req, res) => {
 // Página de Cursos (com busca)
 export const getCoursesPage = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
     // Reutiliza a mesma lógica do controller da API!
-    const { coursesData, categoria, searchQuery } =
-      await courseController.listOrSearchCourses(req.query.search || "");
+    const { coursesData, categoria, searchQuery, currentPage, totalPages } =
+      await courseController.listOrSearchCourses(req.query.search || "", page);
+    
+    // Obter todas as categorias existentes (poderíamos fazer uma query extra, 
+    // mas vamos mapear do que está na tela ou usar fixas para o MVP).
+    // Como coursesData agora é só 1 página, mapear categorias daqui é limitado, 
+    // mas o filtro no frontend continuará funcionando.
     const categoriasParaFiltro = [
       ...new Set(coursesData.map((course) => course.categoria)),
     ].filter((categoria) => categoria);
@@ -47,6 +53,8 @@ export const getCoursesPage = async (req, res) => {
       categoria: categoria,
       categories: categoriasParaFiltro,
       searchQuery: searchQuery || "",
+      currentPage,
+      totalPages
     });
   } catch (error) {
     console.error("Erro ao carregar página de cursos:", error.message);

@@ -150,6 +150,30 @@
 %>
 </div>
 
+    <% if (totalPages > 1) { %>
+      <nav class="pagination">
+        <% if (currentPage > 1) { %>
+          <a href="?page=<%= currentPage - 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>"><i class="fas fa-chevron-left"></i></a>
+        <% } else { %>
+          <span class="disabled"><i class="fas fa-chevron-left"></i></span>
+        <% } %>
+        
+        <% for(let i = 1; i <= totalPages; i++) { %>
+          <% if (i === currentPage) { %>
+            <span class="active"><%= i %></span>
+          <% } else { %>
+            <a href="?page=<%= i %><%= searchQuery ? '&search=' + searchQuery : '' %>"><%= i %></a>
+          <% } %>
+        <% } %>
+        
+        <% if (currentPage < totalPages) { %>
+          <a href="?page=<%= currentPage + 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>"><i class="fas fa-chevron-right"></i></a>
+        <% } else { %>
+          <span class="disabled"><i class="fas fa-chevron-right"></i></span>
+        <% } %>
+      </nav>
+    <% } %>
+
     <%-include ('common/footer')-%>
 
     <script>

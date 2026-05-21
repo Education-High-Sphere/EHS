@@ -311,3 +311,27 @@
     margin-top: var(--sp-6);
 }
 
+
+.mobile-only {
+    display: none;
+}
+@media (max-width: 768px) {
+    .mobile-only {
+        display: block;
+        margin: 15px;
+        width: calc(100% - 30px);
+    }
+    .course-sidebar {
+        display: none !important;
+        height: auto;
+        max-height: 400px;
+    }
+    .course-sidebar.mobile-open {
+        display: flex !important;
+    }
+    .lesson-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}

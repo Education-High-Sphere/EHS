@@ -426,3 +426,26 @@ body {
         justify-content: center;
     }
 }
+/* Melhorias Mobile para Course Details */
+@media (max-width: 768px) {
+    .course-hero {
+        flex-direction: column !important;
+        padding: 20px !important;
+    }
+    .course-hero-content {
+        width: 100% !important;
+    }
+    .course-hero-image {
+        width: 100% !important;
+        margin-top: 20px;
+    }
+    .course-main {
+        flex-direction: column !important;
+    }
+    .course-content, .course-sidebar-info {
+        width: 100% !important;
+    }
+    .enroll-btn {
+        width: 100% !important;
+    }
+}

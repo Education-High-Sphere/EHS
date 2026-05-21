@@ -12,8 +12,13 @@
     <%- include('common/header'); %>
 
     <main class="watch-container">
+        
+        <button id="mobile-sidebar-toggle" class="btn btn-secondary mobile-only">
+            <i class="fas fa-list"></i> Ver Aulas
+        </button>
+
         <!-- Sidebar de Conteúdo -->
-        <aside class="course-sidebar">
+        <aside class="course-sidebar" id="course-sidebar">
             <div class="sidebar-header">
                 <h3>Conteúdo do Curso</h3>
                 <div class="overall-progress">
@@ -153,6 +158,19 @@
         function toggleModule(index) {
             const list = document.getElementById(`module-${index}`);
             list.classList.toggle('collapsed');
+        }
+
+        const sidebarToggleBtn = document.getElementById('mobile-sidebar-toggle');
+        const courseSidebar = document.getElementById('course-sidebar');
+        if (sidebarToggleBtn && courseSidebar) {
+            sidebarToggleBtn.addEventListener('click', () => {
+                courseSidebar.classList.toggle('mobile-open');
+                if (courseSidebar.classList.contains('mobile-open')) {
+                    sidebarToggleBtn.innerHTML = '<i class="fas fa-times"></i> Fechar Aulas';
+                } else {
+                    sidebarToggleBtn.innerHTML = '<i class="fas fa-list"></i> Ver Aulas';
+                }
+            });
         }
 
         const completeBtn = document.getElementById('complete-btn');
