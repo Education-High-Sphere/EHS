@@ -1,15 +1,20 @@
 import { pool } from "../../../.config/db.js";
 
 export default {
-  async findAll() {
-    const { rows } = await pool.query("SELECT * FROM cursos");
+  async findAll(limit = 9, offset = 0) {
+    const { rows } = await pool.query("SELECT * FROM cursos LIMIT $1 OFFSET $2", [limit, offset]);
     return rows;
   },
 
-  async search(searchTerm) {
+  async countAll() {
+    const { rows } = await pool.query("SELECT COUNT(*) FROM cursos");
+    return parseInt(rows[0].count);
+  },
+
+  async search(searchTerm, limit = 9, offset = 0) {
     const { rows } = await pool.query(
-      "SELECT * FROM cursos WHERE nome ILIKE $1 OR descricao ILIKE $1",
-      [`%${searchTerm}%`]
+      "SELECT * FROM cursos WHERE nome ILIKE $1 OR descricao ILIKE $1 LIMIT $2 OFFSET $3",
+      [`%${searchTerm}%`, limit, offset]
     );
     return rows;
   },

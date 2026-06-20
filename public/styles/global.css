@@ -252,6 +252,14 @@ h4 { font-size: var(--fs-xl); }
   background-color: #38a169;
 }
 
+.btn-edit {
+  background-color: #e2e8f0;
+  color: #1a202c;
+}
+.btn-edit:hover {
+  background-color: #cbd5e0;
+}
+
 .btn-ghost {
   background-color: transparent;
   color: var(--cor-texto-secundario);

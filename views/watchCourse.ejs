@@ -12,8 +12,13 @@
     <%- include('common/header'); %>
 
     <main class="watch-container">
+        
+        <button id="mobile-sidebar-toggle" class="btn btn-secondary mobile-only">
+            <i class="fas fa-list"></i> Ver Aulas
+        </button>
+
         <!-- Sidebar de Conteúdo -->
-        <aside class="course-sidebar">
+        <aside class="course-sidebar" id="course-sidebar">
             <div class="sidebar-header">
                 <h3>Conteúdo do Curso</h3>
                 <div class="overall-progress">
@@ -83,13 +88,21 @@
                             } else {
                                 videoId = currentLesson.url_recurso.split('/').pop();
                             }
+                            let youtubeSrc = `https://www.youtube.com/embed/${videoId}`;
+                            youtubeSrc += youtubeSrc.includes('?') ? '&enablejsapi=1' : '?enablejsapi=1';
                         %>
-                        <iframe src="https://www.youtube.com/embed/<%= videoId %>" frameborder="0" allowfullscreen></iframe>
+                        <iframe 
+                            id="youtube-player"
+                            src="<%= youtubeSrc %>" 
+                            frameborder="0" allowfullscreen></iframe>
                     <% } else if (currentLesson.url_recurso && currentLesson.url_recurso.includes('vimeo.com')) { %>
                         <% let videoId = currentLesson.url_recurso.split('/').pop(); %>
-                        <iframe src="https://player.vimeo.com/video/<%= videoId %>" frameborder="0" allowfullscreen></iframe>
+                        <iframe 
+                            id="vimeo-player"
+                            src="https://player.vimeo.com/video/<%= videoId %>" 
+                            frameborder="0" allowfullscreen></iframe>
                     <% } else if (currentLesson.url_recurso) { %>
-                        <video controls src="<%= currentLesson.url_recurso %>"></video>
+                        <video id="html5-player" controls src="<%= currentLesson.url_recurso %>"></video>
                     <% } else { %>
                         <div class="no-video">
                             <i class="fa-solid fa-video-slash"></i>
@@ -101,11 +114,12 @@
                 <div class="lesson-details">
                     <div class="lesson-header">
                         <h2><%= currentLesson.titulo %></h2>
-                        <button id="complete-btn" class="btn-complete <%= completedLessons.includes(currentLesson.id) ? 'completed' : '' %>">
+                        <button id="complete-btn" class="btn-complete <%= completedLessons.includes(currentLesson.id) ? 'completed' : 'locked' %>" 
+                            <% if (!completedLessons.includes(currentLesson.id)) { %> disabled <% } %>>
                             <% if (completedLessons.includes(currentLesson.id)) { %>
                                 <i class="fa-solid fa-check"></i> Concluída
                             <% } else { %>
-                                Marcar como Concluída
+                                <i class="fa-solid fa-lock" id="lock-icon"></i> Assista até o fim para concluir
                             <% } %>
                         </button>
                     </div>
@@ -155,10 +169,104 @@
             list.classList.toggle('collapsed');
         }
 
+        const sidebarToggleBtn = document.getElementById('mobile-sidebar-toggle');
+        const courseSidebar = document.getElementById('course-sidebar');
+        if (sidebarToggleBtn && courseSidebar) {
+            sidebarToggleBtn.addEventListener('click', () => {
+                courseSidebar.classList.toggle('mobile-open');
+                if (courseSidebar.classList.contains('mobile-open')) {
+                    sidebarToggleBtn.innerHTML = '<i class="fas fa-times"></i> Fechar Aulas';
+                } else {
+                    sidebarToggleBtn.innerHTML = '<i class="fas fa-list"></i> Ver Aulas';
+                }
+            });
+        }
+
         const completeBtn = document.getElementById('complete-btn');
+        const isAlreadyCompleted = completeBtn && completeBtn.classList.contains('completed');
+
+        // Função central para desbloquear o botão de conclusão
+        function enableCompleteBtn() {
+            if (!completeBtn || isAlreadyCompleted) return;
+            completeBtn.disabled = false;
+            completeBtn.classList.remove('locked');
+            completeBtn.innerHTML = 'Marcar como Concluída';
+            // Animação de pulso para chamar atenção
+            completeBtn.style.animation = 'none';
+            completeBtn.offsetHeight; // reflow trick
+            completeBtn.style.animation = 'pulseUnlock 0.6s ease';
+        }
+
+        // --- Detecção de tipo de player ---
+        const youtubePlayer = document.getElementById('youtube-player');
+        const vimeoPlayer   = document.getElementById('vimeo-player');
+        const html5Player   = document.getElementById('html5-player');
+
+        if (isAlreadyCompleted) {
+            // Nada a fazer, já concluída
+        } else if (html5Player) {
+            // Vídeo HTML5 nativo
+            html5Player.addEventListener('ended', enableCompleteBtn);
+            // Se o usuário pular para o fim (currentTime >= 95% do total)
+            html5Player.addEventListener('timeupdate', () => {
+                if (html5Player.duration && html5Player.currentTime >= html5Player.duration * 0.95) {
+                    enableCompleteBtn();
+                }
+            });
+        } else if (youtubePlayer) {
+            // YouTube IFrame Player API
+            function initYTPlayer() {
+                const player = new YT.Player('youtube-player', {
+                    events: {
+                        'onReady': function(event) {
+                            console.log('YouTube Player API conectada com sucesso.');
+                            setInterval(() => {
+                                if (typeof player.getCurrentTime === 'function') {
+                                    const currentTime = player.getCurrentTime();
+                                    const duration = player.getDuration();
+                                    if (duration > 0 && currentTime >= duration * 0.95) {
+                                        enableCompleteBtn();
+                                    }
+                                }
+                            }, 1000);
+                        },
+                        'onStateChange': function(event) {
+                            // YT.PlayerState.ENDED === 0
+                            if (event.data === 0) enableCompleteBtn();
+                        }
+                    }
+                });
+            }
+
+            if (window.YT && window.YT.Player) {
+                initYTPlayer();
+            } else {
+                window.onYouTubeIframeAPIReady = initYTPlayer;
+                const ytScript = document.createElement('script');
+                ytScript.src = 'https://www.youtube.com/iframe_api';
+                document.head.appendChild(ytScript);
+            }
+        } else if (vimeoPlayer) {
+            // Vimeo Player SDK
+            const vimeoScript = document.createElement('script');
+            vimeoScript.src = 'https://player.vimeo.com/api/player.js';
+            vimeoScript.onload = function() {
+                const player = new Vimeo.Player(vimeoPlayer);
+                player.on('ended', enableCompleteBtn);
+                // Também dispara quando >95% do vídeo foi assistido
+                player.on('timeupdate', function(data) {
+                    if (data.percent >= 0.95) enableCompleteBtn();
+                });
+            };
+            document.head.appendChild(vimeoScript);
+        } else {
+            // PDF, slide ou sem vídeo: habilitar imediatamente
+            enableCompleteBtn();
+        }
+
         if (completeBtn) {
             completeBtn.addEventListener('click', async () => {
-                if (completeBtn.classList.contains('completed')) return;
+                if (completeBtn.classList.contains('completed') || completeBtn.disabled) return;
 
                 try {
                     const response = await fetch('/api/progress/complete', {

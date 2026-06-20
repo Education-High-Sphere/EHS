@@ -84,6 +84,26 @@
         </form>
     </div>
 
+    <style>
+      .spinner {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border: 2.5px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+        vertical-align: middle;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const dropArea = document.getElementById('file-drop-area');
@@ -160,32 +180,39 @@
             
             // --- 5. Lógica de Envio do Formulário ---
             const form = document.getElementById('create-course-form');
-            form.addEventListener('submit', (e) => {
-                e.preventDefault(); // Impede o envio real (para teste)
+            const submitBtn = form.querySelector('.submit-btn');
+            const originalBtnText = submitBtn.innerHTML;
 
-                // Coleta todos os dados do formulário
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
                 const formData = new FormData(form);
 
-                // --- Teste: Loga os dados no console ---
+                // Ativar spinner
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner"></span> Criando curso...';
+
                 console.log('--- Formulário Pronto para Enviar ---');
                 for (let [key, value] of formData.entries()) {
-                    // O 'imagem' mostrará [object File]
                     console.log(`${key}:`, value);
                 }
                 
                 fetch('/api/cursos/create', {
                     method: 'POST',
-                    body: formData // Envia o FormData (incluindo o arquivo)
+                    body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
                     console.log('Sucesso:', data);
-                    alert('Curso criado com sucesso!');
-                    window.location.href = '/teacherScene'; // Redireciona
+                    submitBtn.innerHTML = '✓ Curso criado!';
+                    submitBtn.style.backgroundColor = '#2ecc71';
+                    setTimeout(() => { window.location.href = '/teacherScene'; }, 1000);
                 })
                 .catch(error => {
                     console.error('Erro:', error);
                     alert('Erro ao criar curso.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
                 });
             });
 

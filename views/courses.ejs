@@ -29,7 +29,7 @@
 
         <select id="levelFilter" class="level-filter">
           <option value="">Todos os níveis</option>
-          <option value="Básico">Básico</option>
+          <option value="Iniciante">Iniciante</option>
           <option value="Intermediário">Intermediário</option>
           <option value="Avançado">Avançado</option>
         </select>
@@ -42,7 +42,7 @@
         </select>
 
         <select id="priceFilter" class="price-filter">
-          <option value="">Qualquer preco</option>
+          <option value="">Qualquer preço</option>
           <option value="gratuito">Gratuito</option>
           <option value="pago">Pago</option>
         </select>
@@ -52,8 +52,6 @@
           <option value="antigos">Mais antigos</option>
         </select>
       </span>
-
-      <button id="applyFilters">Aplicar Filtros</button>
     </nav>
 
     <h2 class="section-title">Nossos Cursos</h2>
@@ -150,99 +148,102 @@
 %>
 </div>
 
+<!-- Estado vazio -->
+<div id="empty-state" style="display:none; grid-column:1/-1; text-align:center; padding:60px 20px; color:#a0aec0;">
+  <i class="fas fa-search" style="font-size:3rem; margin-bottom:16px; display:block; opacity:0.4;"></i>
+  <h3 style="margin-bottom:8px; color:#f4f4f4;">Nenhum curso encontrado</h3>
+  <p>Tente remover alguns filtros para ver mais resultados.</p>
+  <button onclick="resetFilters()" style="margin-top:16px; padding:10px 24px; border-radius:8px; border:1px solid #4a78a6; background:transparent; color:#4a78a6; cursor:pointer; font-weight:600; transition:all 0.2s;" onmouseover="this.style.background='#4a78a6';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#4a78a6'">
+    Limpar filtros
+  </button>
+</div>
+
+    <% if (totalPages > 1) { %>
+      <nav class="pagination">
+        <% if (currentPage > 1) { %>
+          <a href="?page=<%= currentPage - 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>"><i class="fas fa-chevron-left"></i></a>
+        <% } else { %>
+          <span class="disabled"><i class="fas fa-chevron-left"></i></span>
+        <% } %>
+        
+        <% for(let i = 1; i <= totalPages; i++) { %>
+          <% if (i === currentPage) { %>
+            <span class="active"><%= i %></span>
+          <% } else { %>
+            <a href="?page=<%= i %><%= searchQuery ? '&search=' + searchQuery : '' %>"><%= i %></a>
+          <% } %>
+        <% } %>
+        
+        <% if (currentPage < totalPages) { %>
+          <a href="?page=<%= currentPage + 1 %><%= searchQuery ? '&search=' + searchQuery : '' %>"><i class="fas fa-chevron-right"></i></a>
+        <% } else { %>
+          <span class="disabled"><i class="fas fa-chevron-right"></i></span>
+        <% } %>
+      </nav>
+    <% } %>
+
     <%-include ('common/footer')-%>
 
     <script>
-            document.addEventListener("DOMContentLoaded", () => {
-              // Seleciona todos os filtros e os cartões de curso
-              const filters = document.querySelectorAll(".filters select");
-              const coursesGrid = document.querySelector(".course-grid");
-              const allCourses = Array.from(
-                document.querySelectorAll(".course-card")
-              );
+      document.addEventListener("DOMContentLoaded", () => {
+        const coursesGrid = document.querySelector(".courses-grid");
+        const emptyState  = document.getElementById("empty-state");
+        const allCourses  = Array.from(document.querySelectorAll(".course-card"));
 
-              // Função para aplicar os filtros
-              const applyFilters = () => {
-                const categoryFilter =
-                  document.getElementById("categoryFilter").value;
-                const levelFilter = document.getElementById("levelFilter").value;
-                const durationFilter =
-                  document.getElementById("durationFilter").value;
-                const priceFilter = document.getElementById("priceFilter").value;
-                const orderFilter = document.getElementById("orderFilter").value;
+        // ---- Função principal de filtragem ----
+        const applyFilters = () => {
+          const categoryFilter = document.getElementById("categoryFilter").value.trim().toLowerCase();
+          const levelFilter    = document.getElementById("levelFilter").value.trim();
+          const durationFilter = document.getElementById("durationFilter").value.trim().toLowerCase();
+          const priceFilter    = document.getElementById("priceFilter").value.trim().toLowerCase();
+          const orderFilter    = document.getElementById("orderFilter").value;
 
-                // Crie um array para os cursos que serão exibidos
-                let filteredCourses = [...allCourses];
+          let filtered = allCourses.filter(card => {
+            const cat      = (card.dataset.category || '').toLowerCase();
+            const level    = (card.dataset.level    || '').trim();
+            const duration = (card.dataset.duration || '').toLowerCase();
+            const price    = (card.dataset.price    || '').toLowerCase();
 
-                // Lógica para filtrar por Categoria
-                if (categoryFilter) {
-                    const filterText = categoryFilter.toLowerCase();
+            if (categoryFilter && cat !== categoryFilter) return false;
+            if (levelFilter    && level !== levelFilter)  return false;
+            if (durationFilter && duration !== durationFilter) return false;
+            if (priceFilter    && price !== priceFilter)  return false;
+            return true;
+          });
 
-                    filteredCourses = filteredCourses.filter((courseCard) => {
-                    const category = courseCard.dataset.category.toLowerCase();
-        
-                    return category === filterText;
-                  });
-                }
+          // Ordenação
+          filtered.sort((a, b) => {
+            const dateA = new Date(a.dataset.createdAt || 0);
+            const dateB = new Date(b.dataset.createdAt || 0);
+            return orderFilter === 'antigos' ? dateA - dateB : dateB - dateA;
+          });
 
-                // Lógica para filtrar por Nível (adicionar no seu HTML se não tiver)
-                if (levelFilter) {
-                  filteredCourses = filteredCourses.filter((courseCard) => {
-                    const level = courseCard.dataset.level; // Converte o valor do `data-level` para minúsculas
-                    return level === levelFilter;
-                  });
-                }
+          // Re-renderização (move nodes, sem innerHTML para não perder eventos)
+          allCourses.forEach(card => coursesGrid.removeChild(card));
+          filtered.forEach(card => coursesGrid.appendChild(card));
 
-                if (durationFilter) {
-                  filteredCourses = filteredCourses.filter((courseCard) => {
-                    const duration = courseCard.dataset.duration.toLowerCase();
-                    return duration === durationFilter;
-                  });
-                }
+          // Estado vazio
+          if (filtered.length === 0) {
+            emptyState.style.display = 'block';
+          } else {
+            emptyState.style.display = 'none';
+          }
+        };
 
-                if (priceFilter) {
-                  filteredCourses = filteredCourses.filter((courseCard) => {
-                    const price = courseCard.dataset.price.toLowerCase();
-                    return price === priceFilter;
-                
-                  });
-                }
+        // Escuta mudanças em qualquer filtro — sem botão
+        document.querySelectorAll(".filters select").forEach(select => {
+          select.addEventListener("change", applyFilters);
+        });
 
-                // Lógica para ordenação
-                if (orderFilter === 'recentes') {
-                filteredCourses.sort((a, b) => {
-                  // Acessa o atributo de data diretamente do elemento principal
-                  const dateA = new Date(a.dataset.createdAt);
-                  const dateB = new Date(b.dataset.createdAt);
-                  return dateB - dateA; // Ordena do mais novo para o mais antigo
-                });
-                } else if (orderFilter === 'antigos') {
-                  filteredCourses.sort((a, b) => {
-                    // Acessa o atributo de data diretamente do elemento principal
-                    const dateA = new Date(a.dataset.createdAt);
-                    const dateB = new Date(b.dataset.createdAt);
-                    return dateA - dateB;
-                  });
-                }
+        // Função de reset acessível globalmente (usada pelo botão no empty state)
+        window.resetFilters = () => {
+          document.querySelectorAll(".filters select").forEach(sel => sel.selectedIndex = 0);
+          applyFilters();
+        };
 
-                // Limpa a grade de cursos
-                coursesGrid.innerHTML = "";
-
-                // Adiciona os cursos filtrados/ordenados de volta à tela
-                if (filteredCourses.length > 0) {
-                  filteredCourses.forEach((course) => {
-                    coursesGrid.appendChild(course);
-                  });
-                } else {
-                  coursesGrid.innerHTML =
-                    "<p>Nenhum curso encontrado com os filtros selecionados.</p>";
-                }
-              };
-
-              // Adiciona o evento de clique ao botão
-              const applyFiltersButton = document.getElementById("applyFilters");
-              applyFiltersButton.addEventListener("click", applyFilters);
-            });
+        // Aplica ordenação inicial (mais recentes por padrão)
+        applyFilters();
+      });
     </script>
   </body>
 </html>

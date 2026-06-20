@@ -22,111 +22,96 @@
     <section class="hero">
       <div class="hero-container">
         <div class="container">
-          <h1>Educação Online</h1>
+          <h1>Educação Online de Alta Performance</h1>
           <p>
             Sua sala de aula
-            <strong style="color: #4a78a6">disponível em qualquer lugar</strong>
+            <span class="text-accent">disponível em qualquer lugar.</span>
           </p>
           <ul>
-            <li> Cursos Profissionalizantes</li>
-            <br />
-            <li> Material didático</li>
-            <br />
-            <li> Interação com outros alunos</li>
+            <li>Cursos Profissionalizantes</li>
+            <li>Material didático exclusivo</li>
+            <li>Interação real com alunos e mentores</li>
           </ul>
-          <br />
           <div class="buttons">
-            <button style="background-color: #1b2232">Comece agora</button>
-            <button style="background-color: #51769c">
-              Conheça nossos cursos
-            </button>
+            <button class="btn btn-primary btn-lg">Comece agora</button>
+            <button class="btn btn-secondary btn-lg">Conheça os cursos</button>
           </div>
         </div>
         <div class="hero-img">
           <img
             src="../src/estudante.png"
-            alt="Estudante"
-            width="500px"
-            height="auto"
-            object-fit="contain"
+            alt="Estudante EHS"
           />
         </div>
       </div>
-      <h3>Se o mundo é online, sua carreira também pode ser. Vem com a EHS!</h3>
+      <h3 class="hero-footer-text">Se o mundo é online, sua carreira também pode ser. Vem com a EHS!</h3>
     </section>
 
     <section class="categories">
       <div class="category-buttons">
-        <a onclick="filterCategory('tecnologia')">Tecnologia e Inovação</a>
-        <a onclick="filterCategory('idiomas')">Idiomas</a>
-        <a onclick="filterCategory('design & criação')">Design & Criação</a>
-        <a onclick="filterCategory('negócios & finanças')">Negócios & Finanças</a>
+        <a onclick="filterCategory('recomendados', this)" class="active">Cursos que combinam com você</a>
+        <a onclick="filterCategory('tecnologia', this)">Tecnologia e Inovação</a>
+        <a onclick="filterCategory('idiomas', this)">Idiomas</a>
+        <a onclick="filterCategory('design & criação', this)">Design & Criação</a>
+        <a onclick="filterCategory('negócios & finanças', this)">Negócios & Finanças</a>
       </div>
 
       <div class="cards-area">
-        <h1 style="color: #4a78a6">Tecnologia</h1>
-
+        <h1>Tecnologia</h1>
         <div class="cards">
+          <!-- Cards will be injected here -->
         </div>
       </div>
     </section>
-    <section>
-      <div class="main">
-        <h1>Explore nossas comunidades</h1>
-        <div class="comunidades">
-          <div class="big-container">
-            <span class="docker">
-              <div
-                class="docker-header"
-                style="background-image: url('../src/training3.jpg')"
-              ></div>
-              <div class="docker-body">
-                <h3>Clube de desafios práticos</h3>
-                <p>
-                  Espaços interativos onde os alunos enfrentam desafios reais e
-                  dinâmicos em suas áreas de estudo. A cada semana ou mês, novas
-                  missões são lançadas para estimular a prática, desenvolver
-                  habilidades e compartilhar soluções criativas com a
-                  comunidade.
-                </p>
-                <button class="action-button">Ver comunidade</button>
-              </div>
-            </span>
+
+    <section class="main">
+      <h1>Explore nossas comunidades</h1>
+      <div class="comunidades">
+        <div class="big-container">
+          <div class="docker">
+            <div
+              class="docker-header"
+              style="background-image: url('../src/training3.jpg')"
+            ></div>
+            <div class="docker-body">
+              <h3>Clube de desafios práticos</h3>
+              <p>
+                Espaços interativos onde os alunos enfrentam desafios reais e
+                dinâmicos em suas áreas de estudo. A cada semana, novas
+                missões são lançadas para estimular a prática e o networking.
+              </p>
+              <button class="btn btn-primary">Ver comunidade</button>
+            </div>
           </div>
-          <div class="small-container">
-            <span class="docker">
-              <div
-                class="docker-header"
-                style="background-image: url('../src/cursos/curso3.jpg')"
-              ></div>
-              <div class="docker-body">
-                <h3>Clube de Carreira</h3>
-                <p>
-                  Ambientes dedicados ao crescimento profissional, onde alunos
-                  recebem apoio de mentores, trocam experiências de mercado e
-                  participam de sessões exclusivas de orientação de carreira,
-                  networking e desenvolvimento pessoal.
-                </p>
-                <button class="action-button">Ver comunidade</button>
-              </div>
-            </span>
-            <span class="docker">
-              <div class="docker-body">
-                <h3>Squad Learning</h3>
-                <p>
-                  Comunidades formadas por grupos pequenos ou duplas de estudo,
-                  conectando alunos com interesses em comum para trocar
-                  conhecimentos, manter a motivação e alcançar metas juntos de
-                  forma mais leve e colaborativa.
-                </p>
-                <button class="action-button">Ver comunidade</button>
-              </div>
-              <div
-                class="docker-header"
-                style="background-image: url('../src/training.jpg')"
-              ></div>
-            </span>
+        </div>
+        <div class="small-container">
+          <div class="docker">
+            <div
+              class="docker-header"
+              style="background-image: url('../src/cursos/curso3.jpg')"
+            ></div>
+            <div class="docker-body">
+              <h3>Clube de Carreira</h3>
+              <p>
+                Ambientes dedicados ao crescimento profissional com mentores e networking.
+              </p>
+              <button class="btn btn-primary btn-sm">Ver comunidade</button>
+            </div>
           </div>
+          <div class="docker">
+            <div
+              class="docker-header"
+              style="background-image: url('../src/training.jpg')"
+            ></div>
+            <div class="docker-body">
+              <h3>Squad Learning</h3>
+              <p>
+                Grupos pequenos de estudo para troca de conhecimento e motivação mútua.
+              </p>
+              <button class="btn btn-primary btn-sm">Ver comunidade</button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -136,11 +121,11 @@
         <div class="corporate-text">
           <h2>Soluções Corporativas EHSYNC</h2>
           <h3>Potencialize os talentos da sua empresa com trilhas personalizadas.</h3>
-          <p>Desenvolvemos programas educacionais customizados, curadoria de temas e mentorias exclusivas para as equipes da sua empresa alcançarem a alta performance com acompanhamento metodológico B2B.</p>
+          <p>Desenvolvemos programas educacionais customizados, curadoria de temas e mentorias exclusivas para as equipes alcançarem a alta performance com acompanhamento metodológico B2B.</p>
           <ul class="corporate-benefits">
             <li><i class="fas fa-check-circle"></i> MAPEAMENTO DE DÉFICITS: Avaliamos onde sua equipe precisa crescer.</li>
-            <li><i class="fas fa-check-circle"></i> TRILHAS EXCLUSIVAS: Cursos montados adaptados para a sua área.</li>
-            <li><i class="fas fa-check-circle"></i> MENTORIA EHS: Acompanhamento de especialistas de ponta do mercado.</li>
+            <li><i class="fas fa-check-circle"></i> TRILHAS EXCLUSIVAS: Cursos adaptados para a sua área.</li>
+            <li><i class="fas fa-check-circle"></i> MENTORIA EHS: Acompanhamento de especialistas do mercado.</li>
           </ul>
           <button class="corporate-btn">Agendar Consultoria B2B</button>
         </div>
@@ -149,78 +134,96 @@
         </div>
       </div>
     </section>
+
     <%- include('common/footer'); %>
+
     <script>
       const allCourses = <%- JSON.stringify(courses || []) %>;
+      const recommendedCourseIds = <%- typeof recommendedCourseIds !== 'undefined' ? JSON.stringify(recommendedCourseIds || []) : '[]' %>;
+      const isUserLoggedIn = <%= user ? 'true' : 'false' %>;
 
-      async function filterCategory(categoryName){
+      async function filterCategory(categoryName, element){
         const cardsArea = document.querySelector(".cards-area .cards")
         const titleElement = document.querySelector(".cards-area h1")
 
-        titleElement.innerText = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+        // Update active button
+        if (element) {
+          document.querySelectorAll('.category-buttons a').forEach(a => a.classList.remove('active'));
+          element.classList.add('active');
+        }
 
+        if (categoryName === 'recomendados') {
+          titleElement.innerText = "Recomendados para Você";
+        } else {
+          titleElement.innerText = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+        }
         cardsArea.innerHTML = "";
 
-        const filteredCourses = allCourses.filter(
-          (course) =>
-          course.categoria.toLowerCase() === categoryName.toLowerCase() &&
-          course.publicated
-        );
+        if (categoryName === 'recomendados' && !isUserLoggedIn) {
+          cardsArea.innerHTML = `
+            <div class="cta-banner" style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; background: linear-gradient(135deg, #2a344a 0%, #1c2536 100%); border-radius: 16px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);">
+              <h2 style="font-size: 2.2rem; margin-bottom: 15px; color: #ffffff;">Descubra os cursos perfeitos para você!</h2>
+              <p style="font-size: 1.1rem; color: #a0abc0; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.6;">Cadastre-se gratuitamente na plataforma para acessar recomendações personalizadas que vão acelerar a sua carreira.</p>
+              <button onclick="window.location.href='/register'" class="btn btn-primary" style="padding: 16px 40px; font-size: 1.1rem; border-radius: 50px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 5px 15px rgba(74, 120, 166, 0.4); transition: transform 0.2s;">Criar minha conta agora</button>
+            </div>
+          `;
+          return;
+        }
+
+        let filteredCourses = [];
+        if (categoryName === 'recomendados') {
+          filteredCourses = allCourses.filter(c => recommendedCourseIds.includes(c.id) && c.publicated);
+          if (filteredCourses.length === 0) {
+            // Fallback para cursos mais recentes se não houver recomendações
+            filteredCourses = [...allCourses].filter(c => c.publicated).reverse().slice(0, 4);
+          }
+        } else {
+          filteredCourses = allCourses.filter(
+            (course) =>
+            course.categoria.toLowerCase() === categoryName.toLowerCase() &&
+            course.publicated
+          );
+        }
 
         if (filteredCourses.length === 0) {
-    cardsArea.innerHTML =
-      '<h4 class="empty" style="color: #4a78a6">Nenhum curso encontrado nessa categoria!</h4>';
-  } else {
-    filteredCourses.forEach((course) => {
-      const card = document.createElement("div");
-      
-      // Usa a categoria correta do curso
-      card.className = `card ${course.categoria.toLowerCase()}`;
+          cardsArea.innerHTML = '<h4 class="empty-state">Nenhum curso encontrado nesta categoria. Explore outras opções acima!</h4>';
+        } else {
+          filteredCourses.forEach((course) => {
+            const card = document.createElement("div");
+            card.className = `card`;
+            
+            const defaultPlaceholder = 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=600&q=80';
+            
+            card.innerHTML = `
+              <div class="img" style="background-image: url('${defaultPlaceholder}'); background-color: #2a344a;"></div>
+              <div class="card-content">
+                <h3>${course.nome}</h3>
+                <p>${course.descricao || 'Sem descrição disponível.'}</p>
+              </div>
+            `;
 
-      const placeholders = [
-        'https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=600&q=80',
-        'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80',
-        'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80',
-        'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&q=80',
-        'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&q=80',
-        'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=600&q=80'
-      ];
-      const phIndex = course.nome ? course.nome.length % placeholders.length : 0;
-      const placeholderImg = placeholders[phIndex];
-      const finalImg = course.imagem || placeholderImg;
+            // Verificação de imagem válida: Carrega o placeholder primeiro, e troca se a imagem real for válida
+            if (course.imagem && course.imagem.trim() !== "") {
+              const imgChecker = new Image();
+              const imgDiv = card.querySelector('.img');
+              imgChecker.onload = () => {
+                if (imgDiv) imgDiv.style.backgroundImage = `url('${course.imagem}')`;
+              };
+              imgChecker.src = course.imagem;
+            }
 
-      const imgDiv = document.createElement("div");
-      imgDiv.className = "img";
-      imgDiv.style.backgroundImage = `url('${finalImg}')`;
-
-      // Validação de imagem funcional
-      if (course.imagem) {
-        const testImg = new Image();
-        testImg.src = course.imagem;
-        testImg.onerror = () => {
-          imgDiv.style.backgroundImage = `url('${placeholderImg}')`;
-        };
+            card.onclick = () => {
+              window.location.href = `/course/${course.id}`;
+            };
+            cardsArea.appendChild(card);
+          });
+        }
       }
 
-      const title = document.createElement("h3");
-      title.textContent = course.nome;
-
-      const description = document.createElement("p");
-      description.textContent = course.descricao;
-
-      card.appendChild(imgDiv);
-      card.appendChild(title);
-      card.appendChild(description);
-      card.onclick = () => {
-        window.location.href = `/course/${course.id}`; // Redireciona para a página do curso
-      };
-      cardsArea.appendChild(card);
-    });
-  }
-}
-
-      filterCategory("tecnologia")
+      // Initial filter
+      document.addEventListener('DOMContentLoaded', () => {
+        filterCategory("recomendados", document.querySelector('.category-buttons a.active'));
+      });
     </script>
   </body>
 </html>
-

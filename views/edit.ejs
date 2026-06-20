@@ -75,6 +75,22 @@
 
   <%- include('common/footer') -%>
 
+  <style>
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
   <script>
     const avatarInput = document.getElementById('avatarInput');
     const avatarPreview = document.getElementById('avatarPreview');
@@ -110,6 +126,15 @@
         showToast(decodeURIComponent(success), 'success');
       }
     };
+
+    // Spinner de loading no formulário de edição
+    document.getElementById('editUserForm').addEventListener('submit', function() {
+      const btn = this.querySelector('button[type="submit"]');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner"></span> Salvando...';
+      }
+    });
   </script>
 </body>
 </html>

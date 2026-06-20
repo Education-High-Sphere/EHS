@@ -144,3 +144,17 @@ body {
 .join-btn:hover {
   background: var(--accent-color);
 }
+
+/* Melhorias Mobile para Comunidades */
+@media (max-width: 768px) {
+    .communities-grid {
+        grid-template-columns: 1fr !important;
+        padding: 10px !important;
+    }
+    .communities-hero {
+        padding: 40px 20px !important;
+    }
+    .communities-hero h1 {
+        font-size: 2rem !important;
+    }
+}

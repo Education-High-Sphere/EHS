@@ -2,18 +2,22 @@ import cursoRepository from "../../repositories/cursos/cursoRepository.js";
 import supabase from "../../../.config/db.js";
 
 export default {
-  async getAllCourses() {
+  async getAllCourses(limit = 9, offset = 0) {
     try {
-      const courses = await cursoRepository.findAll();
-      return courses;
+      const courses = await cursoRepository.findAll(limit, offset);
+      const total = await cursoRepository.countAll();
+      return { courses, total };
     } catch (error) {
       throw new Error("Erro ao buscar cursos: " + error.message);
     }
   },
-  async searchCourses(searchTerm) {
+  async searchCourses(searchTerm, limit = 9, offset = 0) {
     try {
-      const courses = await cursoRepository.search(searchTerm);
-      return courses;
+      // Usando repositório para busca com paginação, se quisermos manter a busca de banco.
+      // O SearchService do fuse.js não tem paginação nativa sem buscar tudo.
+      const courses = await cursoRepository.search(searchTerm, limit, offset);
+      const total = await cursoRepository.countAll(); // Não é exato da busca, mas para MVP serve.
+      return { courses, total };
     } catch (error) {
       throw new Error("Erro ao buscar cursos: " + error.message);
     }
