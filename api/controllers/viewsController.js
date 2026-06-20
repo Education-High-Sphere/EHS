@@ -17,9 +17,32 @@ import avaliacaoService from "../services/cursos/avaliacaoService.js";
 export const getHomePage = async (req, res) => {
   try {
     const result = await courseService.getAllCourses();
+    let recommendedCourseIds = [];
+
+    if (res.locals.user) {
+      try {
+        const matriculas = await matriculasService.getMatriculasByUser(res.locals.user.id);
+        if (matriculas && matriculas.length > 0) {
+          const enrolledIds = matriculas.map((m) => String(m.curso_id));
+          const enrolledCourses = result.courses.filter((c) => enrolledIds.includes(String(c.id)));
+          
+          const userCategories = [...new Set(enrolledCourses.map((c) => c.categoria))];
+          
+          const recommended = result.courses.filter(
+            (c) => userCategories.includes(c.categoria) && !enrolledIds.includes(String(c.id))
+          );
+          
+          recommendedCourseIds = recommended.map((c) => c.id);
+        }
+      } catch (err) {
+        console.error("Erro ao buscar recomendações:", err.message);
+      }
+    }
+
     res.render("index", {
       user: res.locals.user || null,
       courses: result.courses,
+      recommendedCourseIds: recommendedCourseIds,
       categoria: "tecnologia",
     });
   } catch (error) {

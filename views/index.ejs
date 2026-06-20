@@ -49,7 +49,8 @@
 
     <section class="categories">
       <div class="category-buttons">
-        <a onclick="filterCategory('tecnologia', this)" class="active">Tecnologia e Inovação</a>
+        <a onclick="filterCategory('recomendados', this)" class="active">Cursos que combinam com você</a>
+        <a onclick="filterCategory('tecnologia', this)">Tecnologia e Inovação</a>
         <a onclick="filterCategory('idiomas', this)">Idiomas</a>
         <a onclick="filterCategory('design & criação', this)">Design & Criação</a>
         <a onclick="filterCategory('negócios & finanças', this)">Negócios & Finanças</a>
@@ -138,6 +139,8 @@
 
     <script>
       const allCourses = <%- JSON.stringify(courses || []) %>;
+      const recommendedCourseIds = <%- typeof recommendedCourseIds !== 'undefined' ? JSON.stringify(recommendedCourseIds || []) : '[]' %>;
+      const isUserLoggedIn = <%= user ? 'true' : 'false' %>;
 
       async function filterCategory(categoryName, element){
         const cardsArea = document.querySelector(".cards-area .cards")
@@ -149,14 +152,38 @@
           element.classList.add('active');
         }
 
-        titleElement.innerText = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+        if (categoryName === 'recomendados') {
+          titleElement.innerText = "Recomendados para Você";
+        } else {
+          titleElement.innerText = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+        }
         cardsArea.innerHTML = "";
 
-        const filteredCourses = allCourses.filter(
-          (course) =>
-          course.categoria.toLowerCase() === categoryName.toLowerCase() &&
-          course.publicated
-        );
+        if (categoryName === 'recomendados' && !isUserLoggedIn) {
+          cardsArea.innerHTML = `
+            <div class="cta-banner" style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; background: linear-gradient(135deg, #2a344a 0%, #1c2536 100%); border-radius: 16px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05);">
+              <h2 style="font-size: 2.2rem; margin-bottom: 15px; color: #ffffff;">Descubra os cursos perfeitos para você!</h2>
+              <p style="font-size: 1.1rem; color: #a0abc0; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.6;">Cadastre-se gratuitamente na plataforma para acessar recomendações personalizadas que vão acelerar a sua carreira.</p>
+              <button onclick="window.location.href='/register'" class="btn btn-primary" style="padding: 16px 40px; font-size: 1.1rem; border-radius: 50px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 5px 15px rgba(74, 120, 166, 0.4); transition: transform 0.2s;">Criar minha conta agora</button>
+            </div>
+          `;
+          return;
+        }
+
+        let filteredCourses = [];
+        if (categoryName === 'recomendados') {
+          filteredCourses = allCourses.filter(c => recommendedCourseIds.includes(c.id) && c.publicated);
+          if (filteredCourses.length === 0) {
+            // Fallback para cursos mais recentes se não houver recomendações
+            filteredCourses = [...allCourses].filter(c => c.publicated).reverse().slice(0, 4);
+          }
+        } else {
+          filteredCourses = allCourses.filter(
+            (course) =>
+            course.categoria.toLowerCase() === categoryName.toLowerCase() &&
+            course.publicated
+          );
+        }
 
         if (filteredCourses.length === 0) {
           cardsArea.innerHTML = '<h4 class="empty-state">Nenhum curso encontrado nesta categoria. Explore outras opções acima!</h4>';
@@ -195,7 +222,7 @@
 
       // Initial filter
       document.addEventListener('DOMContentLoaded', () => {
-        filterCategory("tecnologia", document.querySelector('.category-buttons a.active'));
+        filterCategory("recomendados", document.querySelector('.category-buttons a.active'));
       });
     </script>
   </body>

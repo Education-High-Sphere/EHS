@@ -103,7 +103,57 @@
 
     <%- include('common/footer') -%>
 
+    <div id="loading-overlay" class="loading-overlay" style="display:none;">
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <p>Processando...</p>
+      </div>
+    </div>
+
+    <style>
+      .loading-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(27, 34, 50, 0.85);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px);
+      }
+      .loading-content {
+        text-align: center;
+        color: #f4f4f4;
+      }
+      .loading-content p {
+        margin-top: 16px;
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+      .loading-spinner {
+        width: 48px;
+        height: 48px;
+        border: 4px solid rgba(74, 120, 166, 0.3);
+        border-top-color: #4a78a6;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        margin: 0 auto;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+
     <script>
+
+            function showLoading(msg) {
+              const overlay = document.getElementById('loading-overlay');
+              overlay.querySelector('p').textContent = msg || 'Processando...';
+              overlay.style.display = 'flex';
+            }
+            function hideLoading() {
+              document.getElementById('loading-overlay').style.display = 'none';
+            }
 
 
             function editCourse(courseId) {
@@ -115,49 +165,43 @@
 
             function deleteCourse(courseId) {
               const courseName = document.querySelector(`.course-card[data-id="${courseId}"] .course-title`).textContent;
-              alert('Tem certeza que deseja deletar o curso ' + courseName + '? ');
-              try{
-                
-                fetch(`/api/cursos/${courseId}`, {
-                  method: 'DELETE',
-                  headers: {
-                    'Content-Type': 'application/json'
-
-                  }
-                })
-                .then(response => {
-                  if (response.ok) {
-                    alert('Curso deletado com sucesso');
-                    location.reload();
-                  } else {
-                    alert('Erro ao deletar curso');
-                  }
-                })
-                .catch(error => {
-                  console.error('Erro ao deletar curso:', error);
-                });
-              } catch (error) {
-                console.error('Erro ao deletar curso:', error);
-              }
+              if (!confirm('Tem certeza que deseja deletar o curso "' + courseName + '"?')) return;
               
-              
-            }
-
-            function toggleCoursePublish(courseId) {
-              fetch(`/api/cursos/${courseId}/publish`, {
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json'
-                }
+              showLoading('Excluindo curso...');
+              fetch(`/api/cursos/${courseId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
               })
               .then(response => {
                 if (response.ok) {
                   location.reload();
                 } else {
+                  hideLoading();
+                  alert('Erro ao deletar curso');
+                }
+              })
+              .catch(error => {
+                hideLoading();
+                console.error('Erro ao deletar curso:', error);
+              });
+            }
+
+            function toggleCoursePublish(courseId) {
+              showLoading('Atualizando status...');
+              fetch(`/api/cursos/${courseId}/publish`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' }
+              })
+              .then(response => {
+                if (response.ok) {
+                  location.reload();
+                } else {
+                  hideLoading();
                   alert('Erro ao atualizar o curso');
                 }
               })
               .catch(error => {
+                hideLoading();
                 console.error('Erro ao atualizar o curso:', error);
               });
             }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="../css/boxicons.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="icon" href="../src/logo.png" type="image/x-icon" />
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <link rel="stylesheet" href="../styles/register.css" />
@@ -142,11 +142,31 @@
             </label>
         </div>
 
-        <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></div>
+        <div class="g-recaptcha" data-sitekey="<%= RECAPTCHA_SITE_KEY %>"></div>
 
         <button type="submit">Entrar</button>
       </form>
     </main>
+
+    <style>
+      .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255,255,255,0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+        vertical-align: middle;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+    </style>
 
     <script>
       function showLogin() {
@@ -232,6 +252,17 @@
           showLogin();
         }
       };
+
+      // Spinner de loading nos formulários
+      document.querySelectorAll('.form-container').forEach(form => {
+        form.addEventListener('submit', function() {
+          const btn = this.querySelector('button[type="submit"]');
+          if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Aguarde...';
+          }
+        });
+      });
     </script>
   </body>
 </html>
